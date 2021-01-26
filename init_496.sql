@@ -37,5 +37,17 @@ CREATE TABLE Queue(
   student_ids varchar(3000),
   teacher_id int FOREIGN KEY REFERENCES Teacher(teacher_id),
   discipline_name varchar(255) FOREIGN KEY REFERENCES Discipline(discipline_name),
-  question_status BOOLEAN FOREIGN KEY REFERENCES Question(question_status)
+  question_status BOOLEAN FOREIGN KEY REFERENCES Question(question_status),
+  session_id int FOREIGN KEY REFERENCES Session(session_id)
 );
+
+CREATE TABLE Session(
+  session_id int NOT NULL PRIMARY KEY,
+  course_id int NOT NULL,
+  day varchar(20),
+  from_time varchar(20),
+  to_time varchar(20),
+  teacher_id int FOREIGN KEY REFERENCES Teacher(teacher_id),
+  zoom_link varchar(200),
+  zoom_link_passwd varchar(200)
+)
