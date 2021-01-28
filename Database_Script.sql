@@ -69,14 +69,17 @@ CREATE TABLE [Queue](
 /*-------------------------*/
 /* INSERT VALUE STATEMENTS */
 /*-------------------------*/
-INSERT INTO Discipline(discipline_id,discipline_name) VALUES(100,'Biology'),
+INSERT INTO Discipline(discipline_id,discipline_name) VALUES
+	(100,'Biology'),
 	(101,'Chemistry'),
 	(102,'Computer Science'),
 	(103,'Mathematics'),
 	(104,'Earth and Planetary Science'),
 	(105,'Physics'),
 	(106,'Statistics'),
-	(107,'Psychology');
+	(107,'Psychology'),
+	(200,'Academic Advisor'),
+	(201,'Registrar Advisor');
 
 INSERT INTO Teacher([teacher_id],[name],[discipline_id],[available]) VALUES
 	(4000000,'Hoyt Carrillo',104,'1'),
@@ -129,4 +132,8 @@ INSERT INTO Teacher([teacher_id],[name],[discipline_id],[available]) VALUES
 	(4000047,'Darius Dunn',103,'1'),
 	(4000048,'Tarik Maynard',100,'1'),
 	(4000049,'Cruz Rice',105,'1'),
-	(4000050,'Gretchen Richards',106,'1');
+	(4000050,'Gretchen Richards',106,'1'),
+	(4000051,'Willard Norris',200,'1'),
+	(4000052,'Amiyah Glass',201,'1'),
+	(4000053,'Shanon Walton',200,'1'),
+	(4000054,'Kali Key',201,'1');
