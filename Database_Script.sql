@@ -40,7 +40,8 @@ CREATE TABLE Question(
 CREATE TABLE Answer(
   answer_id int NOT NULL PRIMARY KEY,
   answer_string varchar(3000),
-  question_id int FOREIGN KEY REFERENCES Question(question_id)
+  question_id int FOREIGN KEY REFERENCES Question(question_id),
+  answer_date varchar(20)
 );
 
 
