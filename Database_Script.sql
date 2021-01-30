@@ -19,6 +19,7 @@ CREATE TABLE Discipline(
 
 CREATE TABLE Teacher(
   teacher_id int NOT NULL PRIMARY KEY,
+  email varchar(255),
   name varchar(255),
   discipline_id int FOREIGN KEY REFERENCES Discipline(discipline_id),
   available bit
@@ -26,6 +27,7 @@ CREATE TABLE Teacher(
 
 CREATE TABLE Student(
   student_id int NOT NULL PRIMARY KEY,
+  email varchar(255),
   name varchar(255),
   biography varchar(255),
   discipline_id int FOREIGN KEY REFERENCES Discipline(discipline_id)
