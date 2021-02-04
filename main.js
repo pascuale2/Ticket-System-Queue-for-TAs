@@ -1,10 +1,11 @@
 const http = require('http');
-const url = require('url');
 const fs = require('fs');
 
-const server = http.createServer((req, res) => {
+var server = http.createServer(function(req, res) {
 
-    req.on('error', (err) => {
+    console.log('request to '+req.url + ' was made');
+
+   req.on('error', (err) => {
         console.error(err);
         req.statusCode = 400;
         req.end();
@@ -12,27 +13,11 @@ const server = http.createServer((req, res) => {
     res.on('error', (err) => {
         console.error(err);
     });
-
-    if (req.url === '/'){
-        res.write(JSON.stringify(["dr john - Chem", "Dr. Borh - Bio", "Dr Sahm - Physics"]));
-        res.end();
-    }
-
-    if (req.hostname ===  'www.MapleDonut.ca'){
-        res.write("new connection to mapledonut.ca");
-        res.end();
-    }
-
-    if (req.url === '/courses'){
-        res.write("all courses");
-        res.write(JSON.stringify(["bio","chem","physics"]));
-        res.end();
-    }
-    else {
-        res.statusCode = 404;
-        res.end();
-    }
+    //res.write(JSON.stringify(["dr john - Chem", "Dr. Borh - Bio", "Dr Sahm - Physics"]));
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    var myReadStream = fs.createReadStream(__dirname + '/HTML/index.html', 'utf8');
+    myReadStream.pipe(res);
 });
 
-server.listen(3000);
-console.log('listening on port 3000...\n');
+server.listen(3200);
+console.log('listening on port 3200...\n');
