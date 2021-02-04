@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.google.com/specimen/Roboto+Slab');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+}
+body {
+    background: #eedec5;
+}
+
+/* LOGIN HEADER */
+.jumbotron{
+    background-color:#E58943;
+    text-align:center;
+}
+
+.jumbotron h1 {
+    color: #fff;
+    font-size: 400%;
+    font-family: 'Roboto Slab', serif;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.jumbotron p {
+    color: #fff;
+    font-size: 100%;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* LOGIN FOOTER */
+
+.footer {
+    background-color: #f3ae7a;
+    color: white;
+    text-align: center;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 110%;
+}
+
+/* ANIMATION */
+.rotate {
+    animation: rotation 5s infinite linear
+}
+
+@keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+}
+
