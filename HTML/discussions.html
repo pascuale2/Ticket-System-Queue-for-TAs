@@ -1,50 +1,113 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <title>Maple Donut</title>
+    <!-- CSS BOOTSTRAP LINK -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!-- CUSTOM CSS LINK -->
     <link rel="stylesheet" href="../CSS/discussions.css">
+    <!-- FONT AWESOME SCRIPT -->
     <script src="https://kit.fontawesome.com/c13290656a.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
-<div class="wrapper">
-    <!-- Side Bar -->
-    <div class="sidebar">
-        <div class="row justify-content-center">
-            <div class="profile">
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div id="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <!-- Profile picture -->
+            <div class="sidebar-header">
                 <div class="row justify-content-center">
-                    <img src="./img/test.jpg">
+                    <div class="profile">
+                        <div class="row justify-content-center">
+                            <img src="./img/donut.png">
+                        </div>
+                    </div>
                 </div>
+                <h2 class="text-center"> Username </h2>
+                <h3 class="text-center"> Biography </h3>
             </div>
-        </div>
-        <ul>
-            <h2> Username </h2>
-            <h3> Biography </h3>
-        </ul>
-        <hr>
-        <!--SIDE MAIN MENU BUTTONS-->
-        <ul>
-            <li><a href="#"><i class="fas fa-home"></i>Home</a></li>
-            <li><a href="#"><i class="fas fa-book"></i>Courses</a></li>
-            <li><a href="#"><i class="fas fa-question-circle"></i>Questions</a></li>
-            <li><a href="#"><i class="fas fa-chalkboard-teacher"></i>Professors</a></li>
-            <li><a href="#"><i class="fas fa-comments"></i>Discussions</a></li>
-        </ul>
-        <hr>
-        <!--SIDE MENU OPTION BUTTONS-->
-        <ul>
-            <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
-            <li><a href="login.html"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
-        </ul>
-    </div>
-    <div class="main_content">
-        <div class="header">
-            <div class="row justify-content-center">
-                <h2>Discussions</h2>
-            </div>
-        </div>
-    </div>
-</div>
+            <hr>
+            <ul class="list-unstyled components">
+                <li><a href="home.html"><i class="fas fa-home"></i>Home</a></li>
+                <li><a href="courses.html"><i class="fas fa-book"></i>Courses</a></li>
+                <li><a href="questions.html"><i class="fas fa-question-circle"></i>Questions</a></li>
+                <li><a href="professors.html"><i class="fas fa-chalkboard-teacher"></i>Professors</a></li>
+                <li><a href="discussions.html"><i class="fas fa-comments"></i>Discussions</a></li>
+            </ul>
+            <hr>
+            <ul class="list-unstyled components">
+                <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
+                <li><a href="login.html"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </nav>
 
+        <!-- Page Content  -->
+        <div id="page">
+            <nav class="navbar navbar-expand-md">
+                <div class="container-fluid" id="navbar-header">
+                    <a href="#" id="sidebarCollapse">
+                        <i class="fas fa-bars"></i>
+                    </a>     
+                    <h3 class="text-center">DISCUSSIONS</h3> 
+                    <a href="#"></a>
+                </div>
+                
+            </nav>
+            
+            <div id="content">
+                <h2>Homepage</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <div class="line"></div>
+
+                <h2>Lorem Ipsum Dolor</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <div class="line"></div>
+
+                <h2>Lorem Ipsum Dolor</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <div class="line"></div>
+
+                <h3>Lorem Ipsum Dolor</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- Bootstrap bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').addClass('active');
+                $('.overlay').addClass('active');
+            });
+        });
+    </script>
 </body>
 </html>
