@@ -11,26 +11,30 @@ const mysql = require('mysql');
 function configDatabase(req, res) {
 
   var connection = mysql.createConnection({
-    host     : 'mysql.mapledonut.ca',
-    user     : 'mapledonutca1',
-    password : 'UQ8P2mdX',
-    database : 'mapledonut_ca',
-    port     : '3200',
+    host: "mysql.mapledonut.ca",
+    user: "mapledonutca1",
+    password: "UQ8P2mdX",
+    database: "mapledonut_ca"
   });
 
   connection.connect(function(err) {
     if(err){
-      // Select all records from teacher table
-      connection.query('SELECT * FROM Teacher', (err, rows) => {
-        if(!err){                                               // query success
-          res.send(rows);
-        }else{                                                  // query failed
-          console.log(err);
-        }
-      });
-      return console.error("error" + err.message);              // connection failed
+      return console.log("error" + err.message);              // connection failed
     }else{
       console.log("connected to mapledonut_ca");                // connection success
+      //let insertQuery = 'INSERT INTO ?? (??,??,??,??) VALUES (?,?,?,?)';
+      //let query = mysql.format(insertQuery,["Student","student_id","email","biography",
+    //  "discipline_id", 100, "test@gmail.com", "test", 101]);
+      let query = 'SELECT * FROM Student';
+      // Select all records from teacher table
+      connection.query(query, (err, result) => {
+        if(err){                                               // query failed
+          console.log(err);
+        }else{                                                  // query success
+          return console.log("result: " + result[0].student_id);
+        }
+      });
+
     }
   });
 
