@@ -62,24 +62,118 @@
             </nav>
             
             <div id="content">
-                <h2>Homepage</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                 <form class = 'card p-3 bg-light'>
+                 <form>
+                    <h2 class="text-center">Have a question? We'll try to find an answer!</h2>
+                    <div class="input-group">
+                        <input class="form-control py-2 border-right-0 border" type="search" value="Input your question here!" id="searchInput">
+                        <span class="input-group-append">
+                          <button class="btn btn-outline-secondary border-left-0 border" type="button" href="#">
+                                <i class="fa fa-search"></i>
+                          </button>
+                        </span>
+                    </div>
+                    <small id="questionInfo" class="form-text text-muted">
+                        If we can't find a similar one, or you want to speak with someone over voice chat, we'll set you up afterwards!
+                    </small>
+                </form>
 
-                <div class="line"></div>
+                <div class = 'card p-3 bg-light container-fluid'>
+                    <h2 class="text-center">Your outgoing questions and their queues.</h2>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h5>Question</h5>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                This would gather stuff from our database.
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    For text questions answered maybe?
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    For voice chat ready? Maybe with notification?
+                                </a>
+                            </div>
+                        </div>
 
-                <h2>Lorem Ipsum Dolor</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <div class="col-md-3">
+                            <h5>Place in Queue</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item place-in-queue">5</li>
+                                <li class="list-group-item list-group-item-primary place-in-queue">Answered</li>
+                                <li class="list-group-item list-group-item-success place-in-queue">Voice Chat Ready</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="line"></div>
+                <div class = 'card p-3 bg-light container-fluid'>
+                    <h2 class="text-center">Recently asked questions related to your courses.</h2>
 
-                <h2>Lorem Ipsum Dolor</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="list-group">
+                                <h5>Question</h5>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                This would gather stuff from our database.
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">What's the difference between a for loop and a while loop?</a>
+                                <a href="#" class="list-group-item list-group-item-action">How do I create a function in MIPS?</a>
+                                <a href="#" class="list-group-item list-group-item-action">How do I create a table is SQL?</a>
+                                <a href="#" class="list-group-item list-group-item-action">Is HTML a programming language?</a>
+                            </div>
+                        </div>
 
-                <div class="line"></div>
+                        <div class="list-group col-md-3">
+                            <h5>Course</h5>
+                            <a class="list-group-item list-group-item-action">
+                            NULL
+                            </a>
+                            <a class="list-group-item list-group-item-action">CMPT 101</a>
+                            <a class="list-group-item list-group-item-action">CMPT 229</a>
+                            <a class="list-group-item list-group-item-action">CMPT 291</a>
+                            <a class="list-group-item list-group-item-action">CMPT 101</a>
+                        </div>
 
-                <h3>Lorem Ipsum Dolor</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <nav aria-label="PageNavCourseQuestions">
+                            <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class = 'card p-3 bg-light'>
+                    <h2 class="text-center">Popular questions asked to advisors.</h2>
+
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action">
+                          This could also be recent questions, I don't know how we'd implement popular questions.
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">I'm thinking of switching to Arts from Sciences, do all my credits transfer?</a>
+
+                        <nav aria-label="PageNavCourseQuestions">
+                            <ul class="pagination justify-content-center">
+                              <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                              </li>
+                              <li class="page-item"><a class="page-link" href="#">1</a></li>
+                              <li class="page-item"><a class="page-link" href="#">2</a></li>
+                              <li class="page-item"><a class="page-link" href="#">3</a></li>
+                              <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                              </li>
+                            </ul>
+                          </nav>
+                    </div>
+                 </div>
             </div>
         </div>
     </div>
