@@ -15,7 +15,7 @@ body,html{
     Background from: 
     https://unsplash.com/photos/kB61v9CXdus?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink 
     */
-    background-image: url('../HTML/img/maple-bg_blurred.jpg');
+    background-image: url('../IMG/maple-bg_blurred.jpg');
     -webkite-background-size: cover;
     background-size: cover;
     background-repeat: no-repeat;
