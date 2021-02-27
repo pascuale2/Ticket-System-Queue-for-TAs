@@ -20,7 +20,7 @@ function configDatabase(req, res) {
 
   connection.connect(function(err) {
     if(err){
-      return console.log("error" + err.message);              // connection failed
+      return console.log("error" + err.message);               // connection failed
     }else{
       console.log("connected to mapledonut_ca");                // connection success
       //let insertQuery = 'INSERT INTO ?? (??,??,??,??) VALUES (?,?,?,?)';
@@ -35,11 +35,8 @@ function configDatabase(req, res) {
           return console.log("result: " + result[0].student_id);
         }
       });
-
     }
   });
-
-
 }
 
 /*
@@ -49,7 +46,7 @@ const server = http.createServer(function(req, res) {
   let filePath = path.join(
     __dirname,
     "..",
-    req.url === "/" ? "/HTML/login.html": req.url
+    req.url === "/" ? "/HTML/home.html": req.url
   );
   configDatabase(req, res);                             // Configure the database
   console.log('request to '+ req.url + ' was made');
