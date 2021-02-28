@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Maple Donut</title>
+    <!-- CSS BOOTSTRAP LINK -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!-- CUSTOM CSS LINK -->
+    <link rel="stylesheet" href="../CSS/questions.css">
+    <!-- FAVICON LINK -->
+    <link rel="icon" type="image/png" href="/../IMG/donut.png">
+    <!-- FONT AWESOME SCRIPT -->
+    <script src="https://kit.fontawesome.com/c13290656a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div id="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <!-- Profile picture -->
+            <div class="sidebar-header">
+                <div class="row justify-content-center">
+                    <div class="profile">
+                        <div class="row justify-content-center">
+                            <img src="../IMG/donut.png">
+                        </div>
+                    </div>
+                </div>
+                <h2 class="text-center"> Username </h2>
+                <h3 class="text-center"> Biography </h3>
+            </div>
+            <hr>
+            <ul class="list-unstyled components">
+                <li><a href="home.html"><i class="fas fa-home"></i>Home</a></li>
+                <li><a href="courses.html"><i class="fas fa-book"></i>Courses</a></li>
+                <li><a href="questions.html"><i class="fas fa-question-circle"></i>Questions</a></li>
+                <li><a href="professors.html"><i class="fas fa-chalkboard-teacher"></i>Professors</a></li>
+                <li><a href="discussions.html"><i class="fas fa-comments"></i>Discussions</a></li>
+            </ul>
+            <hr>
+            <ul class="list-unstyled components">
+                <li><a href="settings.html"><i class="fas fa-cog"></i>Settings</a></li>
+                <li><a href="login.html"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="page">
+            <nav class="navbar navbar-expand-md">
+                <div class="container-fluid" id="navbar-header">
+                    <a href="#" id="sidebarCollapse">
+                        <i class="fas fa-bars"></i>
+                    </a>     
+                    <h3 class="text-center">QUESTIONS</h3> 
+                    <a href="#"></a>
+                </div>
+                
+            </nav>
+            
+            <div id="content">
+                 <form class = 'card p-3 bg-light'>
+                 <form>
+                    <h2 class="text-center">Have a question? We'll try to find an answer!</h2>
+                    <div class="input-group">
+                        <input class="form-control py-2 border-right-0 border" type="search" value="Input your question here!" id="searchInput">
+                        <span class="input-group-append" onclick="window.location.href='questions_ask.html';">
+                          <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                                <i class="fa fa-search"></i>
+                          </button>
+                        </span>
+                    </div>
+                    <small id="questionInfo" class="form-text text-muted">
+                        If we can't find a similar one, or you want to speak with someone over voice chat, we'll set you up afterwards!
+                    </small>
+                </form>
+
+                <div class = 'card p-3 bg-light container-fluid'>
+                    <h2 class="text-center">Your outgoing questions and their queues.</h2>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h5>Question</h5>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                This would gather stuff from our database.
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    For text questions answered maybe?
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    For voice chat ready? Maybe with notification?
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <h5>Place in Queue</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item place-in-queue">5</li>
+                                <li class="list-group-item list-group-item-primary place-in-queue">Answered</li>
+                                <li class="list-group-item list-group-item-success place-in-queue">Voice Chat Ready</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class = 'card p-3 bg-light container-fluid'>
+                    <h2 class="text-center">Recently asked questions related to your courses.</h2>
+
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="list-group">
+                                <h5>Question</h5>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                This would gather stuff from our database.
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">What's the difference between a for loop and a while loop?</a>
+                                <a href="#" class="list-group-item list-group-item-action">How do I create a function in MIPS?</a>
+                                <a href="#" class="list-group-item list-group-item-action">How do I create a table is SQL?</a>
+                                <a href="#" class="list-group-item list-group-item-action">Is HTML a programming language?</a>
+                            </div>
+                        </div>
+
+                        <div class="list-group col-md-3">
+                            <h5>Course</h5>
+                            <a class="list-group-item list-group-item-action">
+                            NULL
+                            </a>
+                            <a class="list-group-item list-group-item-action">CMPT 101</a>
+                            <a class="list-group-item list-group-item-action">CMPT 229</a>
+                            <a class="list-group-item list-group-item-action">CMPT 291</a>
+                            <a class="list-group-item list-group-item-action">CMPT 101</a>
+                        </div>
+
+                        <nav aria-label="PageNavCourseQuestions">
+                            <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class = 'card p-3 bg-light'>
+                    <h2 class="text-center">Popular questions asked to advisors.</h2>
+
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action">
+                          This could also be recent questions, I don't know how we'd implement popular questions.
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">I'm thinking of switching to Arts from Sciences, do all my credits transfer?</a>
+
+                        <nav aria-label="PageNavCourseQuestions">
+                            <ul class="pagination justify-content-center">
+                              <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                              </li>
+                              <li class="page-item"><a class="page-link" href="#">1</a></li>
+                              <li class="page-item"><a class="page-link" href="#">2</a></li>
+                              <li class="page-item"><a class="page-link" href="#">3</a></li>
+                              <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                              </li>
+                            </ul>
+                          </nav>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- Bootstrap bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').addClass('active');
+                $('.overlay').addClass('active');
+            });
+        });
+    </script>
+</body>
+</html>
