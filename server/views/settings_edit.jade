@@ -1,0 +1,108 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    title Maple Donut
+    // CSS BOOTSTRAP LINK
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
+    // CUSTOM CSS LINK
+    link(rel='stylesheet' href='/stylesheets/settings_edit.css')
+    // FAVICON LINK
+    link(rel='icon' type='image/png' href='/images/donut.png')
+    // FONT AWESOME SCRIPT
+    script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
+  body
+    .wrapper
+      // Sidebar
+      nav#sidebar
+        #dismiss
+          i.fas.fa-arrow-left
+        // Profile picture
+        .sidebar-header
+          .row.justify-content-center
+            .profile
+              .row.justify-content-center
+                img(src='/images/donut.png')
+          h2.text-center  Username 
+          h3.text-center  Biography 
+        hr
+        ul.list-unstyled.components
+          li
+            a(href='home')
+              i.fas.fa-home
+              | Home
+          li
+            a(href='courses')
+              i.fas.fa-book
+              | Courses
+          li
+            a(href='questions')
+              i.fas.fa-question-circle
+              | Questions
+          li
+            a(href='professors')
+              i.fas.fa-chalkboard-teacher
+              | Professors
+          li
+            a(href='discussions')
+              i.fas.fa-comments
+              | Discussions
+        hr
+        ul.list-unstyled.components
+          li
+            a(href='settings')
+              i.fas.fa-cog
+              | Settings
+          li
+            a(href='login')
+              i.fas.fa-sign-out-alt
+              | Logout
+      // Page Content
+      #page
+        nav.navbar.navbar-expand-md
+          #navbar-header.container-fluid
+            a#sidebarCollapse(href='#')
+              i.fas.fa-bars
+            h3.text-center COURSES
+            a(href='#')
+        #content
+          h2 Account Settings
+          form
+            .mb-4.row
+              label.col-sm-2.col-form-label(for='staticUsername') Username
+              .col-sm-10
+                input#staticUsername.form-control-plaintext(type='text' readonly='' value='MacEwanUsername')
+            .mb-4.row
+              label.col-sm-2.col-form-label(for='accountEmail') Email
+              .col-sm-10
+                input#accountEmail.form-control-plaintext(type='text' readonly='' value='MacEwanEmail@mymacewan.ca')
+            .mb-4.row
+              label.col-sm-2.col-form-label(for='staticPassword') Password
+              .col-sm-10
+                input#staticPassword.form-control-plaintext(type='text' readonly='' value='Connected to MacEwan Account')
+            .mb-4.row
+              label.form-label(for='profPic') Profile Picture
+              .col-sm-2
+                input#profPic.form-control(type='file')
+            .mb-4.row
+              label.col-sm-2.col-form-label(for='accountDiscipline') Discipline
+              .col-sm-4
+                input#accountDiscipline.form-control-plaintext(type='text' readonly='' value='Computer Science')
+            .mb-4.row
+              label.col-sm-2.col-form-label(for='accountBio') Bio
+              .col-sm-4
+                textarea#exampleFormControlTextarea1.form-control(rows='3')
+            a.btn.btn-primary(href='settings') Save Changes
+          .line
+    .overlay
+    // jQuery CDN - Slim version (=without AJAX)
+    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
+    // jQuery Custom Scroller CDN
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
+    // Bootstrap bundle CDN
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js' integrity='sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0' crossorigin='anonymous')
+    // Sidebar Animation
+    script(type='text/javascript' src='/javascripts/sidebar.js')
