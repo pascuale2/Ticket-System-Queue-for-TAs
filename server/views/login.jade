@@ -13,6 +13,7 @@ html(lang='en')
     // FAVICON LINK
     link(rel='icon' type='image/png' href='/images/donut.png')
   body
+    meta(name='google-signin-client_id' content='798834471674-2hla9ttcnoausu8a6e2gsoo4j0f70v7u.apps.googleusercontent.com')
     .background-image
     .loginBox
       img#avatar.rotate(src='/images/donut.png')
@@ -24,5 +25,8 @@ html(lang='en')
         p Password
         input(type='password' name='' placeholder='')
         input(type='submit' name='' value='Login')
+        .g-signin2(data-onsuccess='onSignIn')
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
     script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js' integrity='sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0' crossorigin='anonymous')
+    script(src='https://apis.google.com/js/platform.js' async='' defer='')
+    script(type='text/javascript' src='/javascripts/google.js')
