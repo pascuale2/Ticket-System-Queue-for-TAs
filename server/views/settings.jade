@@ -89,11 +89,13 @@ html
               | Logout
       // Page Content
       #page
-        nav.navbar.navbar-expand-md
+        nav.navbar.navbar-expand-ml
           #navbar-header.container-fluid
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
-            h3.text-center COURSES
+            .logo
+              a(href='Home')
+                img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
           h2 Account Settings

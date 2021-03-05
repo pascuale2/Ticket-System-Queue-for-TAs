@@ -7,7 +7,7 @@ html
     title Maple Donut - Questions
     
     // 1,2 - CSS BOOTSTRAP LINK
-    // 3 - CUSTOM CSS LINK
+    // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
     link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
@@ -26,9 +26,10 @@ html
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js', integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
-    // Seth's Scripts
+    // Bruce's Scripts
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
     script(type='text/javascript' src='/javascripts/google.js')
+
   body
     //google auth stuff
     script.
@@ -115,11 +116,13 @@ html
               | Logout
       // Page Content
       #page
-        nav.navbar.navbar-expand-md
+        nav.navbar.navbar-expand-ml
           #navbar-header.container-fluid
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
-            h3.text-center QUESTIONS
+            .logo
+              a(href='Home')
+                img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
           form.card.p-3.bg-light
