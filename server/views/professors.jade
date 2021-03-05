@@ -62,8 +62,8 @@ html
             .profile
               .row.justify-content-center
                 img(src='/images/donut.png')
-          h2.text-center  Username 
-          h3.text-center  Biography 
+          h2.text-center  Username
+          h3.text-center  Biography
         hr
         ul.list-unstyled.components
           li
@@ -77,7 +77,7 @@ html
               ul#coursesSubmenu.collapse.list-unstyled
                 li
                   a(href='courses') Current Courses
-                li 
+                li
                   a(href='#') Search Courses
           li.active
             a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
@@ -86,7 +86,7 @@ html
               ul#questionsSubmenu.collapse.list-unstyled
                 li
                   a(href='questions') Ask a Question
-                li 
+                li
                   a(href='#') Search Questions
           li
             a(href='professors')
@@ -99,7 +99,7 @@ html
               ul#discussionsSubmenu.collapse.list-unstyled
                 li
                   a(href='discussions') Discussion Board
-                li 
+                li
                   a(href='#') Group Chats
         hr
         ul.list-unstyled.components
@@ -125,6 +125,7 @@ html
           .h-100.d-inline-block
           // Search bar
           h3.text-center Search Professors
+           | !{locals.data}
           .container.h-100
             .d-flex.justify-content-center.h-100
               .searchBar
@@ -141,7 +142,7 @@ html
                 h3.text-center Brian Franczak
                 h4.text-center Statistics
                 p.text-center Assistant Professor
-            
+
             .card
               img(src='/images/jelly-donut.png' alt='Avatar')
               hr
