@@ -3,7 +3,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background: #e7e6e1;
+    background: #0f0f0f;
 }
 
 p {
@@ -22,13 +22,33 @@ a:focus {
     transition: all 0.3s;
 }
 
+/* ---------------------------------------------------
+    NAVBAR STYLE
+----------------------------------------------------- */
 .navbar {
-    background: #f2a154;
+    background: #252525;
     border: none;
     border-radius: 0;
     margin-bottom: 40px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
+/* Hamburger Menu */
+#sidebarCollapse{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #FCA926;
+    text-shadow: 0px 1px 1px rgb(197, 161, 119);
+    transition: 0.3s;
+}
+#sidebarCollapse:hover{ opacity: .5; }
+
+.logo img{
+    width: auto;
+    height: 50px;
+    transition: 0.3s;
+}
+.logo img:hover{ opacity: .5; }
 
 .navbar-btn {
     box-shadow: none;
@@ -54,42 +74,13 @@ a:focus {
     left: -250px;
     height: 100vh;
     z-index: 999;
-    background: #314e52;
+    background: #252525;
     font-family: "Roboto", "sans-serif";
     color: #fff;
     transition: all 0.3s;
     overflow-y: scroll;
     outline: none;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-}
-.profile{
-    width: 180px;
-    height: 180px;
-    overflow: hidden;
-    border-radius: 50%;
-}
-.profile img{
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-}
-
-#sidebar .sidebar-header h2{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 42;
-    color: #f7f6e7;
-    text-shadow: 0px 4px rgba(0, 0, 0, 0.25);
-    text-align: center;
-}
-
-#sidebar .sidebar-header h3{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 15;
-    color: #f7f6e7;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    text-align: center;
 }
 
 #sidebar.active {
@@ -101,7 +92,7 @@ a:focus {
     height: 35px;
     line-height: 35px;
     text-align: center;
-    background: #314e52;
+    background: #252525;
     position: absolute;
     top: 10px;
     right: 10px;
@@ -134,13 +125,37 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 25px;
-    background: #314e52;
+    background: #252525;
 }
 
-.wrapper .sidebar hr{
-    height: 2px;
-    border-width: 0;
-    background-color: rgba(0, 0, 0, 0.25);
+#sidebar .sidebar-header h2{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 42;
+    color: #f7f6e7;
+    text-shadow: 0px 4px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+#sidebar .sidebar-header h3{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15;
+    color: #f7f6e7;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.50);
+    text-align: center;
+}
+
+.profile{
+    width: 180px;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.profile img{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 
 #sidebar ul p {
@@ -159,6 +174,7 @@ a:focus {
 
 #sidebar ul li a {
     display: block;
+    width: 100%;
     color: #f7f6e7;
 }
 
@@ -168,19 +184,31 @@ a:focus {
 
 #sidebar ul li a:hover {
     font-weight: 700;
-    color: #f2a154;
+    color: #f2a054;
+}
+
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    background: #252525;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    right: 20px;
+}
+
+ul ul a {
+    font-size: 0.8em !important;
 }
 
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
-#sidebarCollapse{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    color: #FFF;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
 
 #content {
     width: 100%;
@@ -193,13 +221,76 @@ a:focus {
     font-family: 'Roboto', sans-serif;
 }
 
+#content h3{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #FCA926;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
 #page #navbar-header h3{
     font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    font-size: 28px;
-    padding-top: 5px;
-    letter-spacing: 2px;
-    color: #FFF;
-    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+    font-weight: 700;
+    font-size: 20px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+    color: #FCA926;
+    text-shadow: 0px 1px 1px rgb(197, 161, 119);
 
+}
+
+/* ---------------------------------------------------
+    SEARCH BAR STYLE
+----------------------------------------------------- */
+.searchBar{
+    margin-bottom: auto;
+    margin-top: auto;
+    width: 550px;
+    height: 50px;
+    background-color: #252525;
+    border-radius: 30px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.searchInput{
+    color: #eeeeee;
+    text-align: center;
+    padding: 0 10px;
+    border: 0;
+    outline: 0;
+    background: none;
+    width: 500px;
+    caret-color: transparent;
+    line-height: 30px;
+    transition: width 0.4s linear;
+}
+
+.searchBar:hover > .searchInput{
+    caret-color:#FCA926;
+    transition: width 0.4s linear;
+}
+
+.searchBar:hover > .searchIcon{
+    background: #FCA926;
+    color: white;
+}
+
+.searchBar:hover{
+    background-color: #353b48;
+    transition: all .25s ease-out;
+}
+
+.searchIcon{
+    height: 30px;
+    width: 30px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color:white;
+    text-decoration:none;
 }
