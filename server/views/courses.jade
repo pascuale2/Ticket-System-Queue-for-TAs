@@ -122,21 +122,22 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
-          h2 Homepage
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          .line
-          h2 Lorem Ipsum Dolor
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          .line
-          h2 Lorem Ipsum Dolor
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          .line
-          h3 Lorem Ipsum Dolor
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          #course_container
+            .col-md-3 
+              form.card.p-3.bg-light
+                h2.text-left Search For A Course 
+                .input-group
+                  input#searchInput.form-control.py-2.border-right-0.border(type='search' value='Input your question here!')
+                  span.input-group-append(onclick="window.location.href='questions_ask';")
+                    button.btn.btn-outline-secondary.border-left-0.border(type='button')
+                      i.fa.fa-search    
+            .col-md-3 
+              form.card.p-3.bg-light
+                .list-group-flush 
+                  h2.text-left Your Courses
+                  a.list-group-item.list-group-item-action(href='#') Course A
+                  a.list-group-item.list-group-item-action(href='#') Course B
+                  a.list-group-item.list-group-item-action(href='#') Course C
+                  a.list-group-item.list-group-item-action(href='#') Course D
+                  a.list-group-item.list-group-item-action(href='#') Course E
     .overlay
