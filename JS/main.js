@@ -1,23 +1,51 @@
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
+const port = process.env.PORT || 3200;
 
-var server = http.createServer(function(req, res) {
+/*
+ * Create a http server running on port 3200
+*/
+const server = http.createServer(function(req, res) {
+  let filePath = path.join(
+    __dirname,
+    "..",
+    req.url === "/" ? "/HTML/home.html": req.url
+  );
 
-    console.log('request to '+req.url + ' was made');
+  //res.write(JSON.stringify(["dr john - Chem", "Dr. Borh - Bio", "Dr Sahm - Physics"]));
+  let extName = path.extname(filePath);
+  let contentType = 'text/html';
 
-   req.on('error', (err) => {
-        console.error(err);
-        req.statusCode = 400;
-        req.end();
-    });
-    res.on('error', (err) => {
-        console.error(err);
-    });
-    //res.write(JSON.stringify(["dr john - Chem", "Dr. Borh - Bio", "Dr Sahm - Physics"]));
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    var myReadStream = fs.createReadStream(__dirname + '/HTML/index.html', 'utf8');
-    myReadStream.pipe(res);
+  switch (extName) {
+    case '.css':
+      contentType = 'text/css';
+      break;
+    case '.js':
+      contentType = 'text/javascript';
+      break;
+    case '.json':
+      contentType = 'application/json';
+      break;
+    case '.png':
+      contentType = 'image/png';
+      break;
+    case '.jpg':
+      contentType = 'image/jpg';
+      break;
+  }
+
+  console.log(`File Path: ${filePath}`);
+  console.log(`Content Type: ${contentType}`);
+
+  res.writeHead(200, {'Content-Type': contentType});
+  var myReadStream = fs.createReadStream(filePath);
+  myReadStream.pipe(res);
 });
-
-server.listen(3200);
-console.log('listening on port 3200...\n');
+server.listen(port, (err) =>{
+  if (err) {
+    console.log(`Error: ${err}`);
+  } else {
+    console.log(`Server listening at port ${port}...`);
+  }
+});
