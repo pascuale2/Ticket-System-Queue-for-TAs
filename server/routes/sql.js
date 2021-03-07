@@ -27,12 +27,8 @@ function obtainAllCourses(connection, callback){
     if(err){                                               // query failed
       console.log(err);
     }else{
-      var courses;                    // query success
-      for (var i = 0; i <result.length; i ++){
-            courses += result[i].course_name;
-      }
-      courses = courses.slice(9);
-      callback(courses);
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
     }
   });
 }

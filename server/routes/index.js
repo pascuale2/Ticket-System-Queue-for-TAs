@@ -13,10 +13,12 @@ router.get('/discussions', function(req, res, next) {
   res.render('discussions');
 });
 router.get('/professors', function(req, res, next) {
-    var connection = db.configDatabase(req, res);
-    db.obtainAllProfessors(connection, function(result) {
-      res.render('professors', {data: JSON.stringify(result)});
-    });
+  var connection = db.configDatabase(req, res);
+
+  db.obtainAllProfessors(connection, function(result) {
+    res.render('professors', {data: JSON.stringify(result)});
+  });
+
 });
 router.get('/settings', function(req, res, next) {
   res.render('settings');
@@ -25,11 +27,11 @@ router.get('/questions', function(req, res, next) {
   res.render('questions');
 });
 router.get('/courses', function(req, res, next) {
-  // student_id is in /public/google.js
-    var connection = db.configDatabase(req, res);
-    db.obtainAllCourses(connection, function(result) {
-        res.render('courses', {data: JSON.stringify(result)});
-    });
+// student_id is in /public/google.js
+  var connection = db.configDatabase(req, res);
+  db.obtainAllCourses(connection, function(result) {
+      res.render('courses', {data: result});
+  });
 });
 router.get('/courses', function(req, res, next) {
   res.render('courses');
