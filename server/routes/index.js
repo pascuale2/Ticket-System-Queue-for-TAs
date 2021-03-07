@@ -46,4 +46,7 @@ router.get('/settings_edit', function(req, res, next) {
 router.get('/login', function(req, res, next) {
   res.render('login');
 });
+router.get('/chat', function(req, res, next) {
+  res.render('chat');
+});
 module.exports = router;
