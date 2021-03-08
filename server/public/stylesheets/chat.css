@@ -15,7 +15,7 @@ html {
     --theme-bg-color: rgba(16, 18, 27, 0.397);
     --border-color: rgba(113, 119, 144, 0.26);
     --body-font: "Poppins", sans-serif;
-    --content-title-color: #999ba5;
+    --content-title-color: #dddfee;
     --content-bg: rgba(146, 151, 179, 0.137);
     --button-inactive: rgba(248, 242, 242, 0.521);
 }
@@ -94,6 +94,11 @@ body {
 }
 .content-section ul li + li {
     border-top: 1px solid var(--border-color);
+}
+.divider{
+    width:5px;
+    height:auto;
+    display:inline-block;
 }
 .messagegroup {
     display: flex;
