@@ -129,10 +129,17 @@ html
           .d-flex.justify-content
             for names in locals.data
               .card
-                img(src='/images/choc-donut.png' alt='Avatar')
+                img(src='/images/profile.png' alt='Avatar')
                 hr
                 .cardContainer
-                  h3.text-center #{names.name}
+                  if names.available == 1
+                    h3.text-center #{names.name}
+                    h4.text-center Available: Yes
+                    h5.text-center
+                      a(href='/questions') Ask Question
+                  else
+                    h3.text-center #{names.name}
+                    h4.text-center Available: No
 
 
           .d-flex.justify-content-center.h-100
