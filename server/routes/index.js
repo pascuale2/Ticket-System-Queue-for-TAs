@@ -19,7 +19,6 @@ router.get('/discussions', function(req, res, next) {
 router.get('/professors/:coursename', function(req, res, next){
   var id = req.params.coursename;
   db.obtainTeaches(connection, id, function(result) {
-    console.log("query returned: ",result);
     res.render('queues', {data: result});
   });
 });
@@ -32,6 +31,9 @@ router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
 router.get('/questions', function(req, res, next) {
+//  db.obtainQuestions(connection, function(result) {
+  //  res.render('questions', {data: result});
+//  });
   res.render('questions');
 });
 router.get('/courses', function(req, res, next) {
