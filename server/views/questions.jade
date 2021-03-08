@@ -5,7 +5,7 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
     title Maple Donut - Questions
-    
+
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
@@ -65,8 +65,8 @@ html
             .profile
               .row.justify-content-center
                 img(src='/images/donut.png')
-          h2.text-center  Username 
-          h3.text-center  Biography 
+          h2.text-center  Username
+          h3.text-center  Biography
         hr
         ul.list-unstyled.components
           li
@@ -80,7 +80,7 @@ html
               ul#coursesSubmenu.collapse.list-unstyled
                 li
                   a(href='courses') Current Courses
-                li 
+                li
                   a(href='#') Search Courses
           li.active
             a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
@@ -89,7 +89,7 @@ html
               ul#questionsSubmenu.collapse.list-unstyled
                 li
                   a(href='questions') Ask a Question
-                li 
+                li
                   a(href='#') Search Questions
           li
             a(href='professors')
@@ -102,7 +102,7 @@ html
               ul#discussionsSubmenu.collapse.list-unstyled
                 li
                   a(href='discussions') Discussion Board
-                li 
+                li
                   a(href='messages') Group Chats
         hr
         ul.list-unstyled.components
@@ -139,9 +139,13 @@ html
             .row
               .col-md-9
                 h5 Question
-                .list-group
-                  a.list-group-item.list-group-item-action(href='#')
-                    | This would gather stuff from our database.
+                for questions in locals.data
+                  h5 #{questions.question_string}
+                    if questions.question_status == 0
+                      h5 Status: Not Answered
+                    else
+                      h5 Status: Answered
+
                   a.list-group-item.list-group-item-action(href='#')
                     | For text questions answered maybe?
                   a.list-group-item.list-group-item-action(href='#')
