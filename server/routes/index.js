@@ -31,10 +31,10 @@ router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
 router.get('/questions', function(req, res, next) {
-//  db.obtainQuestions(connection, function(result) {
-  //  res.render('questions', {data: result});
-//  });
-  res.render('questions');
+  db.obtainQuestions(connection, function(result) {
+    res.render('questions', {data: result});
+  });
+
 });
 router.get('/courses', function(req, res, next) {
   // student_id is in /public/google.js

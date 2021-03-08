@@ -81,4 +81,5 @@ function obtainQuestions(connection, callback) {
 }
 
 
-module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches};
+module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
+obtainQuestions};
