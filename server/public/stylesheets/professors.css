@@ -4,6 +4,7 @@
 @import './layout/navbar.css';
 @import './layout/scrollbar.css';
 @import './layout/sidebar.css';
+@import './layout/searchbar.css';
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -91,59 +92,7 @@ a:focus {
     text-shadow: 0px 1px 2px rgb(197, 161, 119)
 }
 
-/* ---------------------------------------------------
-    SEARCH BAR STYLE
------------------------------------------------------ */
-.searchBar{
-    margin-bottom: auto;
-    margin-top: auto;
-    width: 550px;
-    height: 50px;
-    background-color: #252525;
-    border-radius: 30px;
-    padding: 10px;
-    transition: 0.3s;
-}
 
-.searchInput{
-    color: #eeeeee;
-    text-align: center;
-    padding: 0 10px;
-    border: 0;
-    outline: 0;
-    background: none;
-    width: 500px;
-    caret-color: transparent;
-    line-height: 30px;
-    transition: width 0.4s linear;
-}
-
-.searchBar:hover > .searchInput{
-    caret-color:#FCA926;
-    transition: width 0.4s linear;
-}
-
-.searchBar:hover > .searchIcon{
-    background: #FCA926;
-    color: white;
-}
-
-.searchBar:hover{
-    background-color: #353b48;
-    transition: all .25s ease-out;
-}
-
-.searchIcon{
-    height: 30px;
-    width: 30px;
-    float: right;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    color:white;
-    text-decoration:none;
-}
 
 /* ---------------------------------------------------
     CARD STYLE
@@ -155,11 +104,11 @@ a:focus {
     background-color: #252525;
     box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
     transition: 0.3s;
-    border-radius: 5px;    
+    border-radius: 5px;
 }
 
 .card img{
-    padding: 5px;
+    padding: 35px;
 }
 
 .card:hover {
@@ -172,13 +121,22 @@ a:focus {
     padding: 2px 8px;
 }
 
+h5 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 200;
+  font-size: 16px;
+  padding-top: 5px;
+  letter-spacing: 2px;
+  color: lightgreen;
+  text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+}
+
 #content .cardContainer h3{
     margin-bottom: 0px;
     font-weight: 400;
     color: #FCA926;
     text-shadow: 0px 1px 2px rgb(197, 161, 119);
     letter-spacing: 1px;
-    
 }
 
 #content .cardContainer h4{

@@ -2,8 +2,11 @@ var express = require('express');
 var router = express.Router();
 var db = require('./sql');
 
+var courses_;
+var connection;
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  connection = db.configDatabase(req, res);
   res.render('login');
 });
 router.get('/home', function(req, res, next) {
@@ -12,8 +15,14 @@ router.get('/home', function(req, res, next) {
 router.get('/discussions', function(req, res, next) {
   res.render('discussions');
 });
+
+router.get('/professors/:coursename', function(req, res, next){
+  var id = req.params.coursename;
+  db.obtainTeaches(connection, id, function(result) {
+    res.render('queues', {data: result});
+  });
+});
 router.get('/professors', function(req, res, next) {
-    var connection = db.configDatabase(req, res);
     db.obtainAllProfessors(connection, function(result) {
       res.render('professors', {data: JSON.stringify(result)});
     });
@@ -22,13 +31,15 @@ router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
 router.get('/questions', function(req, res, next) {
-  res.render('questions');
+  db.obtainQuestions(connection, function(result) {
+    res.render('questions', {data: result});
+  });
+
 });
 router.get('/courses', function(req, res, next) {
   // student_id is in /public/google.js
-    var connection = db.configDatabase(req, res);
     db.obtainAllCourses(connection, function(result) {
-        res.render('courses', {data: JSON.stringify(result)});
+        res.render('courses', {data: result});
     });
 });
 router.get('/courses', function(req, res, next) {
