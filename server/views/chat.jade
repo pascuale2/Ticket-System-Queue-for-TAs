@@ -25,7 +25,7 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
   body
-    // google auth stuff
+    // google auth stuff and chat message generation
     script.
       window.onload = init;
 
@@ -56,7 +56,7 @@ html
       menu.setAttribute('class', 'menu');
       status.setAttribute('class', 'status');
       statuscircle.setAttribute('class', "status-circle green");
-      bttn.setAttribute('class', 'content-button status-button open');
+      bttn.setAttribute('class', 'message-button status-button open');
       bttn.innerText="Open";
       el.appendChild(node);
       node.appendChild(div);
@@ -162,14 +162,14 @@ html
           #navbar-header.container-fluid
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
+            button#add Add group
             .logo
               a(href='Home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
-        #content
-          button#add Add group
-          .content-section
-            .content-section-title messages
+        #content  
+          .message-section
+            .message-section-title messages
             ul#message-list
               li.message
                 img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
@@ -179,7 +179,7 @@ html
                   span.status-circle.green
                   |  message snippet
                 .button-wrapper
-                  button.content-button.status-button.open Open
+                  button.message-button.status-button.open Open
                   .menu
               li.message
                 img(src='/images/letters/letter-f.svg' alt='lettericon' width='40' height='40')
@@ -189,7 +189,7 @@ html
                   span.status-circle
                   |  messgage snippet
                 .button-wrapper
-                  button.content-button.status-button Open
+                  button.message-button.status-button Open
                   .menu
               li.message
                 img(src='/images/letters/letter-z.svg' alt='lettericon' width='40' height='40')
@@ -199,7 +199,7 @@ html
                   span.status-circle.green
                   |  message snippet here
                 .button-wrapper
-                  button.content-button.status-button.open Open
+                  button.message-button.status-button.open Open
                   .menu
               li.message
                 img(src='/images/letters/letter-h.svg' alt='lettericon' width='40' height='40')
@@ -209,7 +209,7 @@ html
                   span.status-circle.green
                   |  message snippet here
                 .button-wrapper
-                  button.content-button.status-button.open Open
+                  button.message-button.status-button.open Open
                   .menu
               li.message
                 img(src='/images/letters/letter-a.svg' alt='lettericon' width='40' height='40')
@@ -219,7 +219,7 @@ html
                   span.status-circle.green
                   |  message snippet here
                 .button-wrapper
-                  button.content-button.status-button.open Open
+                  button.message-button.status-button.open Open
                   .menu
               li.message
                 img(src='/images/letters/letter-o.svg' alt='lettericon' width='40' height='40')
@@ -229,8 +229,101 @@ html
                   span.status-circle.green
                   |  message snippet here
                 .button-wrapper
-                  button.content-button.status-button.open Open
+                  button.message-button.status-button.open Open
                   .menu
+          .mesgs
+            .msg_history
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p
+                      | What do you call a factory that makes okay products?
+                    span.time_date  11:01 AM    |    June 9
+              .outgoing_msg
+                .sent_msg
+                  p
+                    | I dont know.
+                  span.time_date  11:01 AM    |    June 9
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p A satisfactory.
+                    span.time_date  11:01 AM    |    Yesterday
+              .outgoing_msg
+                .sent_msg
+                  p 3/10
+                  span.time_date  11:01 AM    |    Today
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p
+                      | What did the janitor say when he jumped out of the closet? Supplies!
+                    span.time_date  11:01 AM    |    Today
+              .outgoing_msg
+                .sent_msg
+                  p
+                    | Please stop.
+                  span.time_date  11:01 AM    |    June 9
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p
+                      | What did the ocean say to the beach? Nothing, it just waved.
+                    span.time_date  11:01 AM    |    Today
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p
+                      | Why do seagulls fly over the ocean? Because if they flew over the bay, we'd call them bagels.
+                    span.time_date  11:01 AM    |    Today
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p
+                      | I only know 25 letters of the alphabet. I don't know y.
+                    span.time_date  11:01 AM    |    Today
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p
+                      | What did one wall say to the other? I'll meet you at the corner.
+                    span.time_date  11:01 AM    |    Today
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p
+                      | What did the zero say to the eight? That belt looks good on you.
+                    span.time_date  11:01 AM    |    Today
+              .incoming_msg
+                .incoming_msg_img
+                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
+                .received_msg
+                  .received_withd_msg
+                    p
+                      | What's the best thing about Switzerland? I don't know, but the flag is a big plus.
+                    span.time_date  11:01 AM    |    Today
+            .type_msg
+              .input_msg_write
+                input.write_msg(type='text' placeholder='Type a message')
+                button.msg_send_btn(type='button')
+                  i.fa.fa-paper-plane-o(aria-hidden='true')
+
     .overlay
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
