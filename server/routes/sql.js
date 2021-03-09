@@ -27,12 +27,8 @@ function obtainAllCourses(connection, callback){
     if(err){                                               // query failed
       console.log(err);
     }else{
-      var courses;                    // query success
-      for (var i = 0; i <result.length; i ++){
-            courses += result[i].course_name;
-      }
-      courses = courses.slice(9);
-      callback(courses);
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
     }
   });
 }
@@ -55,4 +51,35 @@ function obtainAllProfessors(connection, callback){
   });
 }
 
-module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors};
+
+function obtainTeaches(connection, coursename, callback) {
+  console.log(coursename);
+  let query = 'SELECT name, available FROM Teacher, Course, Teaches WHERE Teacher.teacher_id = \
+  Teaches.teacher_id AND Teaches.course_id = Course.course_id AND Course.course_name = ?';
+
+  connection.query(query, coursename, (err, result) => {
+    if (err) {
+      console.log("CANNOT execute query", err);
+    }else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function obtainQuestions(connection, callback) {
+  let query = 'SELECT question_string, question_status FROM Question, Student WHERE \
+  Question.student_id = 100';
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("CANNOT execute query", err);
+    }else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+
+module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
+obtainQuestions};

@@ -4,14 +4,14 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    title Maple Donut - Questions
+    title Maple Donut - Queues
 
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
     link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/questions.css')
+    link(rel='stylesheet' href='/stylesheets/professors.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
     // 1 - FONT AWESOME SCRIPT
@@ -26,9 +26,6 @@ html
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js', integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
-    // Bruce's Scripts
-    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
-    script(type='text/javascript' src='/javascripts/google.js')
 
   body
     //google auth stuff
@@ -90,7 +87,7 @@ html
                 li
                   a(href='questions') Ask a Question
                 li
-                  a(href='#') Search Questions
+                  a(href='messages') Search Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -102,8 +99,8 @@ html
               ul#discussionsSubmenu.collapse.list-unstyled
                 li
                   a(href='discussions') Discussion Board
-                li 
-                  a(href='chat') Group Chats
+                li
+                  a(href='#') Group Chats
         hr
         ul.list-unstyled.components
           li
@@ -125,87 +122,43 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
-          form.card.p-3.bg-light
-            h2.text-center Have a question? We'll try to find an answer!
-            .input-group
-              input#searchInput.form-control.py-2.border-right-0.border(type='search' value='Input your question here!')
-              span.input-group-append(onclick="window.location.href='questions_ask';")
-                button.btn.btn-outline-secondary.border-left-0.border(type='button')
-                  i.fa.fa-search
-            small#questionInfo.form-text.text-muted
-              | If we can't find a similar one, or you want to speak with someone over voice chat, we'll set you up afterwards!
-          .card.p-3.bg-light.container-fluid
-            h2.text-center Your outgoing questions and their queues.
-            .row
-              .col-md-9
-                h5 Question
-                for questions in locals.data
-                  h5 #{questions.question_string}
-                    if questions.question_status == 0
-                      h5 Status: Not Answered
-                    else
-                      h5 Status: Answered
+          .h-100.d-inline-block
+          // Search bar
+          h3.text-center Available Professors
 
-                  a.list-group-item.list-group-item-action(href='#')
-                    | For text questions answered maybe?
-                  a.list-group-item.list-group-item-action(href='#')
-                    | For voice chat ready? Maybe with notification?
-              .col-md-3
-                h5 Place in Queue
-                ul.list-group
-                  li.list-group-item.place-in-queue 5
-                  li.list-group-item.list-group-item-primary.place-in-queue Answered
-                  li.list-group-item.list-group-item-success.place-in-queue Voice Chat Ready
-          .card.p-3.bg-light.container-fluid
-            h2.text-center Recently asked questions related to your courses.
-            .row
-              .col-md-9
-                .list-group
-                  h5 Question
-                  a.list-group-item.list-group-item-action(href='#')
-                    | This would gather stuff from our database.
-                  a.list-group-item.list-group-item-action(href='#') What's the difference between a for loop and a while loop?
-                  a.list-group-item.list-group-item-action(href='#') How do I create a function in MIPS?
-                  a.list-group-item.list-group-item-action(href='#') How do I create a table is SQL?
-                  a.list-group-item.list-group-item-action(href='#') Is HTML a programming language?
-              .list-group.col-md-3
-                h5 Course
-                a.list-group-item.list-group-item-action
-                  | NULL
-                a.list-group-item.list-group-item-action CMPT 101
-                a.list-group-item.list-group-item-action CMPT 229
-                a.list-group-item.list-group-item-action CMPT 291
-                a.list-group-item.list-group-item-action CMPT 101
-              nav(aria-label='PageNavCourseQuestions')
-                ul.pagination.justify-content-center
-                  li.page-item.disabled
-                    a.page-link(href='#' tabindex='-1') Previous
-                  li.page-item
-                    a.page-link(href='#') 1
-                  li.page-item
-                    a.page-link(href='#') 2
-                  li.page-item
-                    a.page-link(href='#') 3
-                  li.page-item
-                    a.page-link(href='#') Next
-          .card.p-3.bg-light
-            h2.text-center Popular questions asked to advisors.
-            .list-group
-              a.list-group-item.list-group-item-action(href='#')
-                | This could also be recent questions, I don't know how we'd implement popular questions.
-              a.list-group-item.list-group-item-action(href='#') I'm thinking of switching to Arts from Sciences, do all my credits transfer?
-              nav(aria-label='PageNavCourseQuestions')
-                ul.pagination.justify-content-center
-                  li.page-item.disabled
-                    a.page-link(href='#' tabindex='-1') Previous
-                  li.page-item
-                    a.page-link(href='#') 1
-                  li.page-item
-                    a.page-link(href='#') 2
-                  li.page-item
-                    a.page-link(href='#') 3
-                  li.page-item
-                    a.page-link(href='#') Next
+          .d-flex.justify-content-center
+            for names in locals.data
+              .card
+                img(src='/images/person.png' alt='Avatar')
+                hr
+                .cardContainer
+                  if names.available == 1
+                    h3.text-center #{names.name}
+                    h4.text-center Available: Yes
+                    h5.text-center
+                      a(href='/questions') Ask Question
+                  else
+                    h3.text-center #{names.name}
+                    h4.text-center Available: No
+
+
+          .d-flex.justify-content-center.h-100
+            .card
+              img(src='/images/choc-donut.png' alt='Avatar')
+              hr
+              .cardContainer
+                h3.text-center Name
+                h4.text-center Statistics
+                p.text-center Assistant Professor
+
+            .card
+              img(src='/images/jelly-donut.png' alt='Avatar')
+              hr
+              .cardContainer
+                h3.text-center Erwin Pascual
+                h4.text-center Computer Science
+                p.text-center Unemployed
     .overlay
+    
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')

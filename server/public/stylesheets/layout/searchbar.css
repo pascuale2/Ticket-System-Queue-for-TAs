@@ -1,0 +1,53 @@
+/* ---------------------------------------------------
+    SEARCH BAR STYLE
+----------------------------------------------------- */
+.searchBar{
+    margin-bottom: auto;
+    margin-top: auto;
+    width: 550px;
+    height: 50px;
+    background-color: #252525;
+    border-radius: 30px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.searchInput{
+    color: #eeeeee;
+    text-align: center;
+    padding: 0 10px;
+    border: 0;
+    outline: 0;
+    background: none;
+    width: 500px;
+    caret-color: transparent;
+    line-height: 30px;
+    transition: width 0.4s linear;
+}
+
+.searchBar:hover > .searchInput{
+    caret-color:#FCA926;
+    transition: width 0.4s linear;
+}
+
+.searchBar:hover > .searchIcon{
+    background: #FCA926;
+    color: white;
+}
+
+.searchBar:hover{
+    background-color: #353b48;
+    transition: all .25s ease-out;
+}
+
+.searchIcon{
+    height: 30px;
+    width: 30px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color:white;
+    text-decoration:none;
+}

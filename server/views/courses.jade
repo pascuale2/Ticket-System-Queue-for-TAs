@@ -122,28 +122,23 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
+          #courseContainer
+            h3.text-center Search Courses
+            .d-flex.justify-content-center.h-100
+              .container.h-100
+                .d-flex.justify-content-center.h-100
+                  .searchBar
+                    input.searchInput(id='searchInput' type='text' placeholder='e.g. "CMPT355" or "Artificial Intelligence"')
+                    a.searchIcon(href='#')
+                      i.fas.fa-search
+            hr
+            h3.text-center Your Courses
+            .d-flex.justify-content-center
+              for courses in locals.data
+                .card(id='courseCard')
+                  .cardContainer(id='courseCardContainer')
+                    a(href='professors/'+courses.course_name) #{courses.course_name}
 
-          #course_container
-            .col-md-3
-              form.card.p-3.bg-light
-                h2.text-left Search For A Course
-                 | !{locals.data}
-                .input-group
-                  input#searchInput.form-control.py-2.border-right-0.border(type='search' value='Input your question here!')
-                  span.input-group-append(onclick="window.location.href='questions_ask';")
-                    button.btn.btn-outline-secondary.border-left-0.border(type='button')
-                      i.fa.fa-search
-            .col-md-3
-              form.card.p-3.bg-light
-                .list-group-flush
-
-                  h2.text-left Your Courses
-                  // ideally we have a for loop here  for each course
-                    a.list-group-item.list-group-item-action(href='#') Course A
-                    a.list-group-item.list-group-item-action(href='#') Course B
-                    a.list-group-item.list-group-item-action(href='#') Course C
-                    a.list-group-item.list-group-item-action(href='#') Course D
-                    a.list-group-item.list-group-item-action(href='#') Course E
     .overlay
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
