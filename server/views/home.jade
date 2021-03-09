@@ -48,8 +48,18 @@ html
         ux_mode: 'redirect',
         redirect_uri: 'http://localhost:3000/home',
         hosted_domain: 'mymacewan.ca',
+      }).then(function(auth2){
+        if(auth2.isSignedIn.get()){
+          var profile=auth2.currentUser.get().getBasicProfile();
+          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+          console.log('Name: ' + profile.getName());
+          console.log('Image URL: ' + profile.getImageUrl());
+          console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+          var pic=document.getElementById('profilepic');
+          pic.src=profile.getImageUrl();
+        }});
       });
-      });
+      
       }
     .wrapper
       // Sidebar
@@ -61,7 +71,7 @@ html
           .row.justify-content-center
             .profile
               .row.justify-content-center
-                img(src='/images/donut.png')
+                img#profilepic(src='/images/donut.png' alt='lettericon' width='100' height='100')
           h2.text-center  Username 
           h3.text-center  Biography 
         hr
