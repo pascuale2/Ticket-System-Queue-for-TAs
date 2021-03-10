@@ -63,3 +63,32 @@ a:focus {
     text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
 
 }
+
+.card{
+    background-color: #252525;
+    box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
+}
+
+
+#content h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #FCA926;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
+
+#content h5 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #FCA926;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
+#content a.list-group-item {
+    background-color: #f7f6e7;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
