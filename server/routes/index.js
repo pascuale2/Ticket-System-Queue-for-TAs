@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var db = require('./sql');
-
 var courses_;
 var connection;
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   connection = db.configDatabase(req, res);
@@ -22,6 +22,13 @@ router.get('/professors/:coursename', function(req, res, next){
     res.render('queues', {data: result});
   });
 });
+
+router.post('/professors', function(req, res, next){                    // For a professor search
+  db.searchProfessor(connection, req.body.professor, function(result) {
+    res.render('professors', {data: result});
+  });
+});
+
 router.get('/professors', function(req, res, next) {
     db.obtainAllProfessors(connection, function(result) {
       res.render('professors', {data: JSON.stringify(result)});

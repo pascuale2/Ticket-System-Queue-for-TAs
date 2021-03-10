@@ -80,6 +80,19 @@ function obtainQuestions(connection, callback) {
   });
 }
 
+function searchProfessor(connection, input, callback) {
+  let replacement = `'%${input}%'`;
+  let query = 'SELECT * FROM Teacher WHERE name like '+replacement;
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("CANNOT execute search", err);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
 
 module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
-obtainQuestions};
+obtainQuestions, searchProfessor};
