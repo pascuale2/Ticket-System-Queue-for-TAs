@@ -5,7 +5,7 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
     title Maple Donut - Home
-    
+
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINK
     // 4 - FAVICON LINK
@@ -48,8 +48,18 @@ html
         ux_mode: 'redirect',
         redirect_uri: 'http://localhost:3000/home',
         hosted_domain: 'mymacewan.ca',
+      }).then(function(auth2){
+        if(auth2.isSignedIn.get()){
+          var profile=auth2.currentUser.get().getBasicProfile();
+          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+          console.log('Name: ' + profile.getName());
+          console.log('Image URL: ' + profile.getImageUrl());
+          console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+          var pic=document.getElementById('profilepic');
+          pic.src=profile.getImageUrl();
+        }});
       });
-      });
+
       }
     .wrapper
       // Sidebar
@@ -61,9 +71,9 @@ html
           .row.justify-content-center
             .profile
               .row.justify-content-center
-                img(src='/images/donut.png')
-          h2.text-center  Username 
-          h3.text-center  Biography 
+                img#profilepic(src='/images/donut.png' alt='lettericon' width='100' height='100')
+          h2.text-center  Username
+          h3.text-center  Biography
         hr
         ul.list-unstyled.components
           li
@@ -77,7 +87,7 @@ html
               ul#coursesSubmenu.collapse.list-unstyled
                 li
                   a(href='courses') Current Courses
-                li 
+                li
                   a(href='#') Search Courses
           li.active
             a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
@@ -86,7 +96,7 @@ html
               ul#questionsSubmenu.collapse.list-unstyled
                 li
                   a(href='questions') Ask a Question
-                li 
+                li
                   a(href='#') Search Questions
           li
             a(href='professors')
@@ -99,8 +109,8 @@ html
               ul#discussionsSubmenu.collapse.list-unstyled
                 li
                   a(href='discussions') Discussion Board
-                li 
-                  a(href='#') Group Chats
+                li
+                  a(href='chat') Group Chats
         hr
         ul.list-unstyled.components
           li
@@ -140,3 +150,5 @@ html
           p
             | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     .overlay
+    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
+    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')

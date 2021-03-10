@@ -4,7 +4,7 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    title Maple Donut - Professors
+    title Maple Donut - Queues
 
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
@@ -124,35 +124,30 @@ html
         #content
           .h-100.d-inline-block
           // Search bar
-          h3.text-center Search Professors
-          .container.h-100
-            .d-flex.justify-content-center.h-100
-              .searchBar
-                form(action="/professors", method="post")
-                  input(type="text", name="professor", placeholder='e.g. Brian Franczak')
-                  input(type='submit',value='Search',data-transition='fade', data-theme='c')
-                //input.searchInput(id='searchInput' type='text' placeholder='e.g. Brian Franczak')
+          h3.text-center Available Professors
 
-                a.searchIcon(href='#')
-                  i.fas.fa-search
-          hr
-          for names in locals.data
-            if names.name != Null
-              .d-flex.justify-content-center.h-100
-                .card
-                  img(src='/images/choc-donut.png' alt='Avatar')
-                  hr
-                  .cardContainer
+          .d-flex.justify-content
+            for names in locals.data
+              .card
+                img(src='/images/profile.png' alt='Avatar')
+                hr
+                .cardContainer
+                  if names.available == 1
                     h3.text-center #{names.name}
-                    h4.text-center #{names.available}
-                    h3.text-center #{names.discipline}
-          h3.text-center Professors for Enrolled Courses
+                    h4.text-center Available: Yes
+                    h5.text-center
+                      a(href='/questions') Ask Question
+                  else
+                    h3.text-center #{names.name}
+                    h4.text-center Available: No
+
+
           .d-flex.justify-content-center.h-100
             .card
               img(src='/images/choc-donut.png' alt='Avatar')
               hr
               .cardContainer
-                h3.text-center Brian Franczak
+                h3.text-center Name
                 h4.text-center Statistics
                 p.text-center Assistant Professor
 
