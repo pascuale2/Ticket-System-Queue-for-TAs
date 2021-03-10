@@ -87,7 +87,7 @@ html
                 li
                   a(href='questions') Ask a Question
                 li
-                  a(href='chat') Search Questions
+                  a(href='messages') Search Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -128,10 +128,24 @@ html
           .container.h-100
             .d-flex.justify-content-center.h-100
               .searchBar
-                input.searchInput(id='searchInput' type='text' placeholder='e.g. Brian Franczak')
+                form(action="/professors", method="post")
+                  input(type="text", name="professor", placeholder='e.g. Brian Franczak')
+                  input(type='submit',value='Search',data-transition='fade', data-theme='c')
+                //input.searchInput(id='searchInput' type='text' placeholder='e.g. Brian Franczak')
+
                 a.searchIcon(href='#')
                   i.fas.fa-search
           hr
+          for names in locals.data
+            if names.name != Null
+              .d-flex.justify-content-center.h-100
+                .card
+                  img(src='/images/choc-donut.png' alt='Avatar')
+                  hr
+                  .cardContainer
+                    h3.text-center #{names.name}
+                    h4.text-center #{names.available}
+                    h3.text-center #{names.discipline}
           h3.text-center Professors for Enrolled Courses
           .d-flex.justify-content-center.h-100
             .card
