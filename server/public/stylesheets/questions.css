@@ -5,6 +5,7 @@
 @import './layout/navbar.css';
 @import './layout/scrollbar.css';
 @import './layout/sidebar.css';
+@import './layout/searchbar.css';
 
 body {
     font-family: 'Roboto', sans-serif;
