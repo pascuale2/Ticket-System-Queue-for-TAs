@@ -90,7 +90,7 @@ html
                 li
                   a(href='questions') Ask a Question
                 li
-                  a(href='#') Search Questions
+                  a(href='questions_search') Search Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -125,17 +125,41 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
-          form.card.p-3
-            h2.text-center Have a question? We'll try to find an answer!
-            .container.h-100
-              .d-flex.justify-content-center.h-100
-                .searchBar
-                  form(action="/questions", method="post")
-                    input(type="text", name="question", placeholder='What is supervised machine learning?')
-                    input(type='submit',value='Search',data-transition='fade', data-theme='c')
-                  a.searchIcon(href='#')
-                    i.fas.fa-search
-          hr
+          .card.p-3.container-fluid
+            h5 Please input your question.
+            .input-group
+              input#searchInput.form-control.py-2.border-right-0.border(type='search' placeholder='"How do you transcibe w sounds in IPA"')
+            .input-group
+              .input-group-prepend
+                span.input-group-text More info
+              textarea.form-control(aria-label='With textarea')
+            p Added information is not required, but may help your responder prepare.
+            .row
+              .col-md-7
+                h5 Is this a question for a specific course, or an advisor?
+              .col-md-3
+                .input-group.mb-3
+                  select#inputCoA.custom-select
+                    option(selected='') Choose...
+                    option(value='course') Course
+                    option(value='advisor') Advisor
+            .row
+              .col-md-7
+                h5 If for a course, please specify.
+              .col-md-3
+                .input-group.mb-3
+                  select#inputCoA.custom-select
+                    option(selected='') Choose...
+                    option(value='course') CMPT 101
+                    option(value='advisor') CMPT 229
+                    option(value='advisor') CMPT 291
+            .row
+              .col-md-7
+                h5 Do you require voice chat?
+              .col-md-3
+                label.switch
+                  input(type='checkbox')
+                  span.slider
           .card.p-3.container-fluid
             h2.text-center Your outgoing questions and their queues.
             questions_stated = []
