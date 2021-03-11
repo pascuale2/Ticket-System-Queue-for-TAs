@@ -58,6 +58,9 @@ router.get('/question_success', function(req, res, next) {
 router.get('/question_ask', function(req, res, next) {
   res.render('question_ask');
 });
+router.get('/questions_search', function(req, res, next) {
+  res.render('questions_search');
+});
 router.get('/settings_edit', function(req, res, next) {
   res.render('settings_edit');
 });
