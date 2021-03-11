@@ -13,26 +13,24 @@
 }
 
 .searchInput{
-    color: #eeeeee;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #eeeeeedd;
     text-align: center;
     padding: 0 10px;
     border: 0;
     outline: 0;
     background: none;
     width: 500px;
-    caret-color: transparent;
+    caret-color: #FCA926;
     line-height: 30px;
     transition: width 0.4s linear;
 }
 
-.searchBar:hover > .searchInput{
+.searchBar:hover > form .searchInput{
     caret-color:#FCA926;
     transition: width 0.4s linear;
-}
-
-.searchBar:hover > .searchIcon{
-    background: #FCA926;
-    color: white;
 }
 
 .searchBar:hover{
@@ -43,11 +41,19 @@
 .searchIcon{
     height: 30px;
     width: 30px;
+    border: none;
+    background: none;
     float: right;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    color:white;
+    color: white;
     text-decoration:none;
+    transition: all 0.1s linear;
+}
+
+.searchBar:hover > form .searchIcon{
+    background: #FCA926;
+    color: white;
 }
