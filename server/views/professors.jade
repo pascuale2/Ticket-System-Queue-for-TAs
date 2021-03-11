@@ -126,26 +126,30 @@ html
           // Search bar
           h3.text-center Search Professors
           .container.h-100
-            .d-flex.justify-content-center.h-100
+            .d-xl-flex.justify-content-center.h-100
               .searchBar
-                form(action="/professors", method="post")
-                  input(type="text", name="professor", placeholder='e.g. Brian Franczak')
-                  input(type='submit',value='Search',data-transition='fade', data-theme='c')
-                //input.searchInput(id='searchInput' type='text' placeholder='e.g. Brian Franczak')
+                form(action='/professors' method='post')
+                  input.searchInput(type='text' name='professor' placeholder='e.g. Brian Franczak')
+                  button.searchIcon(type='submit')
+                    i.fas.fa-search
 
-                a.searchIcon(href='#')
-                  i.fas.fa-search
           hr
-          for names in locals.data
-            if names.name != Null
-              .d-flex.justify-content-center.h-100
+          .searchResultContainer
+            for names in locals.data
+              if names.name != Null
                 .card
-                  img(src='/images/choc-donut.png' alt='Avatar')
-                  hr
+                  if names.available == 1
+                    img(src='/images/person.png' alt='Avatar')
+                  else
+                    img(src='/images/person_offline.png' alt='Avatar')
                   .cardContainer
-                    h3.text-center #{names.name}
-                    h4.text-center #{names.available}
-                    h3.text-center #{names.discipline}
+                    if names.available == 1
+                      h3.text-center #{names.name}
+                      h5.text-center Available
+                    else
+                      h4.text-center #{names.name}
+                      h4.text-center Not Available
+          hr
           h3.text-center Professors for Enrolled Courses
           .d-flex.justify-content-center.h-100
             .card
