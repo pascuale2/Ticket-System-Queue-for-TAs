@@ -104,11 +104,11 @@ function searchQuestions(connection, input, callback) {
       callback(result);
     }
   });
-}
+}*/
 
 
 function searchCourses(connection, course, callback) {
-  let replacement = `'%${input}%'`;
+  let replacement = `'%${course}%'`;
   let query = 'SELECT * FROM Course WHERE course_name like '+replacement;
   connection.query(query, (err, result) => {
     if (err) {
@@ -118,8 +118,8 @@ function searchCourses(connection, course, callback) {
       callback(result);
     }
   });
-}*/
+}
 
 
 module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
-obtainQuestions, searchProfessor};
+obtainQuestions, searchProfessor, searchCourses};

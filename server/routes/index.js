@@ -66,6 +66,15 @@ router.get('/courses', function(req, res, next) {
 router.get('/courses', function(req, res, next) {
   res.render('courses');
 });
+router.post('/course_search', function(req, res, next) {
+  db.searchCourses(connection, req.body.course, function(result){
+    console.log("result is ",result);
+    res.render('course_search', {data: result});
+  });
+});
+router.get('/course_search', function(req, res, next) {
+  res.render('course_search')
+});
 router.get('/question_success', function(req, res, next) {
   res.render('question_success');
 });
@@ -74,7 +83,6 @@ router.get('/question_ask', function(req, res, next) {
 });
 /*
 router.post('/questions_search', function(req, res, next) {                    // For a question search
-  console.log("HER==E\n\n\n");
   console.log("result is: ",req.body.question);
   db.searchQuestions(connection, req.body.question, function(result) {
     res.render('questions_search', {data: result});
