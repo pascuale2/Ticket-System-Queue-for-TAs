@@ -92,6 +92,33 @@ function searchProfessor(connection, input, callback) {
     }
   });
 }
+/*
+function searchQuestions(connection, input, callback) {
+  let replacement = `'%${input}%'`;
+  let query = 'SELECT * FROM Question WHERE question_string like '+replacement;
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("CANNOT execute search", err);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+
+function searchCourses(connection, course, callback) {
+  let replacement = `'%${input}%'`;
+  let query = 'SELECT * FROM Course WHERE course_name like '+replacement;
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("CANNOT execute search", err);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}*/
 
 
 module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,

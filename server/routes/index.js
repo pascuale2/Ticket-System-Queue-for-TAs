@@ -37,18 +37,32 @@ router.get('/professors', function(req, res, next) {
 router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
+router.post('/questions', function(req, res, next) {
+    console.log(req.body);
+    res.render('questions');
+
+});
 router.get('/questions', function(req, res, next) {
   db.obtainQuestions(connection, function(result) {
     res.render('questions', {data: result});
   });
 
 });
+/*
+router.post('/courses', function(req, res, next) {
+  db.searchCourses(connection, req.body.course, function(result) {
+    console.log("\nresult", result);
+    res.render('courses', {data: result});
+  });
+});*/
+
 router.get('/courses', function(req, res, next) {
   // student_id is in /public/google.js
     db.obtainAllCourses(connection, function(result) {
         res.render('courses', {data: result});
     });
 });
+
 router.get('/courses', function(req, res, next) {
   res.render('courses');
 });
@@ -57,6 +71,18 @@ router.get('/question_success', function(req, res, next) {
 });
 router.get('/question_ask', function(req, res, next) {
   res.render('question_ask');
+});
+/*
+router.post('/questions_search', function(req, res, next) {                    // For a question search
+  console.log("HER==E\n\n\n");
+  console.log("result is: ",req.body.question);
+  db.searchQuestions(connection, req.body.question, function(result) {
+    res.render('questions_search', {data: result});
+  });
+});*/
+
+router.get('/questions_search', function(req, res, next) {
+  res.render('questions_search');
 });
 router.get('/settings_edit', function(req, res, next) {
   res.render('settings_edit');
