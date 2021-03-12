@@ -48,13 +48,6 @@ router.get('/questions', function(req, res, next) {
   });
 
 });
-/*
-router.post('/courses', function(req, res, next) {
-  db.searchCourses(connection, req.body.course, function(result) {
-    console.log("\nresult", result);
-    res.render('courses', {data: result});
-  });
-});*/
 
 router.get('/courses', function(req, res, next) {
   // student_id is in /public/google.js
