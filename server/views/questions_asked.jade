@@ -125,80 +125,17 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
-          .card.p-3.container-fluid
-            h5 Please input your question.
+        .card.p-3.container-fluid
+          h2.text-center Your outgoing questions and their queues.
+          questions_stated = []
+          index_counter = 0
+          .row
+            .col-md-9
+              h5 Question
+              // loops through locals.data and assigns a list-group-item for each question string
+              ul.list-group
+          
 
-            .input-group
-              input#searchInput.form-control.py-2.border-right-0.border(type='search' placeholder='"How do you transcibe w sounds in IPA"')
-            .input-group
-              .input-group-prepend
-                span.input-group-text More info
-              textarea.form-control(aria-label='With textarea')
-            p Added information is not required, but may help your responder prepare.
-            .row
-              .col-md-7
-                h5 Is this a question for a specific course, or an advisor?
-              .col-md-3
-                .input-group.mb-3
-                  select#inputCoA.custom-select
-                    option(selected='') Choose...
-                    option(type='text' value='course') Course
-                    option(type='text' value='advisor') Advisor
-
-            .row
-              .col-md-7
-                h5 If for a course, please specify.
-              .col-md-3
-                .input-group.mb-3
-                  select#inputCoA.custom-select
-                    option(selected='') Choose...
-                    option(value='course') CMPT 101
-                    option(value='advisor') CMPT 229
-                    option(value='advisor') CMPT 291
-
-
-              .row
-                .col-md-7
-                  h5 Do you require voice chat?
-                .col-md-3
-                  label.switch
-                    input(type='checkbox')
-                    span.slider
-          form(action='/questions' method='post')
-            .row
-              input.searchInput(type='text' name='question_ask' placeholder='e.g. What is this website called?')
-            .row
-
-              h5 Is this a question for a specific course, or an advisor?
-              .input-group.mb-3
-                  input.searchInput(type='text' name='question_type' placeholder='e.g. Instructor Name or Course Name')
-            .row
-              button.searchIcon(type='submit')
-                i.fas.fa-search
-
-          .card.p-3.container-fluid
-            h2.text-center Your outgoing questions and their queues.
-            questions_stated = []
-            index_counter = 0
-            .row
-              .col-md-9
-                h5 Question
-                // loops through locals.data and assigns a list-group-item for each question string
-                ul.list-group
-                  for questions in locals.data
-                    //questions_stated[index_counter] = questions.question_string
-                    //index_counter = index_counter + 1
-                    if questions.question_string != Null
-                      a.list-group-item.list-group-item-action #{questions.question_string}
-              .col-md-3
-                h5 Place in Queue
-                // loops through locals.data again and states whether question is answered or not
-                ul.list-group
-                  for questions in locals.data
-                      if questions.question_status == 0
-                        a.list-group-item.list-group-item-action(href='#').place-in-queue Not Answered
-                      else
-                        a.list-group-item.place-in-queueAnswered Answered
     .overlay
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
