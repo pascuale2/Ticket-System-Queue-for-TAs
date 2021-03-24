@@ -181,7 +181,7 @@ html
             questions_stated = []
             index_counter = 0
             .row
-              .col-md-9
+              .col-md-6
                 h5 Question
                 // loops through locals.data and assigns a list-group-item for each question string
                 ul.list-group
@@ -190,6 +190,15 @@ html
                     //index_counter = index_counter + 1
                     if questions.question_string != Null
                       a.list-group-item.list-group-item-action #{questions.question_string}
+              .col-md-3
+                h5 Status
+                // loops through locals.data again and states whether question is answered or not
+                ul.list-group
+                  for questions in locals.data
+                      if questions.question_status == 0
+                        a.list-group-item.list-group-item-action(href='#').place-in-queue Not Answered
+                      else
+                        a.list-group-item.place-in-queueAnswered Answered
               .col-md-3
                 h5 Place in Queue
                 // loops through locals.data again and states whether question is answered or not
