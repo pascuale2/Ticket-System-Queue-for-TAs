@@ -46,8 +46,9 @@ router.post('/questions', function(req, res, next) {
       largestid = result;
       console.log("\n LARGEST ID IS: ",largestid,"\n");
       db.askQuestion(connection, req.body.question_ask, 100, largestid, function(result) {
-        console.log("result is ",result);
-      res.render('questions_asked');
+        db.obtainQuestions(connection, function(result) {
+          res.render('questions', {data: result});
+        });
     });
   });
 

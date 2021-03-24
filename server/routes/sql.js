@@ -68,13 +68,13 @@ function obtainTeaches(connection, coursename, callback) {
 }
 
 function obtainQuestions(connection, callback) {
-  let query = 'SELECT question_string, question_status FROM Question, Student WHERE \
-  Question.student_id = 100';
+  let query = 'SELECT DISTINCT * FROM Question WHERE Question.student_id = 100';
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute query", err);
     }else {
       result = JSON.parse(JSON.stringify(result));
+      console.log("result is ",result);
       callback(result);
     }
   });
