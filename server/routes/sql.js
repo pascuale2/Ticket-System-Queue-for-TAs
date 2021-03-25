@@ -21,21 +21,28 @@ function configDatabase(req, res) {
 }
 
 function obtainAllCourses(connection, callback){
-  let query = 'SELECT course_name FROM Course,Student,Takes WHERE Student.student_id=Takes.student_id AND Takes.course_id = Course.course_id AND Student.student_id = 101';
+  let query = '\
+  SELECT course_name\
+  FROM Course,Student,Takes\
+  WHERE Student.student_id=Takes.student_id AND Takes.course_id = Course.course_id AND Student.student_id = 101';
 
   connection.query(query, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
     }else{
       result = JSON.parse(JSON.stringify(result));
+      console.log(result);
       callback(result);
     }
   });
 }
 
 function obtainAllProfessors(connection, callback){
-  let query = 'SELECT name FROM Teacher, Teaches, Course WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
-  AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
+  let query = '\
+  SELECT name FROM Teacher, Teaches, Course \
+  WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
+  AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student \
+  WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
 
   connection.query(query, (err, result) => {
     if(err){                                               // query failed
@@ -54,7 +61,10 @@ function obtainAllProfessors(connection, callback){
 
 function obtainTeaches(connection, coursename, callback) {
   console.log(coursename);
-  let query = 'SELECT name, available FROM Teacher, Course, Teaches WHERE Teacher.teacher_id = \
+  let query = '\
+  SELECT name, available\
+  FROM Teacher, Course, Teaches \
+  WHERE Teacher.teacher_id = \
   Teaches.teacher_id AND Teaches.course_id = Course.course_id AND Course.course_name = ?';
 
   connection.query(query, coursename, (err, result) => {
@@ -68,13 +78,18 @@ function obtainTeaches(connection, coursename, callback) {
 }
 
 function obtainQuestions(connection, callback) {
-  let query = 'SELECT DISTINCT * FROM Question WHERE Question.student_id = 100';
+  let query = '\
+  SELECT DISTINCT * \
+  FROM Question INNER JOIN Student \
+  ON Question.student_id = Student.student_id \
+  WHERE Question.student_id = 100';
+
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute query", err);
     }else {
       result = JSON.parse(JSON.stringify(result));
-      console.log("result is ",result);
+      // console.log("result is ",result);
       callback(result);
     }
   });
@@ -82,7 +97,11 @@ function obtainQuestions(connection, callback) {
 
 function searchProfessor(connection, input, callback) {
   let replacement = `'%${input}%'`;
-  let query = 'SELECT * FROM Teacher WHERE name like '+replacement;
+  let query = '\
+  SELECT * \
+  FROM Teacher \
+  WHERE name like ' + replacement;
+
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute search", err);
@@ -109,7 +128,7 @@ function searchQuestions(connection, input, callback) {
 
 function searchCourses(connection, course, callback) {
   let replacement = `'%${course}%'`;
-  let query = 'SELECT * FROM Course WHERE course_name like '+replacement;
+  let query = 'SELECT * FROM Course WHERE course_name like '+ replacement;
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute search", err);

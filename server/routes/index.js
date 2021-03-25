@@ -36,6 +36,7 @@ router.get('/professors', function(req, res, next) {
       res.render('professors', {data: JSON.stringify(result)});
     });
 });
+
 router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
@@ -47,16 +48,19 @@ router.post('/questions', function(req, res, next) {
       console.log("\n LARGEST ID IS: ",largestid,"\n");
       db.askQuestion(connection, req.body.question_ask, 100, largestid, function(result) {
         db.obtainQuestions(connection, function(result) {
-          res.render('questions', {data: result});
+            res.render('questions', {data: result});
+          });
         });
     });
   });
 
-
-});
 router.get('/questions', function(req, res, next) {
   db.obtainQuestions(connection, function(result) {
-    res.render('questions', {data: result});
+    db.obtainAllCourses(connection, function(courseResults) {
+      res.render('questions',{
+        "data": result,
+        "courses": courseResults});
+    });
   });
 });
 

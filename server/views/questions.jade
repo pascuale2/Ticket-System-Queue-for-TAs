@@ -125,61 +125,38 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
+          // Search bar
+          h3.text-center Ask a Question
+          .container.h-100
+            .d-xl-flex.justify-content-center.h-100
+              .searchBar
+                form(action='/questions' method='post')
+                  input.searchInput(type='text' name='professor' placeholder='Title: What is the difference between FFT and DFT')
+                  button.searchIcon(type='submit')
+                    i.fas.fa-search
+          hr
           .card.p-3.container-fluid
-            h5 Please input your question.
-
-            .input-group
-              input#searchInput.form-control.py-2.border-right-0.border(type='search' placeholder='"How do you transcibe w sounds in IPA"')
-            .input-group
-              .input-group-prepend
-                span.input-group-text More info
-              textarea.form-control(aria-label='With textarea')
-            p Added information is not required, but may help your responder prepare.
+            h3.text-center Additional Details
             .row
-              .col-md-7
-                h5 Is this a question for a specific course, or an advisor?
-              .col-md-3
+              .col-md-3.justify-content-center
                 .input-group.mb-3
-                  select#inputCoA.custom-select
-                    option(selected='') Choose...
+                  select#discipline.custom-select
+                    option(selected='') Select Discipline
                     option(type='text' value='course') Course
                     option(type='text' value='advisor') Advisor
 
             .row
-              .col-md-7
-                h5 If for a course, please specify.
-              .col-md-3
+              .col-md-3.justify-content-center
                 .input-group.mb-3
-                  select#inputCoA.custom-select
-                    option(selected='') Choose...
-                    option(value='course') CMPT 101
-                    option(value='advisor') CMPT 229
-                    option(value='advisor') CMPT 291
-
-
-              .row
-                .col-md-7
-                  h5 Do you require voice chat?
-                .col-md-3
-                  label.switch
-                    input(type='checkbox')
-                    span.slider
-          form(action='/questions' method='post')
-            .row
-              input.searchInput(type='text' name='question_ask' placeholder='e.g. What is this website called?')
-            .row
-
-              h5 Is this a question for a specific course, or an advisor?
-              .input-group.mb-3
-                  input.searchInput(type='text' name='question_type' placeholder='e.g. Instructor Name or Course Name')
-            .row
-              button.searchIcon(type='submit')
-                i.fas.fa-search
-
+                  select#courseComboBox.custom-select
+                    option(selected='') Select Course
+                    for courses in locals.courses
+                      option(type='text' value=courses.course_name) #{courses.course_name}
+          hr
           .card.p-3.container-fluid
             h2.text-center Your outgoing questions and their queues.
-            questions_stated = []
-            index_counter = 0
+            //- questions_stated = []
+            //- index_counter = 0
             .row
               .col-md-6
                 h5 Question
