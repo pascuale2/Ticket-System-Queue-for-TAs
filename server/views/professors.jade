@@ -143,12 +143,16 @@ html
                   else
                     img(src='/images/person_offline.png' alt='Avatar')
                   .cardContainer
+                    .d-flex.justify-content-center
+                      h3.text-center
+                        a(href='schedule/'+names.name) Check Schedule
                     if names.available == 1
                       h3.text-center #{names.name}
                       h5.text-center Available
                     else
                       h4.text-center #{names.name}
                       h4.text-center Not Available
+
           hr
           h3.text-center Professors for Enrolled Courses
           .d-flex.justify-content-center.h-100
@@ -167,6 +171,5 @@ html
                 h3.text-center Erwin Pascual
                 h4.text-center Computer Science
                 p.text-center Unemployed
-    .overlay
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
