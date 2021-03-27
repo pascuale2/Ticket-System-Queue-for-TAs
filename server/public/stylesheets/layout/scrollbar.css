@@ -8,6 +8,6 @@
 
 ::-webkit-scrollbar-thumb{
     border-radius: 30px;
-    background: -webkit-gradient(linear, left top, left bottom, from(#FCA926), to(#f2a054));
+    background: -webkit-gradient(linear, left top, left bottom, from(#fcaa26b4), to(#f2a05467));
     overflow: auto;
 }

@@ -6,6 +6,7 @@
 @import './layout/scrollbar.css';
 @import './layout/sidebar.css';
 @import './layout/searchbar.css';
+@import './layout/combobox.css';
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -64,11 +65,16 @@ a:focus {
     text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
 
 }
+#questionAskInput{
+    width: 90%;
+    background-color: #181818;
+}
 
 .card{
     background-color: #181818;
     box-shadow: 0 2px 4px 0 rgba(111,111,111,0.2);
 }
+
 
 
 #content h2 {
@@ -89,6 +95,14 @@ a:focus {
   text-shadow: 0px 1px 2px rgb(197, 161, 119)
 }
 
+#content h4{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #eeeeeecc;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111)
+}
+
 #content h5 {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -97,11 +111,77 @@ a:focus {
     text-shadow: 0px 1px 2px rgb(197, 161, 119)
 }
 
+#hr_modified{
+    color: transparent;
+}
+
 #content a.list-group-item {
     background-color: #f7f6e7;
     text-shadow: 0px 1px 2px rgb(197, 161, 119)
 }
+#prepend {
+    background-color: #353b48;;
+    border: none;
+    color: #f7f6e7;
+} 
 
-  .input-group.mb-3 {
+#textArea {
+    max-width: 550px;
+    max-height: 300px;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    background-color: #252525;
+    border: none;
+    border-radius: 10px;
+    color: #eeeeeecc;
+    font-size: 18px;
+    transition: .25s all ease;
+}
+#textArea:hover{
+    opacity: 0.8;
+}
+
+#submit_button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    color: #fff;
+    background-color: #353b48;
+    border: none;
+    border-radius: 30px;
+    width: 300px;
+    padding: 5px;
+    transition: .25s all ease;
+}
+
+#submit_button:hover {
+    color: #000;
     background-color: #f7f6e7;
-  }
+    opacity: 0.9;
+}
+
+#clear_button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    color: #fff;
+    background-color: #990000;
+    border: none;
+    border-radius: 30px;
+    width: 130px;
+    padding: 5px;
+    transition: .25s all ease;
+}
+
+#clear_button:hover {
+    color: #000;
+    background-color: #f7f6e7;
+    opacity: 0.9;
+}
+
+button i{
+    padding-left: 10px;
+}
+
+#list_group {
+    background-color: #353b48;
+}
