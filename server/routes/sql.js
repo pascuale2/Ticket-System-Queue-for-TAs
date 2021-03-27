@@ -21,28 +21,21 @@ function configDatabase(req, res) {
 }
 
 function obtainAllCourses(connection, callback){
-  let query = '\
-  SELECT *\
-  FROM Course,Student,Takes\
-  WHERE Student.student_id=Takes.student_id AND Takes.course_id = Course.course_id AND Student.student_id = 101';
+  let query = 'SELECT course_name FROM Course,Student,Takes WHERE Student.student_id=Takes.student_id AND Takes.course_id = Course.course_id AND Student.student_id = 101';
 
   connection.query(query, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
     }else{
       result = JSON.parse(JSON.stringify(result));
-      console.log(result);
       callback(result);
     }
   });
 }
 
 function obtainAllProfessors(connection, callback){
-  let query = '\
-  SELECT name FROM Teacher, Teaches, Course \
-  WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
-  AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student \
-  WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
+  let query = 'SELECT name FROM Teacher, Teaches, Course WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
+  AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
 
   connection.query(query, (err, result) => {
     if(err){                                               // query failed
@@ -61,10 +54,7 @@ function obtainAllProfessors(connection, callback){
 
 function obtainTeaches(connection, coursename, callback) {
   console.log(coursename);
-  let query = '\
-  SELECT name, available\
-  FROM Teacher, Course, Teaches \
-  WHERE Teacher.teacher_id = \
+  let query = 'SELECT name, available FROM Teacher, Course, Teaches WHERE Teacher.teacher_id = \
   Teaches.teacher_id AND Teaches.course_id = Course.course_id AND Course.course_name = ?';
 
   connection.query(query, coursename, (err, result) => {
@@ -78,18 +68,13 @@ function obtainTeaches(connection, coursename, callback) {
 }
 
 function obtainQuestions(connection, callback) {
-  let query = '\
-  SELECT DISTINCT * \
-  FROM Question INNER JOIN Student \
-  ON Question.student_id = Student.student_id \
-  WHERE Question.student_id = 100';
-
+  let query = 'SELECT DISTINCT * FROM Question WHERE Question.student_id = 100';
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute query", err);
     }else {
       result = JSON.parse(JSON.stringify(result));
-      // console.log("result is ",result);
+      console.log("result is ",result);
       callback(result);
     }
   });
@@ -97,11 +82,7 @@ function obtainQuestions(connection, callback) {
 
 function searchProfessor(connection, input, callback) {
   let replacement = `'%${input}%'`;
-  let query = '\
-  SELECT * \
-  FROM Teacher \
-  WHERE name like ' + replacement;
-
+  let query = 'SELECT * FROM Teacher WHERE name like '+replacement;
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute search", err);
@@ -128,7 +109,7 @@ function searchQuestions(connection, input, callback) {
 
 function searchCourses(connection, course, callback) {
   let replacement = `'%${course}%'`;
-  let query = 'SELECT * FROM Course WHERE course_name like '+ replacement;
+  let query = 'SELECT * FROM Course WHERE course_name like '+replacement;
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute search", err);
@@ -152,16 +133,14 @@ function getQuestionID(connection, callback){
 }
 
 
-function askQuestion(connection, question_title, stu_id, q_desc, dis_id, c_id, qid, callback) {
+function askQuestion(connection, question_string, stu_id, qid, callback) {
+
   qid +=1;
   console.log('quid is ',qid);
   var status = 0;
 
-  let query = '\
-  INSERT INTO Question\
-  (question_id, question_title, question_status, student_id, question_desc, discipline_id, course_id)\
-  VALUES (?, ?, ?, ?, ?, ?, ?)';
-  connection.query(query, [qid, question_title, status, stu_id, q_desc, dis_id, c_id],(err, result) => {
+  let query = 'INSERT INTO Question(question_id, question_string, question_status, student_id) VALUES (?, ?, ?, ?)';
+  connection.query(query, [qid, question_string, status, stu_id],(err, result) => {
     if (err) {
       console.log("CANNOT insert into question", err);
     } else {
@@ -169,6 +148,35 @@ function askQuestion(connection, question_title, stu_id, q_desc, dis_id, c_id, q
       callback(result);
     }
   });
+}
+
+function obtainSession(connection, teacher, callback) {
+  let query = 'SELECT * FROM Session WHERE teacher_id = ?';
+  connection.query(query, teacher, (err, result) => {
+    if(err) {
+      console.log("cannot find session for ",teacher);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+
+function obtainAllTaught(connection, teach_id, course_id, callback) {
+  console.log(typeof course_id);
+  let query = 'SELECT * FROM Session \
+  JOIN Course ON Session.course_id = Course.course_id\
+   WHERE teacher_id = ? \
+   AND Course.course_id IN '+course_id;
+    connection.query(query, teach_id, (err, result) =>{
+      if(err) {
+        console.log("cannot find course for ",course_id, teach_id);
+      } else {
+        result = JSON.parse(JSON.stringify(result));
+        callback(result);
+      }
+    });
 }
 /*
 function getQueueID(connection){
@@ -245,4 +253,5 @@ function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
 
 
 module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
-obtainQuestions, searchProfessor, searchCourses, getQuestionID, askQuestion};
+obtainQuestions, searchProfessor, searchCourses, getQuestionID, askQuestion,
+obtainSession, obtainAllTaught};

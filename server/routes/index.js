@@ -2,11 +2,14 @@ var express = require('express');
 var router = express.Router();
 var db = require('./sql');
 
+
 var courses_;
 var connection;
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
 
   connection = db.configDatabase(req, res);
   res.render('login');
@@ -25,6 +28,30 @@ router.get('/professors/:coursename', function(req, res, next){
   });
 });
 
+
+router.get('/schedule/:profname', function(req, res, next){
+  var id = req.params.profname;
+  db.searchProfessor(connection, id, function(result) {
+    var teaches_id = result[0].teacher_id;
+    db.obtainSession(connection, teaches_id, function(result) {
+      var c = "(";
+      for (var i=0; i<result.length; i++){
+          c += (result[i].course_id);
+          c+=","
+        }
+        var c = c.replace(/.$/,")");
+
+        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
+        console.log('query returned: ',courses);
+        res.render('schedule', {"data": result, "teacher":id, "course": courses});
+      });
+    });
+  });
+
+});
+
+
+
 router.post('/professors', function(req, res, next){                    // For a professor search
   db.searchProfessor(connection, req.body.professor, function(result) {
     res.render('professors', {data: result});
@@ -36,30 +63,27 @@ router.get('/professors', function(req, res, next) {
       res.render('professors', {data: JSON.stringify(result)});
     });
 });
-
 router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
 
 router.post('/questions', function(req, res, next) {
+    var largestid;
     db.getQuestionID(connection, function(result) {
-      var largestid = result;
+      largestid = result;
       console.log("\n LARGEST ID IS: ",largestid,"\n");
-      db.askQuestion(connection, req.body.question_ask, 100, req.body.text_area, 200, req.body.course_combobox, largestid, function(result) {
+      db.askQuestion(connection, req.body.question_ask, 100, largestid, function(result) {
         db.obtainQuestions(connection, function(result) {
-            res.render('questions', {data: result});
-          });
+          res.render('questions', {data: result});
         });
     });
   });
 
+
+});
 router.get('/questions', function(req, res, next) {
   db.obtainQuestions(connection, function(result) {
-    db.obtainAllCourses(connection, function(courseResults) {
-      res.render('questions',
-        {"data": result,
-        "courses": courseResults});
-    });
+    res.render('questions', {data: result});
   });
 });
 
