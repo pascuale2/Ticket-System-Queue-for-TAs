@@ -21,7 +21,10 @@ function configDatabase(req, res) {
 }
 
 function obtainAllCourses(connection, callback){
-  let query = 'SELECT course_name FROM Course,Student,Takes WHERE Student.student_id=Takes.student_id AND Takes.course_id = Course.course_id AND Student.student_id = 101';
+  let query = '\
+   SELECT *\
+   FROM Course,Student,Takes\
+   WHERE Student.student_id=Takes.student_id AND Takes.course_id = Course.course_id AND Student.student_id = 101';
 
   connection.query(query, (err, result) => {
     if(err){                                               // query failed
@@ -34,9 +37,11 @@ function obtainAllCourses(connection, callback){
 }
 
 function obtainAllProfessors(connection, callback){
-  let query = 'SELECT name FROM Teacher, Teaches, Course WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
-  AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
-
+  let query = '\
+  SELECT name FROM Teacher, Teaches, Course \
+  WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
+  AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student \
+  WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
   connection.query(query, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
@@ -68,7 +73,11 @@ function obtainTeaches(connection, coursename, callback) {
 }
 
 function obtainQuestions(connection, callback) {
-  let query = 'SELECT DISTINCT * FROM Question WHERE Question.student_id = 100';
+  let query = '\
+     SELECT DISTINCT * \
+     FROM Question INNER JOIN Student \
+     ON Question.student_id = Student.student_id \
+     WHERE Question.student_id = 100';
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute query", err);
@@ -133,14 +142,16 @@ function getQuestionID(connection, callback){
 }
 
 
-function askQuestion(connection, question_string, stu_id, qid, callback) {
+function askQuestion(connection, question_title, stu_id, q_desc, dis_id, c_id, qid, callback) {
 
   qid +=1;
   console.log('quid is ',qid);
   var status = 0;
-
-  let query = 'INSERT INTO Question(question_id, question_string, question_status, student_id) VALUES (?, ?, ?, ?)';
-  connection.query(query, [qid, question_string, status, stu_id],(err, result) => {
+  let query = '\
+     INSERT INTO Question\
+     (question_id, question_title, question_status, student_id, question_desc, discipline_id, course_id)\
+     VALUES (?, ?, ?, ?, ?, ?, ?)';
+     connection.query(query, [qid, question_title, status, stu_id, q_desc, dis_id, c_id],(err, result) => {
     if (err) {
       console.log("CANNOT insert into question", err);
     } else {

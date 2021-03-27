@@ -72,7 +72,7 @@ router.post('/questions', function(req, res, next) {
     db.getQuestionID(connection, function(result) {
       largestid = result;
       console.log("\n LARGEST ID IS: ",largestid,"\n");
-      db.askQuestion(connection, req.body.question_ask, 100, largestid, function(result) {
+      db.askQuestion(connection, req.body.question_ask, 100, req.body.text_area, 200, req.body.course_combobox, largestid, function(result) {
         db.obtainQuestions(connection, function(result) {
           res.render('questions', {data: result});
         });
@@ -83,7 +83,11 @@ router.post('/questions', function(req, res, next) {
 });
 router.get('/questions', function(req, res, next) {
   db.obtainQuestions(connection, function(result) {
-    res.render('questions', {data: result});
+    db.obtainAllCourses(connection, function(courseResults) {
+      res.render('questions',
+        {"data": result,
+        "courses": courseResults});
+    });
   });
 });
 
