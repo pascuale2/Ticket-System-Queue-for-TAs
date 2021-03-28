@@ -20,7 +20,7 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    //7,8- Google Auth 
+    // 7,8 - Google Auth 
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
@@ -116,12 +116,12 @@ html
             h4.text-center 1) Add a question topic
             .d-xl-flex.justify-content-center.h-100
               .searchBar
-                input.searchInput(type='text' name='question_ask' placeholder='E.g. What is the difference between FFT and DFT')
+                input.searchInput(type='text' name='question_ask' placeholder='e.g. What is the difference between FFT and DFT')
             br
             h4.text-center 2) Select a course
             .d-xl-flex.justify-content-center
               // ------------------------------ //
-              // Select Course ComboBox ComboBox
+              // Select Course ComboBox
               // ------------------------------ //
               .select
                 select(name="course_combobox" id="courseComboBox")
@@ -137,7 +137,7 @@ html
             // ------------------------------ //
             h4.text-center 3) Add a description
             .d-flex.justify-content-center
-              textarea.form-control(name="text_area" id="textArea" aria-label="Question Description" placeholder="E.g. I'm just confused as to how Fast Fourier Transform is a particular implementation of Discrete Fourier Transform")
+              textarea.form-control(name="text_area" id="textArea" aria-label="Question Description" placeholder="e.g. I'm just confused as to how Fast Fourier Transform is a particular implementation of a Discrete Fourier Transform")
             br
             br
             // ------------------------------ //
@@ -149,12 +149,15 @@ html
               .col-md-auto
               button(type='reset' id='clear_button') Clear
                 i.fas.fa-trash
+          br
+          br
+          br
+          br
+          br
+          br
           hr#hr_modified
           .card(id="questionAskInput").p-3.container-fluid
             h2.text-center Your outgoing questions and their queues.
-            hr
-            //- questions_stated = []
-            //- index_counter = 0
             .row
               .d-flex.justify-content-center
                 .col-md-5
@@ -162,8 +165,6 @@ html
                   // loops through locals.data and assigns a list-group-item for each question string
                   ul.list-group(id="list_group")
                     for questions in locals.data
-                      //questions_stated[index_counter] = questions.question_string
-                      //index_counter = index_counter + 1
                       if questions.question_title != Null
                         a.list-group-item.list-group-item-action #{questions.question_title}
                 .col-md-auto

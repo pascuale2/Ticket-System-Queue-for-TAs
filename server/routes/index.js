@@ -2,14 +2,11 @@ var express = require('express');
 var router = express.Router();
 var db = require('./sql');
 
-
 var courses_;
 var connection;
 
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
 
   connection = db.configDatabase(req, res);
   res.render('login');
@@ -28,30 +25,6 @@ router.get('/professors/:coursename', function(req, res, next){
   });
 });
 
-
-router.get('/schedule/:profname', function(req, res, next){
-  var id = req.params.profname;
-  db.searchProfessor(connection, id, function(result) {
-    var teaches_id = result[0].teacher_id;
-    db.obtainSession(connection, teaches_id, function(result) {
-      var c = "(";
-      for (var i=0; i<result.length; i++){
-          c += (result[i].course_id);
-          c+=","
-        }
-        var c = c.replace(/.$/,")");
-
-        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
-        console.log('query returned: ',courses);
-        res.render('schedule', {"data": result, "teacher":id, "course": courses});
-      });
-    });
-  });
-
-});
-
-
-
 router.post('/professors', function(req, res, next){                    // For a professor search
   db.searchProfessor(connection, req.body.professor, function(result) {
     res.render('professors', {data: result});
@@ -63,30 +36,48 @@ router.get('/professors', function(req, res, next) {
       res.render('professors', {data: JSON.stringify(result)});
     });
 });
+
 router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
 
-router.post('/questions', function(req, res, next) {
-    var largestid;
-    db.getQuestionID(connection, function(result) {
-      largestid = result;
-      console.log("\n LARGEST ID IS: ",largestid,"\n");
-      db.askQuestion(connection, req.body.question_ask, 100, req.body.text_area, 200, req.body.course_combobox, largestid, function(result) {
-        db.obtainQuestions(connection, function(result) {
-          res.render('questions', {data: result});
-        });
-    });
-  });
-
-
-});
-router.get('/questions', function(req, res, next) {
-  db.obtainQuestions(connection, function(result) {
+/**
+ * Get request for "Ask a Question" page.
+ * 
+ * db.obtainQuestions -> obtains the questions for the homepage to display
+ * db.obtainAllCourses-> the courses the student is enrolled in which is used to
+ *                       populate the comboBox.
+ */
+ router.get('/questions', function(req, res, next) {
+  db.obtainQuestions(connection, function(questionResults) {
     db.obtainAllCourses(connection, function(courseResults) {
       res.render('questions',
-        {"data": result,
+        {"data": questionResults,
         "courses": courseResults});
+    });
+  });
+});
+
+/**
+ * Post request for "Ask a Question" page
+ * 
+ * db.getQuestionID   -> gets the largest question id
+ * db.askQuestion     -> inserts the question into the database
+ * db.obtainQuestions -> obtains the questions for the homepage to display
+ * db.obtainAllCourses-> the courses the student is enrolled in which is used to
+ *                       populate the comboBox.
+ */
+router.post('/questions', function(req, res, next) {
+  db.getQuestionID(connection, function(largestid) {
+    // TODO: Replace with Student ID and insert DISCIPLINE 
+    db.askQuestion(connection, req.body.question_ask, 100, req.body.text_area, 200, req.body.course_combobox, largestid, function(result) {
+      db.obtainQuestions(connection, function(questionResults) {
+        db.obtainAllCourses(connection, function(courseResults) {
+          res.render('questions', 
+          {"data": questionResults,
+          "courses": courseResults});
+        });
+      });
     });
   });
 });
@@ -116,17 +107,25 @@ router.get('/question_success', function(req, res, next) {
 router.get('/question_ask', function(req, res, next) {
   res.render('question_ask');
 });
-/*
-router.post('/questions_search', function(req, res, next) {                    // For a question search
-  console.log("result is: ",req.body.question);
-  db.searchQuestions(connection, req.body.question, function(result) {
-    res.render('questions_search', {data: result});
+
+router.get('/questions_search', function(req, res, next) {
+  db.obtainAllQuestions(connection, function(allQuestionResults) {
+    res.render('questions_search', {data: allQuestionResults});
   });
 });
-*/
-router.get('/questions_search', function(req, res, next) {
-  res.render('questions_search');
+
+/**
+ * Post request for "Search a Question" page
+ * 
+ * db.searchQuestions -> obtains the questions for the homepage to display
+ */
+router.post('/questions_search', function(req, res, next) {                    // For a question search
+  db.searchQuestions(connection, req.body.question_search, function(searchQuestionResults) {
+    res.render('questions_search', {data: searchQuestionResults});
+  });
 });
+
+
 router.get('/settings_edit', function(req, res, next) {
   res.render('settings_edit');
 });

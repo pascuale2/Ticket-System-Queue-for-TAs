@@ -54,23 +54,6 @@ a:focus {
     font-family: 'Roboto', sans-serif;
 }
 
-#page #navbar-header h3{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    font-size: 28px;
-    padding-top: 5px;
-    letter-spacing: 2px;
-    color: #FFF;
-    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
-
-}
-
-.card{
-    background-color: #252525;
-    box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
-}
-
-
 #content h2 {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -92,4 +75,40 @@ a:focus {
 #content a.list-group-item {
     background-color: #f7f6e7;
     text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
+/* ---------------------------------------------------
+    CARD STYLE
+----------------------------------------------------- */
+
+.searchResultContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card{
+    padding: 15px;
+    margin: 15px;
+    width: 600px;
+    background-color: #252525;
+    box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
+}
+
+.card h3{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #FCA926;
+}
+
+#content .cardContainer h4{
+    margin-bottom: 0px;
+    font-weight: 400;
+    font-size: 18px;
+    color: #eeeeeecc;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111);
+    letter-spacing: 1px;
 }

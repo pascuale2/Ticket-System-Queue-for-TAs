@@ -38,7 +38,8 @@ function obtainAllCourses(connection, callback){
 
 function obtainAllProfessors(connection, callback){
   let query = '\
-  SELECT name FROM Teacher, Teaches, Course \
+  SELECT name\
+  FROM Teacher, Teaches, Course \
   WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
   AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student \
   WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
@@ -83,7 +84,19 @@ function obtainQuestions(connection, callback) {
       console.log("CANNOT execute query", err);
     }else {
       result = JSON.parse(JSON.stringify(result));
-      console.log("result is ",result);
+      callback(result);
+    }
+  });
+}
+
+function obtainAllQuestions(connection, callback) {
+  let query = 'SELECT * FROM Question';
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("CANNOT execute search", err);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      console.log("QUESTIONS: ",result);
       callback(result);
     }
   });
@@ -101,19 +114,20 @@ function searchProfessor(connection, input, callback) {
     }
   });
 }
-/*
+
 function searchQuestions(connection, input, callback) {
   let replacement = `'%${input}%'`;
-  let query = 'SELECT * FROM Question WHERE question_string like '+replacement;
+  let query = 'SELECT * FROM Question WHERE question_title like '+replacement;
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute search", err);
     } else {
       result = JSON.parse(JSON.stringify(result));
+      console.log(result);
       callback(result);
     }
   });
-}*/
+}
 
 
 function searchCourses(connection, course, callback) {
@@ -141,9 +155,8 @@ function getQuestionID(connection, callback){
   });
 }
 
-
+// TODO: somehow incorporate the queue_id into the questions
 function askQuestion(connection, question_title, stu_id, q_desc, dis_id, c_id, qid, callback) {
-
   qid +=1;
   console.log('quid is ',qid);
   var status = 0;
@@ -178,8 +191,8 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
   console.log(typeof course_id);
   let query = 'SELECT * FROM Session \
   JOIN Course ON Session.course_id = Course.course_id\
-   WHERE teacher_id = ? \
-   AND Course.course_id IN '+course_id;
+  WHERE teacher_id = ? \
+  AND Course.course_id IN '+course_id;
     connection.query(query, teach_id, (err, result) =>{
       if(err) {
         console.log("cannot find course for ",course_id, teach_id);
@@ -264,5 +277,5 @@ function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
 
 
 module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
-obtainQuestions, searchProfessor, searchCourses, getQuestionID, askQuestion,
+obtainQuestions, obtainAllQuestions, searchProfessor, searchCourses, searchQuestions, getQuestionID, askQuestion,
 obtainSession, obtainAllTaught};
