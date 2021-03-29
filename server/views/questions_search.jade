@@ -116,12 +116,16 @@ html
                     i.fas.fa-search
               .d-flex.justify-content-center
                 .select
-                  select(name="filter_combobox" id="courseComboBox")
+                  select(name="filter_combobox" id="filterComboBox")
                     option(selected='selected' value='question_title') Search by
                     option(type='text' value='question_title') Title
                     option(type='text' value='label') Label/Tag
                     option(type='text' value='question_desc') Description
                     option(type='text' value='course_name') Course
+                .select(id="sort_combobox")
+                  select(name="sort_combobox" id="sortComboBox")
+                    option(selected='selected' value='') Sort by
+                    option(type='text' value='question_id') Recent
 
             hr
             .searchResultContainer

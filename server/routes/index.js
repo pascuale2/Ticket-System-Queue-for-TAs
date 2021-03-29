@@ -87,7 +87,7 @@ router.post('/questions', function(req, res, next) {
  * db.searchQuestions -> obtains the questions for the page to display
  */
 router.post('/questions_search', function(req, res, next) {                    // For a question search
-  db.searchQuestions(connection, req.body.filter_combobox, req.body.question_search, function(searchQuestionResults) {
+  db.searchQuestions(connection,req.body.sort_combobox, req.body.filter_combobox, req.body.question_search, function(searchQuestionResults) {
     res.render('questions_search', {data: searchQuestionResults});
   });
 });

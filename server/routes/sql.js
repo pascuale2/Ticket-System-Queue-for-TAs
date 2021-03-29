@@ -161,13 +161,20 @@ function searchProfessor(connection, input, callback) {
  * @param {*} input 
  * @param {*} callback 
  */
-function searchQuestions(connection, category, input, callback) {
+function searchQuestions(connection, sort, category, input, callback) {
   // let filter = `'%${category}%'`;
   let replacement = `'%${input}%'`;
   let query = '\
   SELECT *\
   FROM Question INNER JOIN Course ON Question.course_id = Course.course_id\
   WHERE ' + category + ' like ' + replacement;
+
+  console.log("TYPE: ",typeof sort);
+  if (!(sort === "")) {
+    query = query +'\
+    ORDER BY ' + sort + ' DESC';
+  }
+
   console.log("FILTER IS: ",category)
   console.log("INPUT IS: ",input)
   connection.query(query, (err, result) => {
