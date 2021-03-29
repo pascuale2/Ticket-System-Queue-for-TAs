@@ -22,16 +22,14 @@ function configDatabase(req, res) {
 
 /**
  * obtains all courses that the student took.
- * 
- * @param {*} connection 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} callback
  */
 function obtainAllCourses(connection, callback){
-  let query = '\
-   SELECT *\
-   FROM Course,Student,Takes\
-   WHERE Student.student_id=Takes.student_id AND Takes.course_id = Course.course_id AND Student.student_id = 101';
-
+  let query = 'SELECT course_name FROM Course,Student,\
+  Takes WHERE Student.student_id=Takes.student_id AND Takes.course_id = \
+  Course.course_id AND Student.student_id = 100';
   connection.query(query, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
@@ -44,9 +42,9 @@ function obtainAllCourses(connection, callback){
 
 /**
  * obtains all the professors for the courses that student is enrolled in.
- * 
- * @param {*} connection 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} callback
  */
 function obtainAllProfessors(connection, callback){
   let query = '\
@@ -72,10 +70,10 @@ function obtainAllProfessors(connection, callback){
 
 /**
  * obtain professors that teach courses.
- * 
- * @param {*} connection 
- * @param {string} coursename 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {string} coursename
+ * @param {*} callback
  */
 function obtainTeaches(connection, coursename, callback) {
   console.log(coursename);
@@ -94,9 +92,9 @@ function obtainTeaches(connection, coursename, callback) {
 
 /**
  * obtains questions from student.
- * 
- * @param {*} connection 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} callback
  */
 function obtainQuestions(connection, callback) {
   let query = '\
@@ -116,9 +114,9 @@ function obtainQuestions(connection, callback) {
 
 /**
  * obtain all questions.
- * 
- * @param {*} connection 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} callback
  */
 function obtainAllQuestions(connection, callback) {
   let query = 'SELECT * FROM Question';
@@ -135,10 +133,10 @@ function obtainAllQuestions(connection, callback) {
 
 /**
  * searches professor from user input.
- * 
- * @param {*} connection 
- * @param {*} input 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} input
+ * @param {*} callback
  */
 function searchProfessor(connection, input, callback) {
   let replacement = `'%${input}%'`;
@@ -155,11 +153,11 @@ function searchProfessor(connection, input, callback) {
 
 /**
  * searches questions from user inputted filter and search query.
- * 
- * @param {*} connection 
- * @param {*} category 
- * @param {*} input 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} category
+ * @param {*} input
+ * @param {*} callback
  */
 function searchQuestions(connection, sort, category, input, callback) {
   // let filter = `'%${category}%'`;
@@ -190,10 +188,10 @@ function searchQuestions(connection, sort, category, input, callback) {
 
 /**
  * searches courses from user inputted search query.
- * 
- * @param {*} connection 
- * @param {*} course 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} course
+ * @param {*} callback
  */
 function searchCourses(connection, course, callback) {
   let replacement = `'%${course}%'`;
@@ -210,11 +208,11 @@ function searchCourses(connection, course, callback) {
 
 /**
  * gets the highest question id from question table.
- * 
+ *
  * used in making new question id for new questions.
- * 
- * @param {*} connection 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} callback
  */
 function getQuestionID(connection, callback){
  let query = 'SELECT MAX(question_id) AS largestId FROM Question WHERE 1=1';
@@ -231,16 +229,16 @@ function getQuestionID(connection, callback){
 // TODO: somehow incorporate the queue_id into the questions
 /**
  * inserts a new question from user inputted fields
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {string} question_title: title of question
- * @param {string} stu_id:         student id 
+ * @param {string} stu_id:         student id
  * @param {string} q_desc:         question description
  * @param {string} label:          label or tag of the question
  * @param {string} dis_id:         discipline id of question
  * @param {string} c_id:           course id of question
  * @param {string} qid:            question id of question
- * @param {*} callback 
+ * @param {*} callback
  */
 function askQuestion(connection, question_title, stu_id, q_desc, label, dis_id, c_id, qid, callback) {
   qid +=1;
@@ -263,10 +261,10 @@ function askQuestion(connection, question_title, stu_id, q_desc, label, dis_id, 
 
 /**
  * obtains the session from inputted professor
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {String} teacher: teacher that we're trying to obtain session from
- * @param {*} callback 
+ * @param {*} callback
  */
 function obtainSession(connection, teacher, callback) {
   let query = 'SELECT * FROM Session WHERE teacher_id = ?';
@@ -281,11 +279,11 @@ function obtainSession(connection, teacher, callback) {
 }
 
 /**
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {string} teach_id
- * @param {string} course_id 
- * @param {*} callback 
+ * @param {string} course_id
+ * @param {*} callback
  */
 function obtainAllTaught(connection, teach_id, course_id, callback) {
   console.log(typeof course_id);
@@ -303,15 +301,20 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
     });
 }
 
-/*
+
+
+//// TODO: Implement the following
+//// Queue section
+
 function getQueueID(connection){
  let query = 'SELECT MAX(queue_id) FROM Queue WHERE 1=1';
   connection.query(query, (err, result) => {
-  if (err {
-  console.log("Cannot find max queue_id");
-  } else {
-  return result;
-});
+    if (err) {
+    console.log("Cannot find max queue_id");
+    } else {
+    return result;
+    }
+  });
 }
 
 function getDiscipline(connection, teach_id) {
@@ -361,10 +364,10 @@ function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
   question = obtainQuestionID(connection, question_str);
   session = obtainSessionID(connection, teach_id);
 
-  let query = 'INSERT INTO QUEUE(queue_id,	answer_ids,	question_ids,	student_ids,
-  	teacher_id,	discipline_id,	question_id,	session_id) VALUES(que_id, 'Not answered',
-  stu_id, teach_id, discipline, question, session)';
-  connection.query(query, (err, result) => {
+  let query = 'INSERT INTO QUEUE(queue_id,	answer_ids,	question_ids,	student_ids,\
+  	teacher_id,	discipline_id,	question_id,	session_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+  connection.query(query,que_id,'notanswered',question_str,stu_id,teach_id,discipline, question,
+  session, (err, result) => {
     if (err) {
       console.log("CANNOT insert into queue", err);
     } else {
@@ -374,7 +377,7 @@ function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
   });
 }
 
-*/
+
 
 /**
  * exports the modules for the other .js files to use
