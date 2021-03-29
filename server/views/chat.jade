@@ -28,14 +28,22 @@ html
   body
     // google auth stuff and chat message generation
     script.
-      window.onload = init;
+      //window.onload = init(!{channels});
+      window.addEventListener('DOMContentLoaded', function() {
+        init(!{channels});
+      });
 
-      function init() {
-        document.getElementById('add').onclick = addMessageGroup;
-        document.getElementById('add2').onclick = addRecievedMessage;
-        document.getElementById('add3').onclick = addSentMessage;
+      function init(getchannels) {
+        getchannels.channels.forEach(addMessageGroup);
+        document.getElementById("messagesend").onclick=function(){
+          sendMessage(!{zoomtokn}.access_token,getchannels.channels[0].id,document.getElementById("messagecontent").value);
+          document.getElementById("messagecontent").value="";
+        };
+        
+        //addMessageGroup(getchannels.channels[0]);
+        //console.log(getchannels.channels[0].id);
+
       }
-
       function logOut() {
       var auth2 = gapi.auth2.getAuthInstance();
       if (auth2.isSignedIn.get()) {
@@ -323,9 +331,9 @@ html
                       | What's the best thing about Switzerland? I don't know, but the flag is a big plus.
             .type_msg
               .input_msg_write
-                input.write_msg(type='text' placeholder='Type a message')
-                button.msg_send_btn(type='button')
-                  i.fa.fa-paper-plane-o(aria-hidden='true')
+                input#messagecontent.write_msg(type='text' placeholder='Type a message')
+                button#messagesend.msg_send_btn(type='button')
+                  img(src='/images/send.svg' alt='send' width='20' height='20')
 
     .overlay
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')

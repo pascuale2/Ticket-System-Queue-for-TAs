@@ -23,11 +23,6 @@ body {
     font-family: "Poppins", sans-serif;
     background: #0f0f0f;
 }
-@media screen and (max-width: 480px) {
-    body {
-        padding: 0.8em;
-   }
-}
 .message-button {
     background-color: #3a6df0;
     border: none;
@@ -42,12 +37,11 @@ body {
 .message-section {
     display: flex;
     flex-direction: column;
-    height: 100%;
     width: 100vh;
 }
 .message-section-title {
     color: var(--content-title-color);
-    margin-bottom: 14px;
+    padding-bottom: 5px;
 }
 .message-section ul {
     color: var(--content-title-color);
@@ -55,14 +49,12 @@ body {
     flex-direction: column;
     width: 100%;
     max-height: 79vh;
-    justify-content: space-around;
     background-color: var(--content-bg);
     padding-left: 0;
     margin: 0;
     border-radius: 4px;
     border: 1px solid var(--theme-bg-color);
     cursor: pointer;
-    overflow:hidden;
     overflow-y:scroll;
 }
 .message-section ul li {
@@ -98,21 +90,11 @@ body {
     align-items: center;
     width: 150px;
 }
-@media screen and (max-width: 480px) {
-    .products {
-        width: 120px;
-   }
-}
 .status {
     margin-left: auto;
     width: 140px;
     font-size: 15px;
     position: relative;
-}
-@media screen and (max-width: 700px) {
-    .status {
-        display: none;
-   }
 }
 .status-circle {
     width: 6px;
@@ -130,11 +112,6 @@ body {
     font-size: 15px;
     margin-top: 0;
     padding: 6px 24px;
-}
-@media screen and (max-width: 390px) {
-    .status-button {
-        padding: 6px 14px;
-   }
 }
 .status-button.open {
     background: none;
@@ -159,11 +136,6 @@ body {
     justify-content: flex-end;
     width: 187px;
     margin-left: auto;
-}
-@media screen and (max-width: 480px) {
-    .button-wrapper {
-        width: auto;
-   }
 }
 img{ max-width:100%;}
 .incoming_msg_img {
@@ -219,7 +191,7 @@ img{ max-width:100%;}
 
 .type_msg {border-top: 1px solid #c4c4c4;position: relative;}
 .msg_send_btn {
-  background: #05728f none repeat scroll 0 0;
+  background: var(--content-bg);
   border: medium none;
   border-radius: 50%;
   color: #fff;

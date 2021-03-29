@@ -1,4 +1,4 @@
-function addMessageGroup() {
+function addMessageGroup(channel) {
     var el = document.getElementById("message-list");
     var node = document.createElement("li");
     var div = document.createElement("div");
@@ -9,7 +9,13 @@ function addMessageGroup() {
     var status = document.createElement("span");
     var statuscircle = document.createElement("span");
     var bttn = document.createElement("bttn");
-    icon.src = '/images/letters/letter-s.svg'
+    var letter =channel.name.charAt(0);
+    if(letter.length === 1 && letter.match(/[a-z]/i)){
+        icon.src = '/images/letters/letter-'+letter+'.svg'
+    }
+    else{
+        icon.src = '/images/letters/letter-s.svg'
+    }
     icon.setAttribute("height", "40");
     icon.setAttribute("width", "40");
     icon.setAttribute("alt", "lettericon");
@@ -17,7 +23,7 @@ function addMessageGroup() {
     node.setAttribute('class', 'message');
     div.setAttribute('class', 'divider');
     msggrp.setAttribute('class', 'messagegroup');
-    msggrp.innerText="Group #";
+    msggrp.innerText=channel.name;
     bttnwrap.setAttribute('class', 'button-wrapper');
     menu.setAttribute('class', 'menu');
     status.setAttribute('class', 'status');
@@ -25,6 +31,7 @@ function addMessageGroup() {
     bttn.setAttribute('class', 'message-button status-button open');
     bttn.innerText="Open";
     el.appendChild(node);
+    node.setAttribute("onClick","addRecievedMessage()");
     node.appendChild(div);
     node.appendChild(msggrp);
     status.innerText="message snippet";
@@ -66,8 +73,23 @@ function addRecievedMessage(){
     cont.innerText="Why do seagulls fly over the ocean? Because if they flew over the bay, we'd call them bagels.";
     rcvmsgcnt.appendChild(cont);
 }
-function addSentMessage(){
-    var list = document.getElementById("msg_history");
-    var message = document.createElement("li");
+function sendMessage(authtokn,channel,content){
+    var data = JSON.stringify({
+        "message": content,
+        "to_channel": channel
+      });
+      
+      var xhr = new XMLHttpRequest();
+      
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === this.DONE) {
+          console.log(this.responseText);
+        }
+      });
+      
+      xhr.open("POST", "https://localhost:3000/chat/redirect");
+      xhr.setRequestHeader("content-type", "application/json");
+      
+      xhr.send(data);
 }
       
