@@ -40,8 +40,27 @@ router.get('/schedule/:profname', function(req, res, next){
           c+=","
         }
         var c = c.replace(/.$/,")");
+
         db.obtainAllTaught(connection, teaches_id, c, function(courses) {
-        console.log('query returned: ',courses);
+        res.render('schedule', {"data": result, "teacher":id, "course": courses});
+      });
+    });
+  });
+});
+
+router.get('/professors/schedule/:profname', function(req, res, next){
+  var id = req.params.profname;
+  db.searchProfessor(connection, id, function(result) {
+    var teaches_id = result[0].teacher_id;
+    db.obtainSession(connection, teaches_id, function(result) {
+      var c = "(";
+      for (var i=0; i<result.length; i++){
+          c += (result[i].course_id);
+          c+=","
+        }
+        var c = c.replace(/.$/,")");
+
+        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
         res.render('schedule', {"data": result, "teacher":id, "course": courses});
       });
     });
@@ -64,7 +83,9 @@ router.get('/courses', function(req, res, next) {
         res.render('courses', {data: result});
     });
 });
-
+router.get('/course_search', function(req, res, next) {
+  res.render('course_search');
+});
 router.post('/course_search', function(req, res, next) {
   db.searchCourses(connection, req.body.course, function(result){
     console.log("result is ",result);

@@ -286,19 +286,23 @@ function obtainSession(connection, teacher, callback) {
  * @param {*} callback
  */
 function obtainAllTaught(connection, teach_id, course_id, callback) {
-  console.log(typeof course_id);
-  let query = 'SELECT * FROM Session \
-  JOIN Course ON Session.course_id = Course.course_id\
-  WHERE teacher_id = ? \
-  AND Course.course_id IN '+course_id;
-    connection.query(query, teach_id, (err, result) =>{
-      if(err) {
-        console.log("cannot find course for ",course_id, teach_id);
-      } else {
-        result = JSON.parse(JSON.stringify(result));
-        callback(result);
-      }
+  console.log(typeof course_id, course_id);
+  if(course_id.length < 4){                                             // If the instructor does not have any courses in the sessions table
+    callback('None');
+  } else {
+    let query = 'SELECT * FROM Session \
+    JOIN Course ON Session.course_id = Course.course_id\
+    WHERE teacher_id = ? \
+    AND Course.course_id IN '+course_id;
+      connection.query(query, teach_id, (err, result) =>{
+        if(err) {
+          console.log("cannot find course for ",course_id, teach_id);
+        } else {
+          result = JSON.parse(JSON.stringify(result));
+          callback(result);
+        }
     });
+  }
 }
 
 
