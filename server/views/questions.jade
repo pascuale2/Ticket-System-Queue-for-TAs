@@ -115,10 +115,15 @@ html
             // ------------------------------ //
             h4.text-center 1) Add a question topic
             .d-xl-flex.justify-content-center.h-100
-              .searchBar
-                input.searchInput(type='text' name='question_ask' placeholder='e.g. What is the difference between FFT and DFT')
+              .searchBar(id='search_bar')
+                input.searchInput(id='search_input' type='text' name='question_ask' placeholder='e.g. What is the difference between FFT and DFT')
             br
-            h4.text-center 2) Select a course
+            h4.text-center 2) Add a label/tag
+            .d-xl-flex.justify-content-center.h-100
+              .searchBar(id='search_bar')
+                input.searchInput(id='search_input' type='text' name='label' placeholder='e.g. Assignment 5 / Week 8')
+            br
+            h4.text-center 3) Select a course
             .d-xl-flex.justify-content-center
               // ------------------------------ //
               // Select Course ComboBox
@@ -135,7 +140,7 @@ html
             // ------------------------------ //
             // Text Area Code
             // ------------------------------ //
-            h4.text-center 3) Add a description
+            h4.text-center 4) Add a description
             .d-flex.justify-content-center
               textarea.form-control(name="text_area" id="textArea" aria-label="Question Description" placeholder="e.g. I'm just confused as to how Fast Fourier Transform is a particular implementation of a Discrete Fourier Transform")
             br

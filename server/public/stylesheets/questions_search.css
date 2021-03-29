@@ -6,6 +6,7 @@
 @import './layout/scrollbar.css';
 @import './layout/sidebar.css';
 @import './layout/searchbar.css';
+@import './layout/combobox.css';
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -104,6 +105,25 @@ a:focus {
     color: #FCA926;
 }
 
+.card p{
+    margin-bottom: 2px;
+    font-weight: 400;
+    font-size: 18px;
+    color: #eeeeeecc;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111);
+    letter-spacing: 1px;
+}
+
+#desc_header{
+    margin: 0px;
+    font-weight: 400;
+    font-style: oblique;
+    font-size: 18px;
+    color: #eeeeee;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111);
+    letter-spacing: 1px;
+}
+
 #content .cardContainer h4{
     margin-bottom: 0px;
     font-weight: 400;
@@ -111,4 +131,30 @@ a:focus {
     color: #eeeeeecc;
     text-shadow: 0px 1px 2px rgb(111, 111, 111);
     letter-spacing: 1px;
+}
+
+#hr_light{
+    color: #eeeeeecc;
+}
+
+/* COMBO BOX PROPERTY @OVERRIDE */
+.select {
+    position: relative;
+    display: flex;
+    margin: 5px;
+    left: 180px;
+    width: 180px;
+    height: 42px;
+    background: #252525;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+select {
+    flex: 1;
+    padding: 5px;
+    text-align-last: auto;
+    font-size: 18px;
+    color: #bbbbbb;
+    cursor: pointer;
 }

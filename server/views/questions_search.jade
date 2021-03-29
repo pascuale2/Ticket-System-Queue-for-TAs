@@ -108,18 +108,31 @@ html
           br
           h2.text-center Have a question? We'll try to find an answer!
           .container.h-100
-            .d-xl-flex.justify-content-center.h-100
-              .searchBar
-                form(action='/questions_search' method='post')
-                  input.searchInput(type='text' name='question_search' placeholder='e.g. What is Supervised learning?')
-                  button.searchIcon(type='submit')
+            form(action='/questions_search' method='post')
+              .d-flex.justify-content-center
+                .searchBar(id='search_bar')
+                  input.searchInput(id='search_input' type='text' name='question_search' placeholder='e.g. What is Supervised learning?')
+                  button.searchIcon(id='search_icon' type='submit')
                     i.fas.fa-search
-          hr
-          .searchResultContainer
-            for questions in locals.data
-              if questions.question_title != Null
-                .card
-                  h3.text-center #{questions.question_title}
-                  .cardContainer
-                    h4.text-center #{questions.question_desc}
+              .d-flex.justify-content-center
+                .select
+                  select(name="filter_combobox" id="courseComboBox")
+                    option(selected='selected' value='question_title') Search by
+                    option(type='text' value='question_title') Title
+                    option(type='text' value='label') Label/Tag
+                    option(type='text' value='question_desc') Description
+                    option(type='text' value='course_name') Course
+
+            hr
+            .searchResultContainer
+              if locals.data != Null
+                for questions in locals.data
+                  if questions.question_title != Null
+                    .card
+                      h3.text-center #{questions.question_title}
+                      p.text-center  Label: #{questions.label} | Course: #{questions.course_name}
+                      hr(id='hr_light')
+                      .cardContainer
+                        p(id='desc_header').text-center Description:
+                        h4.text-center #{questions.question_desc}
     .overlay

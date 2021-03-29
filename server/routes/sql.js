@@ -1,6 +1,6 @@
 var mysql = require('mysql');
-function configDatabase(req, res) {
 
+function configDatabase(req, res) {
   var connection = mysql.createConnection({
     host: "mysql.mapledonut.ca",
     user: "mapledonutca1",
@@ -8,9 +8,9 @@ function configDatabase(req, res) {
     database: "mapledonut_ca"
   });
   connection.connect(function(err) {
-    if(err){
+    if(err) {
       return console.log("error" + err.message);               // connection failed
-    }else{
+    } else {
       console.log("connected to mapledonut_ca");                // connection success
       //let insertQuery = 'INSERT INTO ?? (??,??,??,??) VALUES (?,?,?,?)';
       //let query = mysql.format(insertQuery,["Student","student_id","email","biography",
@@ -20,6 +20,12 @@ function configDatabase(req, res) {
   return connection;
 }
 
+/**
+ * obtains all courses that the student took.
+ * 
+ * @param {*} connection 
+ * @param {*} callback 
+ */
 function obtainAllCourses(connection, callback){
   let query = '\
    SELECT *\
@@ -36,6 +42,12 @@ function obtainAllCourses(connection, callback){
   });
 }
 
+/**
+ * obtains all the professors for the courses that student is enrolled in.
+ * 
+ * @param {*} connection 
+ * @param {*} callback 
+ */
 function obtainAllProfessors(connection, callback){
   let query = '\
   SELECT name\
@@ -44,20 +56,27 @@ function obtainAllProfessors(connection, callback){
   AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student \
   WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
   connection.query(query, (err, result) => {
-    if(err){                                               // query failed
+    if(err) {                                               // query failed
       console.log(err);
-    }else{
+    } else {
       var teachers;                    // query success
       for (var i = 0; i <result.length; i ++){
-            teachers += result[i].name;
+        teachers += result[i].name;
       }
       teachers = teachers.slice(9);
+      teachers = JSON.stringify(teachers);
       callback(teachers);
     }
   });
 }
 
-
+/**
+ * obtain professors that teach courses.
+ * 
+ * @param {*} connection 
+ * @param {string} coursename 
+ * @param {*} callback 
+ */
 function obtainTeaches(connection, coursename, callback) {
   console.log(coursename);
   let query = 'SELECT name, available FROM Teacher, Course, Teaches WHERE Teacher.teacher_id = \
@@ -73,6 +92,12 @@ function obtainTeaches(connection, coursename, callback) {
   });
 }
 
+/**
+ * obtains questions from student.
+ * 
+ * @param {*} connection 
+ * @param {*} callback 
+ */
 function obtainQuestions(connection, callback) {
   let query = '\
      SELECT DISTINCT * \
@@ -89,6 +114,12 @@ function obtainQuestions(connection, callback) {
   });
 }
 
+/**
+ * obtain all questions.
+ * 
+ * @param {*} connection 
+ * @param {*} callback 
+ */
 function obtainAllQuestions(connection, callback) {
   let query = 'SELECT * FROM Question';
   connection.query(query, (err, result) => {
@@ -102,6 +133,13 @@ function obtainAllQuestions(connection, callback) {
   });
 }
 
+/**
+ * searches professor from user input.
+ * 
+ * @param {*} connection 
+ * @param {*} input 
+ * @param {*} callback 
+ */
 function searchProfessor(connection, input, callback) {
   let replacement = `'%${input}%'`;
   let query = 'SELECT * FROM Teacher WHERE name like '+replacement;
@@ -115,9 +153,23 @@ function searchProfessor(connection, input, callback) {
   });
 }
 
-function searchQuestions(connection, input, callback) {
+/**
+ * searches questions from user inputted filter and search query.
+ * 
+ * @param {*} connection 
+ * @param {*} category 
+ * @param {*} input 
+ * @param {*} callback 
+ */
+function searchQuestions(connection, category, input, callback) {
+  // let filter = `'%${category}%'`;
   let replacement = `'%${input}%'`;
-  let query = 'SELECT * FROM Question WHERE question_title like '+replacement;
+  let query = '\
+  SELECT *\
+  FROM Question INNER JOIN Course ON Question.course_id = Course.course_id\
+  WHERE ' + category + ' like ' + replacement;
+  console.log("FILTER IS: ",category)
+  console.log("INPUT IS: ",input)
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute search", err);
@@ -129,7 +181,13 @@ function searchQuestions(connection, input, callback) {
   });
 }
 
-
+/**
+ * searches courses from user inputted search query.
+ * 
+ * @param {*} connection 
+ * @param {*} course 
+ * @param {*} callback 
+ */
 function searchCourses(connection, course, callback) {
   let replacement = `'%${course}%'`;
   let query = 'SELECT * FROM Course WHERE course_name like '+replacement;
@@ -143,6 +201,14 @@ function searchCourses(connection, course, callback) {
   });
 }
 
+/**
+ * gets the highest question id from question table.
+ * 
+ * used in making new question id for new questions.
+ * 
+ * @param {*} connection 
+ * @param {*} callback 
+ */
 function getQuestionID(connection, callback){
  let query = 'SELECT MAX(question_id) AS largestId FROM Question WHERE 1=1';
   connection.query(query, (err, result) => {
@@ -156,15 +222,29 @@ function getQuestionID(connection, callback){
 }
 
 // TODO: somehow incorporate the queue_id into the questions
-function askQuestion(connection, question_title, stu_id, q_desc, dis_id, c_id, qid, callback) {
+/**
+ * inserts a new question from user inputted fields
+ * 
+ * @param {*} connection 
+ * @param {string} question_title: title of question
+ * @param {string} stu_id:         student id 
+ * @param {string} q_desc:         question description
+ * @param {string} label:          label or tag of the question
+ * @param {string} dis_id:         discipline id of question
+ * @param {string} c_id:           course id of question
+ * @param {string} qid:            question id of question
+ * @param {*} callback 
+ */
+function askQuestion(connection, question_title, stu_id, q_desc, label, dis_id, c_id, qid, callback) {
   qid +=1;
   console.log('quid is ',qid);
   var status = 0;
+
   let query = '\
      INSERT INTO Question\
-     (question_id, question_title, question_status, student_id, question_desc, discipline_id, course_id)\
-     VALUES (?, ?, ?, ?, ?, ?, ?)';
-     connection.query(query, [qid, question_title, status, stu_id, q_desc, dis_id, c_id],(err, result) => {
+     (question_id, question_title, question_status, student_id, question_desc, label, discipline_id, course_id)\
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+     connection.query(query, [qid, question_title, status, stu_id, q_desc, label, dis_id, c_id],(err, result) => {
     if (err) {
       console.log("CANNOT insert into question", err);
     } else {
@@ -174,6 +254,13 @@ function askQuestion(connection, question_title, stu_id, q_desc, dis_id, c_id, q
   });
 }
 
+/**
+ * obtains the session from inputted professor
+ * 
+ * @param {*} connection 
+ * @param {String} teacher: teacher that we're trying to obtain session from
+ * @param {*} callback 
+ */
 function obtainSession(connection, teacher, callback) {
   let query = 'SELECT * FROM Session WHERE teacher_id = ?';
   connection.query(query, teacher, (err, result) => {
@@ -186,7 +273,13 @@ function obtainSession(connection, teacher, callback) {
   });
 }
 
-
+/**
+ * 
+ * @param {*} connection 
+ * @param {string} teach_id
+ * @param {string} course_id 
+ * @param {*} callback 
+ */
 function obtainAllTaught(connection, teach_id, course_id, callback) {
   console.log(typeof course_id);
   let query = 'SELECT * FROM Session \
@@ -202,6 +295,7 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
       }
     });
 }
+
 /*
 function getQueueID(connection){
  let query = 'SELECT MAX(queue_id) FROM Queue WHERE 1=1';
@@ -275,7 +369,9 @@ function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
 
 */
 
-
+/**
+ * exports the modules for the other .js files to use
+ */
 module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
 obtainQuestions, obtainAllQuestions, searchProfessor, searchCourses, searchQuestions, getQuestionID, askQuestion,
 obtainSession, obtainAllTaught};

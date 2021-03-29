@@ -107,10 +107,10 @@ html
           h3.text-center Search Professors
           .container.h-100
             .d-xl-flex.justify-content-center.h-100
-              .searchBar
-                form(action='/professors' method='post')
-                  input.searchInput(type='text' name='professor' placeholder='e.g. Brian Franczak')
-                  button.searchIcon(type='submit')
+              form(action='/professors' method='post')
+                .searchBar(id='search_bar')
+                  input.searchInput(id='search_input' type='text' name='professor' placeholder='e.g. Brian Franczak')
+                  button.searchIcon(id='search_icon' type='submit')
                     i.fas.fa-search
 
           hr
@@ -125,30 +125,11 @@ html
                   .cardContainer
                     .d-flex.justify-content-center
                       h3.text-center
-                        a(href='schedule/'+names.name) Check Schedule
+                        a(href='schedule/'+ names.name) Check Schedule
                     if names.available == 1
                       h3.text-center #{names.name}
                       h5.text-center Available
                     else
                       h4.text-center #{names.name}
                       h4.text-center Not Available
-
-          hr
-          h3.text-center Professors for Enrolled Courses
-          .d-flex.justify-content-center.h-100
-            .card
-              img(src='/images/choc-donut.png' alt='Avatar')
-              hr
-              .cardContainer
-                h3.text-center Brian Franczak
-                h4.text-center Statistics
-                p.text-center Assistant Professor
-
-            .card
-              img(src='/images/jelly-donut.png' alt='Avatar')
-              hr
-              .cardContainer
-                h3.text-center Erwin Pascual
-                h4.text-center Computer Science
-                p.text-center Unemployed
     .overlay
