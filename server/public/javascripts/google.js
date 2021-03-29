@@ -6,7 +6,8 @@ function onSignIn(googleUser) {
     console.log('Email: ' + profile.getEmail());
     window.location.replace("home");
   }
-/*function logOut() {
+
+function logOut() {
   var auth2 = gapi.auth2.getAuthInstance();
   if(auth2.isSignedIn.get()){
     auth2.signOut().then(function () {
@@ -16,6 +17,7 @@ function onSignIn(googleUser) {
   }
 
 }
+
 function onLoad() {
   gapi.load('auth2', function() {
     auth2 = gapi.auth2.init({
@@ -26,7 +28,7 @@ function onLoad() {
       hosted_domain: 'mymacewan.ca',
     });
   });
-}*/
+}
 
 /*function signOut() {
   var auth2 = gapi.auth2.getAuthInstance();

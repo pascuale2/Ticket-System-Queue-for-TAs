@@ -1,7 +1,7 @@
 /* ---------------------------------------------------
     SEARCH BAR STYLE
 ----------------------------------------------------- */
-.searchBar{
+#search_bar{
     margin-bottom: auto;
     margin-top: auto;
     width: 550px;
@@ -12,42 +12,48 @@
     transition: 0.3s;
 }
 
-.searchInput{
-    color: #eeeeee;
+#search_input{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #eeeeeedd;
     text-align: center;
     padding: 0 10px;
     border: 0;
     outline: 0;
     background: none;
     width: 500px;
-    caret-color: transparent;
+    caret-color: #FCA926;
     line-height: 30px;
     transition: width 0.4s linear;
 }
 
-.searchBar:hover > .searchInput{
+#search_input:hover > #search_input{
     caret-color:#FCA926;
     transition: width 0.4s linear;
 }
 
-.searchBar:hover > .searchIcon{
-    background: #FCA926;
-    color: white;
-}
-
-.searchBar:hover{
+#search_bar:hover{
     background-color: #353b48;
     transition: all .25s ease-out;
 }
 
-.searchIcon{
+#search_icon{
     height: 30px;
     width: 30px;
+    border: none;
+    background: none;
     float: right;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    color:white;
+    color: white;
     text-decoration:none;
+    transition: all 0.1s linear;
+}
+
+#search_bar:hover > #search_icon{
+    background: #FCA926;
+    color: white;
 }

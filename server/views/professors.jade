@@ -20,37 +20,17 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
+    // 7,8 - Google Auth 
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js', integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
+    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
+    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
 
   body
-    //google auth stuff
-    script.
-      function logOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        if(auth2.isSignedIn.get()){
-          auth2.signOut().then(function () {
-            console.log('User signed out.');
-            window.location.replace("login");
-          });
-        }
-
-      }
-      function onLoad() {
-      gapi.load('auth2', function() {
-      auth2 = gapi.auth2.init({
-        client_id: '798834471674-2hla9ttcnoausu8a6e2gsoo4j0f70v7u.apps.googleusercontent.com',
-        cookiepolicy: 'single_host_origin',
-        ux_mode: 'redirect',
-        redirect_uri: 'http://localhost:3000/home',
-        hosted_domain: 'mymacewan.ca',
-      });
-      });
-      }
     .wrapper
       // Sidebar
       nav#sidebar
@@ -87,7 +67,7 @@ html
                 li
                   a(href='questions') Ask a Question
                 li
-                  a(href='chat') Search Questions
+                  a(href='questions_search') Search Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -126,28 +106,30 @@ html
           // Search bar
           h3.text-center Search Professors
           .container.h-100
-            .d-flex.justify-content-center.h-100
-              .searchBar
-                input.searchInput(id='searchInput' type='text' placeholder='e.g. Brian Franczak')
-                a.searchIcon(href='#')
-                  i.fas.fa-search
-          hr
-          h3.text-center Professors for Enrolled Courses
-          .d-flex.justify-content-center.h-100
-            .card
-              img(src='/images/choc-donut.png' alt='Avatar')
-              hr
-              .cardContainer
-                h3.text-center Brian Franczak
-                h4.text-center Statistics
-                p.text-center Assistant Professor
+            .d-xl-flex.justify-content-center.h-100
+              form(action='/professors' method='post')
+                .searchBar(id='search_bar')
+                  input.searchInput(id='search_input' type='text' name='professor' placeholder='e.g. Brian Franczak')
+                  button.searchIcon(id='search_icon' type='submit')
+                    i.fas.fa-search
 
-            .card
-              img(src='/images/jelly-donut.png' alt='Avatar')
-              hr
-              .cardContainer
-                h3.text-center Erwin Pascual
-                h4.text-center Computer Science
-                p.text-center Unemployed
-    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
+          hr
+          .searchResultContainer
+            for names in locals.data
+              if names.name != Null
+                .card
+                  if names.available == 1
+                    img(src='/images/person.png' alt='Avatar')
+                  else
+                    img(src='/images/person_offline.png' alt='Avatar')
+                  .cardContainer
+                    .d-flex.justify-content-center
+                      h3.text-center
+                        a(href='schedule/'+ names.name) Check Schedule
+                    if names.available == 1
+                      h3.text-center #{names.name}
+                      h5.text-center Available
+                    else
+                      h4.text-center #{names.name}
+                      h4.text-center Not Available
+    .overlay
