@@ -20,7 +20,7 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth 
+    // 7,8 - Google Auth
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
@@ -169,6 +169,7 @@ html
                   h5 Question
                   // loops through locals.data and assigns a list-group-item for each question string
                   ul.list-group(id="list_group")
+                  if locals.data != Null
                     for questions in locals.data
                       if questions.question_title != Null
                         a.list-group-item.list-group-item-action #{questions.question_title}
@@ -176,6 +177,7 @@ html
                   h5 Status
                   // loops through locals.data again and states whether question is answered or not
                   ul.list-group(id="list_group")
+                  if locals.data != Null
                     for questions in locals.data
                         if questions.question_status == 0
                           li.list-group-item Not Answered
@@ -185,6 +187,7 @@ html
                   h5 Queue
                   // loops through locals.data again and states whether question is answered or not
                   ul.list-group(id="list_group")
+                  if locals.data != Null
                     for questions in locals.data
                       li.list-group-item 1
     .overlay

@@ -10,8 +10,10 @@ router.use(cors());
 
 var connection;
 router.get('/', function(req, res, next) {
+  connection = db.configDatabase(req, res);
   res.render('login');
 });
+
 
 router.get('/home', function(req, res, next) {
   res.render('home');
@@ -19,8 +21,53 @@ router.get('/home', function(req, res, next) {
 router.get('/discussions', function(req, res, next) {
   res.render('discussions');
 });
+
+router.get('/professors/:coursename', function(req, res, next){
+  var id = req.params.coursename;
+  db.obtainTeaches(connection, id, function(result) {
+    res.render('queues', {data: result});
+  });
+});
+
+router.get('/schedule/:profname', function(req, res, next){
+  var id = req.params.profname;
+  db.searchProfessor(connection, id, function(result) {
+    var teaches_id = result[0].teacher_id;
+    db.obtainSession(connection, teaches_id, function(result) {
+      var c = "(";
+      for (var i=0; i<result.length; i++){
+          c += (result[i].course_id);
+          c+=","
+        }
+        var c = c.replace(/.$/,")");
+
+        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
+        res.render('schedule', {"data": result, "teacher":id, "course": courses});
+      });
+    });
+  });
+});
+
+router.get('/professors/schedule/:profname', function(req, res, next){
+  var id = req.params.profname;
+  db.searchProfessor(connection, id, function(result) {
+    var teaches_id = result[0].teacher_id;
+    db.obtainSession(connection, teaches_id, function(result) {
+      var c = "(";
+      for (var i=0; i<result.length; i++){
+          c += (result[i].course_id);
+          c+=","
+        }
+        var c = c.replace(/.$/,")");
+
+        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
+        res.render('schedule', {"data": result, "teacher":id, "course": courses});
+      });
+    });
+  });
+});
+
 router.get('/professors', function(req, res, next) {
-    var connection = db.configDatabase(req, res);
     db.obtainAllProfessors(connection, function(result) {
       res.render('professors', {data: JSON.stringify(result)});
     });
@@ -28,23 +75,17 @@ router.get('/professors', function(req, res, next) {
 router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
-router.get('/questions', function(req, res, next) {
-  res.render('questions');
-
-});
 
 router.get('/courses', function(req, res, next) {
   // student_id is in /public/google.js
-    var connection = db.configDatabase(req, res);
     db.obtainAllCourses(connection, function(result) {
-        res.render('courses', {data: JSON.stringify(result)});
+      console.log("courses are",result);
+        res.render('courses', {data: result});
     });
 });
-
-router.get('/courses', function(req, res, next) {
-  res.render('courses');
+router.get('/course_search', function(req, res, next) {
+  res.render('course_search');
 });
-
 router.post('/course_search', function(req, res, next) {
   db.searchCourses(connection, req.body.course, function(result){
     console.log("result is ",result);
@@ -52,12 +93,9 @@ router.post('/course_search', function(req, res, next) {
   });
 });
 
-router.get('/course_search', function(req, res, next) {
-  res.render('course_search')
-});
 /**
  * Get request for "Ask a Question" page.
- * 
+ *
  * db.obtainQuestions -> obtains the questions for the homepage to display
  * db.obtainAllCourses-> the courses the student is enrolled in which is used to
  *                       populate the comboBox.
@@ -65,6 +103,7 @@ router.get('/course_search', function(req, res, next) {
  router.get('/questions', function(req, res, next) {
   db.obtainQuestions(connection, function(questionResults) {
     db.obtainAllCourses(connection, function(courseResults) {
+      console.log(courseResults, questionResults);
       res.render('questions',
         {"data": questionResults,
         "courses": courseResults});
@@ -74,7 +113,7 @@ router.get('/course_search', function(req, res, next) {
 
 /**
  * Post request for "Ask a Question" page
- * 
+ *
  * db.getQuestionID   -> gets the largest question id
  * db.askQuestion     -> inserts the question into the database
  * db.obtainQuestions -> obtains the questions for the homepage to display
@@ -83,11 +122,11 @@ router.get('/course_search', function(req, res, next) {
  */
 router.post('/questions', function(req, res, next) {
   db.getQuestionID(connection, function(largestid) {
-    // TODO: Replace with Student ID and insert DISCIPLINE 
+    // TODO: Replace with Student ID and insert DISCIPLINE
     db.askQuestion(connection, req.body.question_ask, 100, req.body.text_area, req.body.label, 200, req.body.course_combobox, largestid, function(result) {
       db.obtainQuestions(connection, function(questionResults) {
         db.obtainAllCourses(connection, function(courseResults) {
-          res.render('questions', 
+          res.render('questions',
           {"data": questionResults,
           "courses": courseResults});
         });
@@ -98,7 +137,7 @@ router.post('/questions', function(req, res, next) {
 
 /**
  * Post request for "Search a Question" page
- * 
+ *
  * db.searchQuestions -> obtains the questions for the page to display
  */
 router.post('/questions_search', function(req, res, next) {                    // For a question search
@@ -122,12 +161,7 @@ router.get('/question_ask', function(req, res, next) {
   res.render('question_ask');
 });
 
-router.get('/professors/:coursename', function(req, res, next){
-  var id = req.params.coursename;
-  db.obtainTeaches(connection, id, function(result) {
-    res.render('queues', {data: result});
-  });
-});
+
 
 router.post('/professors', function(req, res, next){                    // For a professor search
   db.searchProfessor(connection, req.body.professor, function(result) {
@@ -176,10 +210,11 @@ router.get('/token/code', function (req, res) {
       req.app.locals.zoomtokn=body;
       req.app.locals.authtokn=authtokn;
       zoom.getchannels(authtokn,res,req);
-    });   
+    });
 })
 router.get('/token', function (req, res) {
   // Access userId via: req.params.userId
+  console.log(req.params);
   res.redirect('https://zoom.us/oauth/authorize?response_type=code&client_id=uqERGEzQThSiyeVrlQlMvQ&redirect_uri=https://localhost:3000/token/code');
 })
 router.post('/chat/redirect', function (req, res) {
@@ -199,7 +234,7 @@ router.post('/chat/redirect', function (req, res) {
   };
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-  
+
     console.log(body);
   });
   res.end("yes");
@@ -221,7 +256,7 @@ router.get('/profpage3', function(req, res, next) {
 router.get('/profpage4', function(req, res, next) {
   res.render('name of jade file here');
 });
-  
+
 
 
 router.get('/settings_edit', function(req, res, next) {

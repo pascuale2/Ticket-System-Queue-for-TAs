@@ -132,6 +132,8 @@ html
                 img(src='/images/person.png' alt='Avatar')
                 hr
                 .cardContainer
+                  h3.text-center
+                    a(href='schedule/'+ names.name) Check Schedule
                   if names.available == 1
                     h3.text-center #{names.name}
                     h4.text-center Available: Yes
@@ -159,6 +161,6 @@ html
                 h4.text-center Computer Science
                 p.text-center Unemployed
     .overlay
-    
+
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
