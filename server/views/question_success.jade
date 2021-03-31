@@ -37,9 +37,8 @@ html
           .row.justify-content-center
             .profile
               .row.justify-content-center
-                img(src='/images/donut.png')
-          h2.text-center  Username 
-          h3.text-center  Biography 
+                img#profilepic(src='/images/donut.png')
+          h2#profilename.text-center  username
         hr
         ul.list-unstyled.components
           li
@@ -84,7 +83,7 @@ html
               i.fas.fa-cog
               | Settings
           li
-            a(href='login')
+            a(href='#' onclick='logOut();')
               i.fas.fa-sign-out-alt
               | Logout
       // Page Content
@@ -100,3 +99,5 @@ html
             h6
               | Congradulations! Your submission for your question "insert question" has been a success! If you have to wait in a queue, we'll notify when your helper is available.
     .overlay
+    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
+    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
