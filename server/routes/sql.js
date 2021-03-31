@@ -1,5 +1,11 @@
 var mysql = require('mysql');
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 function configDatabase(req, res) {
   var connection = mysql.createConnection({
     host: "mysql.mapledonut.ca",

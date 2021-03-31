@@ -182,6 +182,11 @@ router.get('/discussions', function(req, res, next) {
 router.get('/chat', function(req, res, next) {
   res.render('chat');
 });
+
+router.get('/settings_edit', function(req, res, next) {
+  res.render('settings_edit');
+});
+
 router.get('/home/:userId', function (req, res) {
   // Access userId via: req.params.userId
   res.render('home');
@@ -204,19 +209,21 @@ router.get('/token/code', function (req, res) {
     }
   };
 
-    request(options, function(error, response, body) {
-      if (error) throw new Error(error);
-      var authtokn = JSON.parse(body).access_token;
-      req.app.locals.zoomtokn=body;
-      req.app.locals.authtokn=authtokn;
-      zoom.getchannels(authtokn,res,req);
-    });
+  request(options, function(error, response, body) {
+    if (error) throw new Error(error);
+    var authtokn = JSON.parse(body).access_token;
+    req.app.locals.zoomtokn=body;
+    req.app.locals.authtokn=authtokn;
+    zoom.getchannels(authtokn,res,req);
+  });
 })
+
 router.get('/token', function (req, res) {
   // Access userId via: req.params.userId
   console.log(req.params);
   res.redirect('https://zoom.us/oauth/authorize?response_type=code&client_id=uqERGEzQThSiyeVrlQlMvQ&redirect_uri=https://localhost:3000/token/code');
 })
+
 router.post('/chat/redirect', function (req, res) {
   var message = req.body.message;
   var channel = req.body.to_channel;
@@ -239,29 +246,30 @@ router.post('/chat/redirect', function (req, res) {
   });
   res.end("yes");
 })
+
 router.post('/home/idtoken', function (req, res) {
   var idtoken = req.body.token;
   console.log(idtoken);
   res.end("yes");
 })
-router.get('/profpage1', function(req, res, next) {
-  res.render('name of jade file here');
+
+/**********************************************
+ *            PROFESSOR ROUTING
+ **********************************************/
+router.get('/prof_home', function(req, res, next) {
+  res.render('prof_home');
 });
-router.get('/profpage2', function(req, res, next) {
-  res.render('name of jade file here');
+
+router.get('/prof_courses', function(req, res, next) {
+  res.render('prof_courses');
 });
-router.get('/profpage3', function(req, res, next) {
-  res.render('name of jade file here');
+
+router.get('/prof_questions', function(req, res, next) {
+  res.render('prof_questions');
 });
+
 router.get('/profpage4', function(req, res, next) {
   res.render('name of jade file here');
 });
-
-
-
-router.get('/settings_edit', function(req, res, next) {
-  res.render('settings_edit');
-});
-
 
 module.exports = router;
