@@ -122,15 +122,16 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
-          .h-100.d-inline-block
-          h3.text-center Search Courses
-          .container.h-100
+          #courseContainer
+            h3.text-center Search Courses
             .d-flex.justify-content-center.h-100
-              .searchBar
-                form(action='/course_search' method='post')
-                  input.searchInput(id='searchInput' name='course' type='text' placeholder='e.g. "CMPT355" or "Artificial Intelligence"')
-                  button.searchIcon(type='submit')
-                    i.fas.fa-search
+              .container.h-100
+                .d-flex.justify-content-center.h-100
+                  .searchBar(id='search_bar')
+                    form(action='/course_search' method='post')
+                      input.searchInput(id='search_input' name='course' type='text' placeholder='e.g. "CMPT355" or "Artificial Intelligence"')
+                      button.searchIcon(type='submit')
+                        i.fas.fa-search
 
           if locals.data != Null
             hr

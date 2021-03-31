@@ -46,17 +46,29 @@ html
         client_id: '798834471674-2hla9ttcnoausu8a6e2gsoo4j0f70v7u.apps.googleusercontent.com',
         cookiepolicy: 'single_host_origin',
         ux_mode: 'redirect',
-        redirect_uri: 'http://localhost:3000/home',
+        redirect_uri: 'https://localhost:3000/home',
         hosted_domain: 'mymacewan.ca',
       }).then(function(auth2){
         if(auth2.isSignedIn.get()){
           var profile=auth2.currentUser.get().getBasicProfile();
-          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-          console.log('Name: ' + profile.getName());
-          console.log('Image URL: ' + profile.getImageUrl());
-          console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+          var id_token = profile.getId();
+          var data = JSON.stringify({
+            "token": id_token,
+          });
+          var xhr = new XMLHttpRequest();
+          xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+              console.log(this.responseText);
+            }
+          });
+          xhr.open("POST", "https://localhost:3000/home/idtoken");
+          xhr.setRequestHeader("content-type", "application/json");
+          xhr.send(data);
           var pic=document.getElementById('profilepic');
           pic.src=profile.getImageUrl();
+          var pic=document.getElementById('profilename');
+          pic.innerText=profile.getName();
+
         }});
       });
 
@@ -71,9 +83,9 @@ html
           .row.justify-content-center
             .profile
               .row.justify-content-center
-                img#profilepic(src='/images/donut.png' alt='lettericon' width='100' height='100')
-          h2.text-center  Username
-          h3.text-center  Biography
+                img#profilepic(src='/images/donut.png')
+          h2#profilename.text-center  Seth Thompson
+          h3.text-center
         hr
         ul.list-unstyled.components
           li
@@ -88,7 +100,7 @@ html
                 li
                   a(href='courses') Current Courses
                 li
-                  a(href='#') Search Courses
+                  a(href='course_search') Search Courses
           li.active
             a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
               i.fas.fa-question-circle
@@ -97,7 +109,7 @@ html
                 li
                   a(href='questions') Ask a Question
                 li
-                  a(href='#') Search Questions
+                  a(href='questions_search') Search Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -110,7 +122,7 @@ html
                 li
                   a(href='discussions') Discussion Board
                 li
-                  a(href='chat') Group Chats
+                  a(href='token') Group Chats
         hr
         ul.list-unstyled.components
           li
