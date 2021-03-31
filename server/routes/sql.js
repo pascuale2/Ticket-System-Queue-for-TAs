@@ -33,9 +33,56 @@ function configDatabase(req, res) {
  * @param {*} callback
  */
 function obtainAllCourses(connection, callback){
-  let query = 'SELECT course_name FROM Course,Student,\
-  Takes WHERE Student.student_id=Takes.student_id AND Takes.course_id = \
-  Course.course_id AND Student.student_id = 100';
+  let query = 'SELECT * \
+  FROM Takes INNER JOIN Student ON Takes.student_id = Student.student_id \
+  INNER JOIN Course ON Course.course_id = Takes.course_id \
+  WHERE Student.student_id = 100';
+  connection.query(query, (err, result) => {
+    if(err){                                               // query failed
+      console.log(err);
+    }else{
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+// TODO: REPLACE TEACHER_ID WITH LOGIN_ID SOMEHOW???
+// TODO: SUBTRACT COURSES TEACHER IS ALREADY ENROLLED IN
+
+/**
+ * obtains all the addable courses for the teacher to teach
+ * 
+ * @param {*} connection 
+ * @param {*} callback 
+ */
+function obtainAddableCourses(connection, callback){
+  let query = 'SELECT course_id, course_name, course_title \
+  FROM Teacher INNER JOIN Course ON Teacher.discipline_id = Course.discipline_id \
+  WHERE Teacher.teacher_id = 4000011';
+
+  connection.query(query, (err, result) => {
+    if(err){                                               // query failed
+      console.log(err);
+    }else{
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
+ * obtains all the courses that the professor is teaching
+ * 
+ * @param {*} connection 
+ * @param {*} callback 
+ */
+ function obtainTeachingCourses(connection, callback){
+  let query = 'SELECT Course.course_id, Course.course_name, Course.course_title \
+  FROM Teacher INNER JOIN Teaches ON Teacher.teacher_id = Teaches.teacher_id \
+  INNER JOIN Course ON Teaches.course_id = Course.course_id \
+  WHERE Teacher.teacher_id = 4000011';
+
   connection.query(query, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
@@ -232,7 +279,6 @@ function getQuestionID(connection, callback){
   });
 }
 
-// TODO: somehow incorporate the queue_id into the questions
 /**
  * inserts a new question from user inputted fields
  *
@@ -287,13 +333,14 @@ function obtainSession(connection, teacher, callback) {
 /**
  *
  * @param {*} connection
- * @param {string} teach_id
+ * @param {string} teach_id 
  * @param {string} course_id
  * @param {*} callback
  */
 function obtainAllTaught(connection, teach_id, course_id, callback) {
   console.log(typeof course_id, course_id);
-  if(course_id.length < 4){                                             // If the instructor does not have any courses in the sessions table
+  // If the instructor does not have any courses in the sessions table
+  if(course_id.length < 4){
     callback('None');
   } else {
     let query = 'SELECT * FROM Session \
@@ -311,7 +358,54 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
   }
 }
 
+/**
+ * obtains all the questions from course that professors teach and orders them by course
+ * 
+ * @param {*} connection 
+ * @param {string} teacher_id the teacher id of the professor
+ * @param {*} callback 
+ */
+function obtainQuestionFromCourses(connection, teacher_id, callback) {
+  let query = '\
+  SELECT * \
+  FROM Teaches INNER JOIN Question ON Teaches.course_id = Question.course_id \
+  WHERE teacher_id = ' + teacher_id +' \
+  ORDER BY Question.course_id';
 
+  connection.query(query, (err, result) => {
+    if(err) {
+      console.log("cannot find session for ",teacher);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
+ * obtains all the question count from course that professors teach and orders them by course
+ * 
+ * @param {*} connection 
+ * @param {string} teacher_id the teacher id of the professor
+ * @param {*} callback 
+ */
+ function obtainQuestionCountFromCourses(connection, teacher_id, callback) {
+  let query = '\
+  SELECT Question.course_id, COUNT(Question.course_id) AS questionCounts \
+  FROM Question INNER JOIN Teaches ON Teaches.course_id = Question.course_id \
+  WHERE teacher_id = ' + teacher_id +' \
+  GROUP BY Question.course_id';
+
+  connection.query(query, (err, result) => {
+    if(err) {
+      console.log("cannot find session for ",teacher);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      console.log("COUNTS: ", result);
+      callback(result);
+    }
+  });
+}
 
 //// TODO: Implement the following
 //// Queue section
@@ -392,6 +486,22 @@ function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
 /**
  * exports the modules for the other .js files to use
  */
-module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
-obtainQuestions, obtainAllQuestions, searchProfessor, searchCourses, searchQuestions, getQuestionID, askQuestion,
-obtainSession, obtainAllTaught};
+module.exports = {
+  configDatabase, 
+  obtainAllCourses, 
+  obtainAllProfessors, 
+  obtainTeaches,
+  obtainQuestions,
+  obtainAllQuestions,
+  searchProfessor, 
+  searchCourses, 
+  searchQuestions, 
+  getQuestionID, 
+  askQuestion,
+  obtainSession, 
+  obtainAllTaught, 
+  obtainAddableCourses, 
+  obtainTeachingCourses, 
+  obtainQuestionFromCourses,
+  obtainQuestionCountFromCourses
+};

@@ -18,17 +18,17 @@ function logOut() {
 
 }
 
-function onLoad() {
-  gapi.load('auth2', function() {
-    auth2 = gapi.auth2.init({
-      client_id: '798834471674-2hla9ttcnoausu8a6e2gsoo4j0f70v7u.apps.googleusercontent.com',
-      cookiepolicy: 'single_host_origin',
-      ux_mode: 'redirect',
-      redirect_uri: 'http://localhost:3000/home',
-      hosted_domain: 'mymacewan.ca',
-    });
-  });
-}
+// function onLoad() {
+//   gapi.load('auth2', function() {
+//     auth2 = gapi.auth2.init({
+//       client_id: '798834471674-2hla9ttcnoausu8a6e2gsoo4j0f70v7u.apps.googleusercontent.com',
+//       cookiepolicy: 'single_host_origin',
+//       ux_mode: 'redirect',
+//       redirect_uri: 'http://localhost:3000/home',
+//       hosted_domain: 'mymacewan.ca',
+//     });
+//   });
+// }
 
 /*function signOut() {
   var auth2 = gapi.auth2.getAuthInstance();
