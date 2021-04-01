@@ -11,7 +11,9 @@ function configDatabase(req, res) {
     host: "mysql.mapledonut.ca",
     user: "mapledonutca1",
     password: "UQ8P2mdX",
-    database: "mapledonut_ca"
+    database: "mapledonut_ca",
+    queueLimit : 0, // unlimited queueing
+    connectionLimit : 0 // unlimited connections
   });
   connection.connect(function(err) {
     if(err) {
@@ -83,7 +85,7 @@ function obtainAddableCourses(connection, callback){
   WHERE Teacher.teacher_id = 4000011';
 
   connection.query(query, (err, result) => {
-    if(err){                                               // query failed
+    if(err) {                                               // query failed
       console.log(err);
     }else{
       result = JSON.parse(JSON.stringify(result));
@@ -357,6 +359,22 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
   }
 }
 
+
+//// TODO: Implement the following
+//// Queue section
+
+function getQueueID(connection, callback){
+ let query = 'SELECT MAX(queue_id) AS max_num FROM Queue WHERE 1=1';
+  connection.query(query, (err, result) => {
+    if (err) {
+    console.log("Cannot find max queue_id");
+    } else {
+    result = JSON.parse(JSON.stringify(result))[0].max_num;
+    if (result == null) {
+      result = 0
+    }
+    callback(result);
+
 /**
  * Obtains the user inputted course information.
  * 
@@ -414,6 +432,18 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
   });
 }
 
+function locateQueue(connection, sess_id, callback) {
+  let query = 'SELECT queue_id FROM Queue WHERE session_id = ?';
+  connection.query(query, sess_id[0].session_id, (err, result) => {
+    if (err) {
+      console.log("cannot locate queue", err);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
 /**
  * obtains all the questions from course that professors teach and orders them by course
  * 
@@ -437,6 +467,44 @@ function obtainQuestionFromCourses(connection, teacher_id, callback) {
     }
   });
 }
+
+function createSessionID(connection, callback) {
+  let query = 'SELECT MAX(session_id) AS largestId FROM Session WHERE 1=1';
+   connection.query(query, (err, result) => {
+     if (err) {
+     console.log("Cannot find max queue_id");
+     } else {
+     result = JSON.parse(JSON.stringify(result[0])).largestId;
+     console.log(result);
+     callback(result);
+     }
+   });
+}
+
+function createSession(connection, courseid, callback) {
+  createSessionID(connection, function(sesh_id) {
+    sesh_id +=1;
+    let query = 'INSERT INTO Session(session_id, course_id, teacher_id) \
+    VALUES(?, ?, ?)';
+    connection.query(query, [sesh_id, courseid, 0000000], (err, result) => {
+      if (err) {
+        console.log("cannot create session", err);
+      } else {
+        result = JSON.parse(JSON.stringify(result));
+        callback(result);
+      }
+    });
+  });
+}
+
+function getDiscipline(connection, courseid, callback) {
+  let query = 'SELECT discipline_id FROM Course WHERE course_id = ?';
+  connection.query(query, courseid, (err, result) => {
+  if (err) {
+    console.log("CANNOT insert into question", err);
+  } else {
+    result = JSON.parse(JSON.stringify(result))[0].discipline_id;
+    callback(result);
 
 /**
  * obtains all the question count from course that professors teach and orders them by course
@@ -496,7 +564,7 @@ function getDiscipline(connection, teach_id) {
 
 function obtainQuestionID(connection, question_str) {
   let query = 'SELECT question_id FROM Question WHERE \
-  question_string = question_str';
+  question_title = question_str';
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT find question_id", err);
@@ -507,38 +575,120 @@ function obtainQuestionID(connection, question_str) {
   });
 }
 
-function obtainSessionID(connection, teach_id) {
-let query = 'SELECT session_id FROM Session, Teacher WHERE \
-Teacher.teacher_id = teach_id AND Teacher.teacher_id = Session.teacher_id';
-connection.query(query, (err, result) => {
-  if (err) {
-    console.log("CANNOT find question_id", err);
-  }else {
-    result = JSON.parse(JSON.stringify(result));
-    return result;
-  }
-});
-}
-
-function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
-  que_id = getQueueID(connection);
-  que_id +=1;
-
-  discipline = getDiscipline(connection, teach_id);
-  question = obtainQuestionID(connection, question_str);
-  session = obtainSessionID(connection, teach_id);
-
-  let query = 'INSERT INTO QUEUE(queue_id,	answer_ids,	question_ids,	student_ids,\
-  	teacher_id,	discipline_id,	question_id,	session_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
-  connection.query(query,que_id,'notanswered',question_str,stu_id,teach_id,discipline, question,
-  session, (err, result) => {
+function obtainSessionID(connection, courseid, callback) {
+  let query = 'SELECT session_id FROM Session WHERE \
+  course_id = ?';
+  connection.query(query, courseid, (err, result) => {
     if (err) {
-      console.log("CANNOT insert into queue", err);
-    } else {
+      console.log("CANNOT find question_id", err);
+    }else {
       result = JSON.parse(JSON.stringify(result));
+      console.log('res is',result);
       callback(result);
     }
   });
+}
+
+function obtainMaxPosition(connection, qid, callback) {
+  let query = 'SELECT MAX(position) as maxPos FROM Containsqueue WHERE queue_id = ?';
+  connection.query(query, qid, (err, result) => {
+    if (err) {
+      console.log("Error locating max queue position");
+    } else {
+      console.log(result);
+      result = JSON.parse(JSON.stringify(result))[0].maxPos;
+      callback(result);
+    }
+  });
+}
+
+function insertStudentIntoQueue(connection, stud_id, quest_id, queue_id, callback) {
+  console.log("q (SHOULD BE CREATED ALREADY) id is: ", queue_id);
+  obtainMaxPosition(connection, queue_id, function(position) {
+    console.log("Position is ", position);
+    if(position == null) {
+      position = 1;
+    }
+    else{
+      position+=1;
+      //queue_id = queue_id[0].queue_id;
+    }
+    let query = 'INSERT INTO Containsqueue(student_id, question_id, queue_id, position) \
+    VALUES(?, ?, ?, ?)';
+    connection.query(query, [stud_id, quest_id, queue_id, position], (err, result) => {
+      if(err) {
+        console.log("Error inserting student into queue", err);
+      } else {
+        result = JSON.parse(JSON.stringify(result));
+        callback(result);
+      }
+    });
+  });
+}
+
+function insertIntoQueue(connection, course_id, callback) {
+  getQueueID(connection, function(que_id) {
+    que_id +=1;
+
+    getDiscipline(connection, course_id, function(discipline) {
+      //question = obtainQuestionID(connection, question_str);
+      obtainSessionID(connection, course_id, function(session) {
+        console.log('insert is ', que_id, discipline, session[0].session_id);
+        var sesh_id = session[0].session_id;
+        let query = 'INSERT INTO Queue(queue_id, teacher_id, discipline_id, session_id) VALUES(?, ?, ?, ?)';
+        connection.query(query, [que_id, 0000000, discipline, sesh_id], (err, result) => {
+          if (err) {
+            console.log("CANNOT create queue", err);
+          } else {
+            result = JSON.parse(JSON.stringify(result));
+            callback(que_id);
+          }
+        });
+      });
+    });
+  });
+}
+
+function findCurrentPosition(connection, quest_id, callback) {
+  let query = 'SELECT * FROM Containsqueue WHERE \
+  question_id IN '+quest_id;
+  connection.query(query, (err, result) => {
+    if(err || result == null) {
+      console.log("Cannot locate current pos in queue");
+      callback(result);
+
+
+function obtainCourseByQuestionId(connection, quest_id, callback) {
+  let query = 'SELECT course_name FROM Course \
+  INNER JOIN Question\
+   ON Question.course_id = Course.course_id \
+   AND Question.question_id IN '+quest_id;
+   connection.query(query, (err, result) => {
+     if (err || result == null) {
+       console.log("Cannot locate course with question id: ", quest_id);
+       callback(result);
+     } else {
+       result = JSON.parse(JSON.stringify(result));
+       callback(result);
+     }
+   });
+}
+
+function obtainAllQuestionInfo(connection, quest_id, callback) {
+  let query = 'SELECT * FROM Containsqueue\
+   INNER JOIN Question \
+   ON Question.question_id = Containsqueue.question_id \
+   INNER JOIN Course \
+   ON Course.course_id = Question.course_id \
+   WHERE Question.question_id IN '+quest_id;
+   connection.query(query, (err, result) => {
+     if (err) {
+       console.log("could not locate all data from question_id");
+     } else {
+       result = JSON.parse(JSON.stringify(result));
+       callback(result);
+     }
+   });
 }
 
 /**
@@ -558,6 +708,14 @@ module.exports = {
   askQuestion,
   obtainSession, 
   obtainAllTaught, 
+  locateQueue,
+  obtainSessionID,
+  insertIntoQueue, 
+  createSession, 
+  insertStudentIntoQueue,
+  findCurrentPosition,
+  obtainCourseByQuestionId,
+  obtainAllQuestionInfo,
   obtainAddableCourses, 
   obtainTeachingCourses,
   obtainCourseInfo,

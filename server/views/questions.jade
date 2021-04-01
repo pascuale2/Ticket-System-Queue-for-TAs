@@ -173,6 +173,12 @@ html
                       if questions.question_title != Null
                         a.list-group-item.list-group-item-action #{questions.question_title}
                 .col-md-auto
+                  h5 Course
+                  ul.list_group(id="list_group")
+                  if locals.coursenames != Null
+                    for courses in locals.coursenames
+                      li.list-group-item #{courses.course_name}
+                .col-md-auto
                   h5 Status
                   // loops through locals.data again and states whether question is answered or not
                   ul.list-group(id="list_group")
@@ -183,10 +189,10 @@ html
                         else
                           li.list-group-item Answered
                 .col-md-auto
-                  h5 Queue
+                  h5 Queue Position
                   // loops through locals.data again and states whether question is answered or not
                   ul.list-group(id="list_group")
-                  if locals.data != Null
-                    for questions in locals.data
-                      li.list-group-item 1
+                  if locals.queue != Null
+                    for pos in locals.queue
+                      li.list-group-item #{pos.position}
     .overlay
