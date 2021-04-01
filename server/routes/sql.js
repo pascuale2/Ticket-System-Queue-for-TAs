@@ -48,7 +48,6 @@ function obtainAllCourses(connection, callback){
 }
 
 // TODO: REPLACE TEACHER_ID WITH LOGIN_ID SOMEHOW???
-// TODO: SUBTRACT COURSES TEACHER IS ALREADY ENROLLED IN
 
 /**
  * obtains all the addable courses for the teacher to teach
@@ -359,6 +358,63 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
 }
 
 /**
+ * Obtains the user inputted course information.
+ * 
+ * This function is primarily used for displaying the course information when the user
+ * clicks on the course they are trying to answers questions from.
+ * 
+ * @param {*} connection 
+ * @param {string} course_id the course id we are trying to get questions from
+ * @param {*} callback 
+ */
+ function obtainCourseInfo(connection, course_id, callback) {
+  let query = '\
+  SELECT * \
+  FROM Course \
+  WHERE course_id = ' + course_id;
+
+  connection.query(query, (err, result) => {
+    if(err) {
+      console.log("cannot find session for ",teacher);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
+ * obtains all the questions from a single course.
+ * 
+ * This function is primarily used for displaying all the questions related
+ * to the course the professor picks.
+ * 
+ * @param {*} connection 
+ * @param {string} course_id the course id we are trying to get questions from
+ * @param {*} callback 
+ */
+ function obtainQuestionFromACourse(connection, course_name, question_id, callback) {
+  let query = "\
+  SELECT * \
+  FROM Question INNER JOIN Containsqueue ON Question.question_id = Containsqueue.question_id INNER JOIN Course ON Course.course_id = Question.course_id \
+  WHERE Course.course_name='"+course_name+"' ";
+
+  if(!(question_id==="")){
+    query = query + " AND Question.question_id='"+question_id+"' ";
+  }
+  query = query + " ORDER BY POSITION";
+
+  connection.query(query, (err, result) => {
+    if(err) {
+      console.log("Cannot obtain questions from inputted course!");
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
  * obtains all the questions from course that professors teach and orders them by course
  * 
  * @param {*} connection 
@@ -374,7 +430,7 @@ function obtainQuestionFromCourses(connection, teacher_id, callback) {
 
   connection.query(query, (err, result) => {
     if(err) {
-      console.log("cannot find session for ",teacher);
+      console.log("Cannot obtain questions from courses!");
     } else {
       result = JSON.parse(JSON.stringify(result));
       callback(result);
@@ -389,19 +445,24 @@ function obtainQuestionFromCourses(connection, teacher_id, callback) {
  * @param {string} teacher_id the teacher id of the professor
  * @param {*} callback 
  */
- function obtainQuestionCountFromCourses(connection, teacher_id, callback) {
+ function obtainQuestionCountFromCoursesTaught(connection, teacher_id, callback) {
   let query = '\
-  SELECT Question.course_id, COUNT(Question.course_id) AS questionCounts \
+  SELECT TCTable.course_id, TCTable.course_name, TCTable.course_title, IFNULL(QCTable.questionCounts,0) AS questionCount \
+  FROM \
+  (SELECT Question.course_id, COUNT(Question.course_id) AS questionCounts \
   FROM Question INNER JOIN Teaches ON Teaches.course_id = Question.course_id \
-  WHERE teacher_id = ' + teacher_id +' \
-  GROUP BY Question.course_id';
+  WHERE teacher_id = '+teacher_id+' AND Question.question_status=0 \
+  GROUP BY Question.course_id) AS QCTable \
+  RIGHT JOIN \
+  (SELECT Course.course_id, Course.course_name, Course.course_title \
+  FROM Teacher INNER JOIN Teaches ON Teacher.teacher_id = Teaches.teacher_id INNER JOIN Course ON Teaches.course_id = Course.course_id \
+  WHERE Teacher.teacher_id = '+teacher_id+') AS TCTable ON QCTable.course_id = TCTable.course_id';
 
   connection.query(query, (err, result) => {
     if(err) {
-      console.log("cannot find session for ",teacher);
+      console.log("Cannot obtain question counts from courses!");
     } else {
       result = JSON.parse(JSON.stringify(result));
-      console.log("COUNTS: ", result);
       callback(result);
     }
   });
@@ -459,7 +520,6 @@ connection.query(query, (err, result) => {
 });
 }
 
-
 function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
   que_id = getQueueID(connection);
   que_id +=1;
@@ -481,8 +541,6 @@ function insertIntoQueue(connection, stu_id, teach_id, question_str, callback) {
   });
 }
 
-
-
 /**
  * exports the modules for the other .js files to use
  */
@@ -501,7 +559,9 @@ module.exports = {
   obtainSession, 
   obtainAllTaught, 
   obtainAddableCourses, 
-  obtainTeachingCourses, 
+  obtainTeachingCourses,
+  obtainCourseInfo,
+  obtainQuestionFromACourse,
   obtainQuestionFromCourses,
-  obtainQuestionCountFromCourses
+  obtainQuestionCountFromCoursesTaught
 };

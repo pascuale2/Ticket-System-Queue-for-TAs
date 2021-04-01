@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.google.com/specimen/Roboto+Slab');
+@import url('https://fonts.googleapis.com/css2?family=RocknRoll+One&display=swap');
 
 @import './layout/navbar.css';
 @import './layout/scrollbar.css';
@@ -7,10 +8,13 @@
 @import './layout/searchbar.css';
 @import './layout/combobox.css';
 
-
 body {
     font-family: 'Roboto', sans-serif;
     background: #0f0f0f;
+}
+
+h2 {
+    font-family: 'RocknRoll One', sans-serif;
 }
 
 p {
@@ -28,10 +32,10 @@ a:focus {
     text-decoration: none;
     transition: all 0.3s;
 }
-
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
+
 #content {
     width: 100%;
     padding: 50px;
@@ -69,38 +73,61 @@ a:focus {
     text-shadow: 0px 1px 2px rgb(111, 111, 111)
 }
 
-#courseCard {
-    margin: 10px;
-    padding: 15px;
-    width: 250px;
-    background-color: #252525;
-    box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
-    transition: 0.3s;
-    border-radius: 5px;
-
-    text-align: center;
-    font-size: 20px;
+#content h5{
     font-family: 'Roboto', sans-serif;
-    color: #F7F6E7;
-    text-shadow: 0px 1px 2px rgb(197, 161, 119);
+    font-weight: 400;
+    font-size: 24px;
+    color: #eeeeeecc;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111)
 }
 
-#courseCard:hover {
-    background-color: #353b48;
+
+/* ---------------------------------------------------
+    LIST CARD STYLE
+----------------------------------------------------- */
+
+#link_card, #link_card_active{
+    width: 1200px;
+}
+
+#link_card{
+    background-color: #252525;
+    width: 1200px;
+    transition: all 0.3s;
+}
+
+#link_card:hover{
+    background-color: #252525;
+    opacity: 0.8;
     box-shadow: 0 0px 8px 0 #FCA926;
+    width: 1300px;
 }
 
-.title_container {
-    height: 80px;
+#link_card:active{
+    background-color: #eeeeee;
+    color: #000000;
+    opacity: 0.8;
+    box-shadow: 0 0px 8px 0 #FCA926;
+    width: 1290px;
 }
 
-#options_text{
-    font-size: 12px;
+#link_card_active:hover{
+    opacity: 0.8;
+    box-shadow: 0 0px 8px 0 #FCA926;
+    width: 1300px;
 }
 
-#invisible_line_break{
+#link_card_active:active{
+    background-color: #eeeeee;
+    color: #000000;
+    opacity: 0.8;
+    box-shadow: 0 0px 8px 0 #FCA926;
+    width: 1290px;
+}
+
+#question_card_desc{
     margin: 5px;
-    color: transparent;
+    padding-left: 20px;
 }
 
 #no_margin_line_break{
@@ -111,26 +138,4 @@ a:focus {
     margin: 0px;
 }
 
-#card_text{
-    font-size: 18px;
-}
 
-/* COMBO BOX PROPERTY @OVERRIDE */
-.select {
-    position: relative;
-    display: flex;
-    width: 250px;
-    height: 3em;
-    line-height: 3;
-    background: #252525;
-    overflow: hidden;
-    border-radius: 10px;
-}
-
-select {
-    flex: 1;
-    text-align-last: auto;
-    font-size: 18px;
-    color: #bbbbbb;
-    cursor: pointer;
-}

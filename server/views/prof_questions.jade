@@ -4,7 +4,7 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    title Maple Donut - Search a Question
+    title Maple Donut - Questions
 
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
@@ -75,7 +75,7 @@ html
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
             .logo
-              a(href='prof_home')
+              a(href='/prof_home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
@@ -83,40 +83,37 @@ html
             h1.text-center Questions
             hr
             .d-flex.justify-content-center.h-100
-              if locals.courseData != null
-                for courses in locals.courseData
+              if locals.data != null
+                for courses in locals.data
                   .card(id='courseCard')
                     h3.text-center #{courses.course_name}
                     .title_container(id='cardTitle')
                       p(id='card_text').text-center  #{courses.course_title}
-                    if locals.count != null
-                      for count in locals.count
-                        if courses.course_id == count.course_id
-                          hr(id='no_margin_line_break')
-                          p.text-center 
-                            small 
-                              small QUESTION STATUS
-                          h1.text-center #{count.questionCounts}
-                          p(id='no_margin_paragraph').text-center 
-                            small 
-                              small Questions Unanswered
-                          hr
-                          .cardContainer(id='cardOptions')
-                            button.btn.btn-success.btn-block
-                              a(href='#') Answer Questions
-                        else 
-                          hr(id='no_margin_line_break')
-                          p.text-center 
-                            small 
-                              small QUESTION STATUS
-                          h1.text-center 0
-                          p(id='no_margin_paragraph').text-center 
-                            small 
-                              small Questions Unanswered
-                          hr
-                          .cardContainer(id='cardOptions')
-                            button.btn.btn-danger.btn-block(disabled)
-                              a(href='#') No Questions to Answer
+                    hr(id='no_margin_line_break')
+                    p.text-center 
+                      small 
+                        small QUESTION STATUS
+                    
+                    // IF THE QUESTION COUNT ISNT 0
+                    // THEN YOU CAN CHECK THE QUESTIONS
+                    // OTHERWISE BUTTON IS DISABLED
+                    if courses.questionCount != 0 
+                      h1.text-center #{courses.questionCount}
+                      p(id='no_margin_paragraph').text-center 
+                        small 
+                          small Questions Unanswered
+                      hr
+                      .cardContainer(id='cardOptions')
+                        a.btn.btn-success.btn-block(href='/prof_questions/'+courses.course_name name='answer_question' value=courses.course_id) Answer Questions
+                    else 
+                      h1.text-center #{courses.questionCount}
+                      p(id='no_margin_paragraph').text-center 
+                        small 
+                          small Questions Unanswered
+                      hr
+                      .cardContainer(id='cardOptions')
+                        button.btn.btn-secondary.btn-block(disabled)
+                          a(href='#') No Questions to Answer
 
               else
                 br

@@ -46,21 +46,21 @@ html
         hr
         ul.list-unstyled.components
           li
-            a(href='prof_home')
+            a(href='/prof_home')
               i.fas.fa-home
               | Home
           li
-            a(href='prof_courses')
+            a(href='/prof_courses')
               i.fas.fa-book
               | Courses
           li
-            a(href='prof_questions')
+            a(href='/prof_questions')
               i.fas.fa-question-circle
               | Questions
         hr
         ul.list-unstyled.components
           li
-            a(href='settings')
+            a(href='/settings')
               i.fas.fa-cog
               | Settings
           li
@@ -74,16 +74,17 @@ html
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
             .logo
-              a(href='prof_home')
+              a(href='/prof_home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
           #courseContainer
             h1.text-center Current Courses
             hr
+            // Dynamically displays the courses that the prof teaches as cards
             .d-flex.justify-content-center.h-100
-              if locals.courseData != null
-                for courses in locals.courseData
+              if locals.count != null
+                for courses in locals.count
                   .card(id='courseCard')
                     h3.text-center #{courses.course_name}
                     .title_container(id='cardTitle')
@@ -94,10 +95,20 @@ html
                         small 
                           small COURSE OPTIONS
                     .cardContainer(id='cardOptions')
-                      button.btn.btn-info.btn-block
+                      button.btn.btn-info.btn-block.btn-lg
                         a(href='#') Edit Schedule
-                      button.btn.btn-danger.btn-block
-                        a(href='#') Check Questions
+                          i.far.fa-calendar-alt.fa-fw
+                      hr#invisible_line_break
+                      // Checks if there are any questions that need to be answered 
+                      // If there are then the button to check questions is enabled 
+                      // otherwise it is disabled
+                      if courses.questionCount > 0
+                        a.btn.btn-danger.btn-block.btn-lg(href='/prof_questions/'+courses.course_name name='check_questions' value=courses.course_id) Check Questions
+                            i.far.fa-question-circle.fa-fw
+                      else
+                        button.btn.btn-secondary.btn-block.btn-lg(disabled)
+                          a(href='#') No Questions
+                            i.far.fa-times-circle.fa-fw
               else
                 br
                 h4#desc.text-center You currently are not teaching any courses :(
