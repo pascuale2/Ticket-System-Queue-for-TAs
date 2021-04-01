@@ -265,21 +265,19 @@ router.get('/prof_home', function(req, res, next) {
 });
 
 /**
- * Get request for professor course page
+ * get request for professor course page
  * 
- * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
- * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
+ * db.obtainQuestionFromACourse -> obtains all the questions from the inputted course
+ * db.obtainCourseInfo -> obtains the course information we are trying to answer questions from
  */
-router.get('/prof_courses', function(req, res, next) {
-  db.obtainAddableCourses(connection, function(courseResults) {
-    db.obtainTeachingCourses(connection, function(teachResults) {
-      res.render('prof_courses', {
-        "data": courseResults,
-        "courseData": teachResults});
-    });
+ router.get('/prof_courses/:courses', function(req, res, next) {
+  var course_name = req.params.courses;
+  db.obtainQuestionFromACourse(connection, req.body.check_question, "", function(questionResults) {
+    res.render('prof_questions-answer', {
+      "questions": questionResults,
+      "courseID": course_name});
   });
 });
-
 
 /**
  * Get request for professor course page
@@ -287,19 +285,56 @@ router.get('/prof_courses', function(req, res, next) {
  * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
  * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
  */
-router.get('/prof_questions', function(req, res, next) {
+router.get('/prof_courses', function(req, res, next) {
   var temp_prof_id = 4000011;
-  db.obtainTeachingCourses(connection, function(teachResults) {
-    db.obtainQuestionCountFromCourses(connection, temp_prof_id, function(questionCountResults) {
-      res.render('prof_questions', {
-        "courseData": teachResults,
+  db.obtainAddableCourses(connection, function(courseResults) {
+    db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+      res.render('prof_courses', {
+        "data": courseResults,
         "count": questionCountResults});
     });
   });
 });
 
-router.get('/profpage4', function(req, res, next) {
-  res.render('name of jade file here');
+/**
+ * get request for professor overview page -> professor question overview page
+ * 
+ * db.obtainQuestionFromACourse -> obtains all the questions from the inputted course
+ */
+router.get('/prof_questions/:courses', function(req, res, next) {
+  var course_name = req.params.courses;
+  db.obtainQuestionFromACourse(connection, course_name, "", function(questionResults) {
+    res.render('prof_questions-answer', {
+      "questions": questionResults,
+      "courseID": course_name});
+  });
+});
+
+/**
+ * Get request for professor questions overview page
+ * 
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
+ */
+router.get('/prof_questions', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+    console.log("DATA: ", questionCountResults);
+    res.render('prof_questions', {data: questionCountResults});
+  });
+});
+
+/**
+ * Get request for professor answer a question page
+ * 
+ * db.obtainQuestionFromACourse -> obtains the question information from the user inputted course
+ */
+router.get('/prof_questions/:courses/:question_id', function(req, res, next) {
+  var course_name = req.params.courses;
+  var question_id = req.params.question_id;
+  db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+    res.render('prof_answer-question', {data: questionResult});
+  });
 });
 
 module.exports = router;
