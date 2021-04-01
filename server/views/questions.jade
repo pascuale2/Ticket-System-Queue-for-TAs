@@ -41,9 +41,8 @@ html
           .row.justify-content-center
             .profile
               .row.justify-content-center
-                img(src='/images/donut.png')
-          h2.text-center  Username
-          h3.text-center  Biography
+                img#profilepic(src='/images/donut.png')
+          h2#profilename.text-center  username
         hr
         ul.list-unstyled.components
           li
@@ -133,7 +132,7 @@ html
                   option(selected) What course is this for?
                   if locals.courses != Null
                     for courses in locals.courses
-                      option(type='text' value= courses.course_id) #{courses.course_name}
+                      option(type='text' value=courses.course_id) #{courses.course_name}
             br
             h3.text-center Additional Details
             hr#hr_modified
@@ -149,10 +148,10 @@ html
             // Submit Button for Form
             // ------------------------------ //
             .d-xl-flex.justify-content-center.h-100
-              button(type='submit' id='submit_button') Submit Question
+              button.btn.btn-success(type='submit' id='submit_button') Submit Question
                 i.fab.fa-telegram-plane
               .col-md-auto
-              button(type='reset' id='clear_button') Clear
+              button.btn.btn-danger(type='reset' id='clear_button') Clear
                 i.fas.fa-trash
           br
           br

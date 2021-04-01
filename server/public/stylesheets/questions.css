@@ -75,8 +75,6 @@ a:focus {
     box-shadow: 0 2px 4px 0 rgba(111,111,111,0.2);
 }
 
-
-
 #content h2 {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -143,43 +141,27 @@ a:focus {
 }
 
 #submit_button {
-    font-family: 'Roboto', sans-serif;
     font-size: 20px;
-    color: #fff;
-    background-color: #353b48;
     border: none;
-    border-radius: 30px;
-    width: 300px;
+    border-radius: 5px;
+    width: 350px;
     padding: 5px;
     transition: .25s all ease;
 }
 
-#submit_button:hover {
-    color: #000;
-    background-color: #f7f6e7;
-    opacity: 0.9;
-}
 
 #clear_button {
-    font-family: 'Roboto', sans-serif;
     font-size: 20px;
-    color: #fff;
-    background-color: #990000;
     border: none;
-    border-radius: 30px;
-    width: 130px;
+    border-radius: 5px;
+    width: 150px;
     padding: 5px;
     transition: .25s all ease;
-}
-
-#clear_button:hover {
-    color: #000;
-    background-color: #f7f6e7;
-    opacity: 0.9;
 }
 
 button i{
     padding-left: 10px;
+    font-size: 20px;
 }
 
 #list_group {

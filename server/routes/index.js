@@ -202,14 +202,18 @@ router.get('/question_ask', function(req, res, next) {
   res.render('question_ask');
 });
 
-
-
+/**
+ * 
+ */
 router.post('/professors', function(req, res, next){                    // For a professor search
   db.searchProfessor(connection, req.body.professor, function(result) {
     res.render('professors', {data: result});
   });
 });
 
+/**
+ * 
+ */
 router.get('/professors', function(req, res, next) {
     db.obtainAllProfessors(connection, function(result) {
       res.render('professors', {data: result});
@@ -223,6 +227,11 @@ router.get('/discussions', function(req, res, next) {
 router.get('/chat', function(req, res, next) {
   res.render('chat');
 });
+
+router.get('/settings_edit', function(req, res, next) {
+  res.render('settings_edit');
+});
+
 router.get('/home/:userId', function (req, res) {
   // Access userId via: req.params.userId
   res.render('home');
@@ -245,19 +254,21 @@ router.get('/token/code', function (req, res) {
     }
   };
 
-    request(options, function(error, response, body) {
-      if (error) throw new Error(error);
-      var authtokn = JSON.parse(body).access_token;
-      req.app.locals.zoomtokn=body;
-      req.app.locals.authtokn=authtokn;
-      zoom.getchannels(authtokn,res,req);
-    });
+  request(options, function(error, response, body) {
+    if (error) throw new Error(error);
+    var authtokn = JSON.parse(body).access_token;
+    req.app.locals.zoomtokn=body;
+    req.app.locals.authtokn=authtokn;
+    zoom.getchannels(authtokn,res,req);
+  });
 })
+
 router.get('/token', function (req, res) {
   // Access userId via: req.params.userId
   console.log(req.params);
   res.redirect('https://zoom.us/oauth/authorize?response_type=code&client_id=uqERGEzQThSiyeVrlQlMvQ&redirect_uri=https://localhost:3000/token/code');
 })
+
 router.post('/chat/redirect', function (req, res) {
   var message = req.body.message;
   var channel = req.body.to_channel;
@@ -279,30 +290,92 @@ router.post('/chat/redirect', function (req, res) {
     console.log(body);
   });
   res.end("yes");
-});
+})
+
 router.post('/home/idtoken', function (req, res) {
   var idtoken = req.body.token;
   console.log(idtoken);
   res.end("yes");
 })
-router.get('/profpage1', function(req, res, next) {
-  res.render('name of jade file here');
-});
-router.get('/profpage2', function(req, res, next) {
-  res.render('name of jade file here');
-});
-router.get('/profpage3', function(req, res, next) {
-  res.render('name of jade file here');
-});
-router.get('/profpage4', function(req, res, next) {
-  res.render('name of jade file here');
+
+/**********************************************
+ *            PROFESSOR ROUTING
+ **********************************************/
+router.get('/prof_home', function(req, res, next) {
+  res.render('prof_home');
 });
 
-
-
-router.get('/settings_edit', function(req, res, next) {
-  res.render('settings_edit');
+/**
+ * get request for professor course page
+ * 
+ * db.obtainQuestionFromACourse -> obtains all the questions from the inputted course
+ * db.obtainCourseInfo -> obtains the course information we are trying to answer questions from
+ */
+ router.get('/prof_courses/:courses', function(req, res, next) {
+  var course_name = req.params.courses;
+  db.obtainQuestionFromACourse(connection, req.body.check_question, "", function(questionResults) {
+    res.render('prof_questions-answer', {
+      "questions": questionResults,
+      "courseID": course_name});
+  });
 });
 
+/**
+ * Get request for professor course page
+ * 
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
+ */
+router.get('/prof_courses', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.obtainAddableCourses(connection, function(courseResults) {
+    db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+      res.render('prof_courses', {
+        "data": courseResults,
+        "count": questionCountResults});
+    });
+  });
+});
+
+/**
+ * get request for professor overview page -> professor question overview page
+ * 
+ * db.obtainQuestionFromACourse -> obtains all the questions from the inputted course
+ */
+router.get('/prof_questions/:courses', function(req, res, next) {
+  var course_name = req.params.courses;
+  db.obtainQuestionFromACourse(connection, course_name, "", function(questionResults) {
+    res.render('prof_questions-answer', {
+      "questions": questionResults,
+      "courseID": course_name});
+  });
+});
+
+/**
+ * Get request for professor questions overview page
+ * 
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
+ */
+router.get('/prof_questions', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+    console.log("DATA: ", questionCountResults);
+    res.render('prof_questions', {data: questionCountResults});
+  });
+});
+
+/**
+ * Get request for professor answer a question page
+ * 
+ * db.obtainQuestionFromACourse -> obtains the question information from the user inputted course
+ */
+router.get('/prof_questions/:courses/:question_id', function(req, res, next) {
+  var course_name = req.params.courses;
+  var question_id = req.params.question_id;
+  db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+    res.render('prof_answer-question', {data: questionResult});
+  });
+});
 
 module.exports = router;
