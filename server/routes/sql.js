@@ -367,13 +367,16 @@ function getQueueID(connection, callback){
  let query = 'SELECT MAX(queue_id) AS max_num FROM Queue WHERE 1=1';
   connection.query(query, (err, result) => {
     if (err) {
-    console.log("Cannot find max queue_id");
+      console.log("Cannot find max queue_id");
     } else {
-    result = JSON.parse(JSON.stringify(result))[0].max_num;
-    if (result == null) {
-      result = 0
+      result = JSON.parse(JSON.stringify(result))[0].max_num;
+      if (result == null) {
+        result = 0
+      }
+      callback(result);
     }
-    callback(result);
+  });
+}
 
 /**
  * Obtains the user inputted course information.
@@ -500,11 +503,14 @@ function createSession(connection, courseid, callback) {
 function getDiscipline(connection, courseid, callback) {
   let query = 'SELECT discipline_id FROM Course WHERE course_id = ?';
   connection.query(query, courseid, (err, result) => {
-  if (err) {
-    console.log("CANNOT insert into question", err);
-  } else {
-    result = JSON.parse(JSON.stringify(result))[0].discipline_id;
-    callback(result);
+    if (err) {
+      console.log("CANNOT insert into question", err);
+    } else {
+      result = JSON.parse(JSON.stringify(result))[0].discipline_id;
+      callback(result);
+    }
+  });
+}
 
 /**
  * obtains all the question count from course that professors teach and orders them by course
@@ -656,7 +662,9 @@ function findCurrentPosition(connection, quest_id, callback) {
     if(err || result == null) {
       console.log("Cannot locate current pos in queue");
       callback(result);
-
+    }
+  });
+}
 
 function obtainCourseByQuestionId(connection, quest_id, callback) {
   let query = 'SELECT course_name FROM Course \
