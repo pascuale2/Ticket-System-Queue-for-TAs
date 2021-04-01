@@ -412,6 +412,7 @@ function obtainMaxPosition(connection, qid, callback) {
     if (err) {
       console.log("Error locating max queue position");
     } else {
+      console.log(result);
       result = JSON.parse(JSON.stringify(result))[0].maxPos;
       callback(result);
     }
@@ -419,13 +420,15 @@ function obtainMaxPosition(connection, qid, callback) {
 }
 
 function insertStudentIntoQueue(connection, stud_id, quest_id, queue_id, callback) {
+  console.log("q (SHOULD BE CREATED ALREADY) id is: ", queue_id);
   obtainMaxPosition(connection, queue_id, function(position) {
+    console.log("Position is ", position);
     if(position == null) {
       position = 1;
     }
     else{
       position+=1;
-      queue_id = queue_id[0].queue_id;
+      //queue_id = queue_id[0].queue_id;
     }
     let query = 'INSERT INTO Containsqueue(student_id, question_id, queue_id, position) \
     VALUES(?, ?, ?, ?)';
@@ -463,6 +466,53 @@ function insertIntoQueue(connection, course_id, callback) {
   });
 }
 
+function findCurrentPosition(connection, quest_id, callback) {
+  let query = 'SELECT * FROM Containsqueue WHERE \
+  question_id IN '+quest_id;
+  connection.query(query, (err, result) => {
+    if(err || result == null) {
+      console.log("Cannot locate current pos in queue");
+      callback(result);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function obtainCourseByQuestionId(connection, quest_id, callback) {
+  let query = 'SELECT course_name FROM Course \
+  INNER JOIN Question\
+   ON Question.course_id = Course.course_id \
+   AND Question.question_id IN '+quest_id;
+   connection.query(query, (err, result) => {
+     if (err || result == null) {
+       console.log("Cannot locate course with question id: ", quest_id);
+       callback(result);
+     } else {
+       result = JSON.parse(JSON.stringify(result));
+       callback(result);
+     }
+   });
+}
+
+function obtainAllQuestionInfo(connection, quest_id, callback) {
+  let query = 'SELECT * FROM Containsqueue\
+   INNER JOIN Question \
+   ON Question.question_id = Containsqueue.question_id \
+   INNER JOIN Course \
+   ON Course.course_id = Question.course_id \
+   WHERE Question.question_id IN '+quest_id;
+   connection.query(query, (err, result) => {
+     if (err) {
+       console.log("could not locate all data from question_id");
+     } else {
+       result = JSON.parse(JSON.stringify(result));
+       callback(result);
+     }
+   });
+}
+
 
 /**
  * exports the modules for the other .js files to use
@@ -470,4 +520,5 @@ function insertIntoQueue(connection, course_id, callback) {
 module.exports = {configDatabase, obtainAllCourses, obtainAllProfessors, obtainTeaches,
 obtainQuestions, obtainAllQuestions, searchProfessor, searchCourses, searchQuestions, getQuestionID, askQuestion,
 obtainSession, obtainAllTaught, obtainSessionID, locateQueue,
- obtainSessionID, insertIntoQueue, createSession, insertStudentIntoQueue};
+ obtainSessionID, insertIntoQueue, createSession, insertStudentIntoQueue,
+findCurrentPosition, obtainCourseByQuestionId, obtainAllQuestionInfo};

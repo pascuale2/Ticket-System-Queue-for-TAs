@@ -104,10 +104,33 @@ router.post('/course_search', function(req, res, next) {
  router.get('/questions', function(req, res, next) {
   db.obtainQuestions(connection, function(questionResults) {
     db.obtainAllCourses(connection, function(courseResults) {
-      res.render('questions',
-        {"data": questionResults,
-        "courses": courseResults});
-    });
+      var c = "(";
+      for (var i=0; i<questionResults.length; i++){
+          c += (questionResults[i].question_id);
+          c+=","
+        }
+        var c = c.replace(/.$/,")");
+        if(c.length<2){
+          res.render('questions', {
+            "courses": courseResults
+          });
+        }
+        else{
+          db.obtainAllQuestionInfo(connection, c, function(allresults) {
+            console.log(allresults);
+            res.render('questions2', {"data": allresults});
+      //db.obtainCourseByQuestionId(connection, c, function(coursename) {
+        //  db.findCurrentPosition(connection, c, function(position){
+          //res.render('questions',
+        //    {"data": questionResults,
+        //    "courses": courseResults,
+        //    "queue": position,
+        //    "coursenames": coursename});
+        //  });
+    //  });
+          });
+        }
+            });
   });
 });
 
@@ -129,14 +152,24 @@ router.post('/questions', function(req, res, next) {
       db.obtainQuestions(connection, function(questionResults) {
         db.obtainAllCourses(connection, function(courseResults) {
 
+          //db.obtainCourseByQuestionId(connection, temp, function(coursename) {
           // TODO: queue stuff
           console.log('question id is ',question_id);
-          var iscreated = queue.generateQueue(connection, courseid, question_id);
-          console.log('Success: ',iscreated);
-
-          res.render('questions',
-          {"data": questionResults,
-          "courses": courseResults});
+          //var queue_id =
+          queue.generateQueue(connection, courseid, question_id, function(queue_id) {
+            var temp = "(";
+            temp += question_id;
+            temp += ")";
+            db.findCurrentPosition(connection, temp, function(position){
+            console.log('Success: ',queue_id, "position: ",position);
+            res.render('questions',
+            {"data": questionResults,
+            "courses": courseResults,
+            "queue": position});
+            //"coursenames": coursename});
+              });
+          //});
+          });
         });
       });
     });

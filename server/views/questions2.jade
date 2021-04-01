@@ -165,35 +165,27 @@ html
             h2.text-center Your outgoing questions and their queues.
             .row
               .d-flex.justify-content-center
-                .col-md-5
-                  h5 Question
-                  // loops through locals.data and assigns a list-group-item for each question string
-                  ul.list-group(id="list_group")
-                  if locals.data != Null
-                    for questions in locals.data
-                      if questions.question_title != Null
-                        a.list-group-item.list-group-item-action #{questions.question_title}
-                .col-md-auto
-                  h5 Course
-                  ul.list_group(id="list_group")
-                  if locals.coursenames != Null
-                    for courses in locals.coursenames
-                      li.list-group-item #{courses.course_name}
-                .col-md-auto
-                  h5 Status
-                  // loops through locals.data again and states whether question is answered or not
-                  ul.list-group(id="list_group")
-                  if locals.data != Null
-                    for questions in locals.data
-                        if questions.question_status == 0
-                          li.list-group-item Not Answered
-                        else
-                          li.list-group-item Answered
-                .col-md-auto
-                  h5 Queue Position
-                  // loops through locals.data again and states whether question is answered or not
-                  ul.list-group(id="list_group")
-                  if locals.queue != Null
-                    for pos in locals.queue
-                      li.list-group-item #{pos.position}
+              table
+                thead
+                  tr
+                    th Question
+                    th Course Name
+                    th Question Status
+                    th Position
+                tbody
+                  for questions in locals.data
+                    tr
+                      .d-xl-flex.justify-content-center.h-100
+                        td #{questions.question_title}
+                      .d-xl-flex.justify-content-center.h-100
+                        td #{questions.course_name}
+                      if questions.question_status == 0
+                        .d-xl-flex.justify-content-center.h-100
+                          td Not Answered
+                      else
+                        .d-xl-flex.justify-content-center.h-100
+                          td Answered
+                      .d-xl-flex.justify-content-center.h-100
+                        td #{questions.position}
+
     .overlay
