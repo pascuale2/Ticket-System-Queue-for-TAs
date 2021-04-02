@@ -48,6 +48,11 @@ function onLoadHome() {
     if(auth2.isSignedIn.get()){
       var profile=auth2.currentUser.get().getBasicProfile();
       var id_token = profile.getId();
+      var email=profile.getEmail().split("@")[1];
+      var profemail="macewan.ca"
+      if(profemail.localeCompare(email)==0){
+        window.location.replace("/prof_home");
+      }
       var data = JSON.stringify({
         "token": id_token,
       });  
