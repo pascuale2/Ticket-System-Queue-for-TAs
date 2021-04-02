@@ -20,7 +20,7 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth 
+    // 7,8 - Google Auth
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
@@ -43,7 +43,7 @@ html
               .row.justify-content-center
                 img#profilepic(src='/images/donut.png')
           h2#profilename.text-center Seth Thompson
-          h3.text-center  
+          h3.text-center
         hr
         ul.list-unstyled.components
           li
@@ -88,20 +88,15 @@ html
                   h2.text-center #{locals.data[0].question_title}
                   small Position: #{locals.data[0].position}
                 p(id='question_card_desc').mb-1 #{locals.data[0].question_desc}
-                small Label/Tag: #{locals.data[0].label} 
-          .d-flex.justify-content-center
-            textarea.form-control(maxlength="3000" name="text_area" id="textArea" aria-label="Question Description" placeholder="Answer Question Here\n(3000 Characters Max)")
-          br
-          .d-flex.justify-content-center
-            button.btn.btn-primary(id='submit_button' type='submit') Submit
-              i.fas.fa-arrow-right.fa-fw
-            .col-md-auto
-            button.btn.btn-danger(id='clear_button' type='clear') Clear
-              i.fas.fa-trash.fa-fw
+                small Label/Tag: #{locals.data[0].label}
+          form(action='/prof_questions/'+locals.data[0].course_name+'/'+locals.data[0].question_id method='post')
+            .d-flex.justify-content-center
+              textarea.form-control(maxlength="3000" name="text_area" id="textArea" aria-label="Question Description" placeholder="Answer Question Here\n(3000 Characters Max)")
+            br
+            .d-flex.justify-content-center
+                button.btn.btn-primary(id='submit_button' type='submit') Submit
+                  i.fas.fa-arrow-right.fa-fw
+                .col-md-auto
+                button.btn.btn-danger(id='clear_button' type='clear') Clear
+                  i.fas.fa-trash.fa-fw
     .overlay
-              
-
-                  
-
-                      
-                    
