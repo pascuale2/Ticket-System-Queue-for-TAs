@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('./sql');
 var queue = require('./queue');
+var answers = require('./prof_answer');
 
 var request = require("request");
 var zoom = require("./zoom.js");
@@ -123,7 +124,7 @@ router.get('/questions', function(req, res, next) {
                 "courses": courseResults});
             });
           });
-        } 
+        }
       //db.obtainCourseByQuestionId(connection, c, function(coursename) {
         //  db.findCurrentPosition(connection, c, function(position){
           //res.render('questions',
@@ -147,7 +148,7 @@ router.get('/questions', function(req, res, next) {
  *                       populate the comboBox.
  */
 router.post('/questions', function(req, res, next) {
-  //TODO: CHANGE THIS PLSSSSSSSS 
+  //TODO: CHANGE THIS PLSSSSSSSS
   var temp_student_id = 100;
   db.getQuestionID(connection, function(largestid) {
     // TODO: Replace with Student ID and insert DISCIPLINE
@@ -199,7 +200,7 @@ router.get('/questions_search', function(req, res, next) {
 });
 
 /**
- * 
+ *
  */
 router.post('/professors', function(req, res, next){                    // For a professor search
   db.searchProfessor(connection, req.body.professor, function(result) {
@@ -208,7 +209,7 @@ router.post('/professors', function(req, res, next){                    // For a
 });
 
 /**
- * 
+ *
  */
 router.get('/professors', function(req, res, next) {
   res.render('professors');
@@ -301,7 +302,7 @@ router.get('/prof_home', function(req, res, next) {
 
 /**
  * get request for professor course page
- * 
+ *
  * db.obtainQuestionFromACourse -> obtains all the questions from the inputted course
  * db.obtainCourseInfo -> obtains the course information we are trying to answer questions from
  */
@@ -316,7 +317,7 @@ router.get('/prof_home', function(req, res, next) {
 
 /**
  * Get request for professor course page
- * 
+ *
  * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
  * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
  */
@@ -333,7 +334,7 @@ router.get('/prof_courses', function(req, res, next) {
 
 /**
  * get request for professor overview page -> professor question overview page
- * 
+ *
  * db.obtainQuestionFromACourse -> obtains all the questions from the inputted course
  */
 router.get('/prof_questions/:courses', function(req, res, next) {
@@ -347,7 +348,7 @@ router.get('/prof_questions/:courses', function(req, res, next) {
 
 /**
  * Get request for professor questions overview page
- * 
+ *
  * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
  * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
  */
@@ -361,15 +362,32 @@ router.get('/prof_questions', function(req, res, next) {
 
 /**
  * Get request for professor answer a question page
- * 
+ *
  * db.obtainQuestionFromACourse -> obtains the question information from the user inputted course
  */
-router.get('/prof_questions/:courses/:question_id', function(req, res, next) {
-  var course_name = req.params.courses;
-  var question_id = req.params.question_id;
-  db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
-    res.render('prof_answer-question', {data: questionResult});
+ router.get('/prof_questions/:courses/:question_id', function(req, res, next) {
+   var course_name = req.params.courses;
+   var question_id = req.params.question_id;
+   db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+     res.render('prof_answer-question', {data: questionResult});
+   });
+ });
+
+ /**
+  * Post request for professor answer a question page
+  *
+  * db.obtainQuestionFromACourse -> obtains the question information from the user inputted course
+  */
+  router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
+    var course_name = req.params.courses;
+    var question_id = req.params.question_id;
+    console.log(req.body);
+    db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+      console.log(question_id, questionResult[0].course_id, req.body.text_area);
+      answers.insertAnswer(connection, req.body.text_area, "DATE Not applicable", question_id, questionResult[0], function(answerResult) {
+        res.render('prof_home');
+      });
+    });
   });
-});
 
 module.exports = router;
