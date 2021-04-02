@@ -307,7 +307,7 @@ function askQuestion(connection, question_title, stu_id, q_desc, label, dis_id, 
       console.log("CANNOT insert into question", err);
     } else {
       result = JSON.parse(JSON.stringify(result));
-      callback(result);
+      callback(qid);
     }
   });
 }
@@ -619,9 +619,13 @@ function insertStudentIntoQueue(connection, stud_id, quest_id, queue_id, callbac
       position+=1;
       //queue_id = queue_id[0].queue_id;
     }
-    let query = 'INSERT INTO Containsqueue(student_id, question_id, queue_id, position) \
+    console.log("S_ID: ",stud_id);
+    console.log("QUEUE_ID: ",queue_id);
+    console.log("POS: ",position);
+    console.log("QUEST_ID: ",quest_id);
+    let query = 'INSERT INTO Containsqueue(student_id, queue_id, position, question_id) \
     VALUES(?, ?, ?, ?)';
-    connection.query(query, [stud_id, quest_id, queue_id, position], (err, result) => {
+    connection.query(query, [stud_id, queue_id, position, quest_id], (err, result) => {
       if(err) {
         console.log("Error inserting student into queue", err);
       } else {
@@ -662,15 +666,18 @@ function findCurrentPosition(connection, quest_id, callback) {
     if(err || result == null) {
       console.log("Cannot locate current pos in queue");
       callback(result);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
     }
   });
 }
 
 function obtainCourseByQuestionId(connection, quest_id, callback) {
   let query = 'SELECT course_name FROM Course \
-  INNER JOIN Question\
-   ON Question.course_id = Course.course_id \
-   AND Question.question_id IN '+quest_id;
+  INNER JOIN Question \
+  ON Question.course_id = Course.course_id \
+  AND Question.question_id IN '+quest_id;
    connection.query(query, (err, result) => {
      if (err || result == null) {
        console.log("Cannot locate course with question id: ", quest_id);
@@ -699,35 +706,53 @@ function obtainAllQuestionInfo(connection, quest_id, callback) {
    });
 }
 
+function obtainAllQuestionInfoByStudentID(connection, student_id, callback) {
+  let query = 'SELECT * FROM Containsqueue\
+   INNER JOIN Question \
+   ON Question.question_id = Containsqueue.question_id \
+   INNER JOIN Course \
+   ON Course.course_id = Question.course_id \
+   WHERE Question.student_id = '+student_id;
+   connection.query(query, (err, result) => {
+     if (err) {
+       console.log("could not locate all data from question_id");
+     } else {
+       result = JSON.parse(JSON.stringify(result));
+       callback(result);
+     }
+   });
+}
+
 /**
  * exports the modules for the other .js files to use
  */
 module.exports = {
   configDatabase, 
-  obtainAllCourses, 
-  obtainAllProfessors, 
-  obtainTeaches,
-  obtainQuestions,
-  obtainAllQuestions,
+  askQuestion,
+  createSession,
+  insertIntoQueue,
+  insertStudentIntoQueue,
+  findCurrentPosition,
+  getQuestionID, 
+  locateQueue,
   searchProfessor, 
   searchCourses, 
   searchQuestions, 
-  getQuestionID, 
-  askQuestion,
-  obtainSession, 
-  obtainAllTaught, 
-  locateQueue,
-  obtainSessionID,
-  insertIntoQueue, 
-  createSession, 
-  insertStudentIntoQueue,
-  findCurrentPosition,
-  obtainCourseByQuestionId,
-  obtainAllQuestionInfo,
   obtainAddableCourses, 
-  obtainTeachingCourses,
+  obtainAllCourses, 
+  obtainAllProfessors,
+  obtainAllQuestionInfo,
+  obtainAllQuestionInfoByStudentID,
+  obtainAllQuestions,
+  obtainAllTaught,  
+  obtainCourseByQuestionId,
   obtainCourseInfo,
-  obtainQuestionFromACourse,
+  obtainQuestions,
+  obtainQuestionFromACourse, 
   obtainQuestionFromCourses,
-  obtainQuestionCountFromCoursesTaught
+  obtainQuestionCountFromCoursesTaught,
+  obtainSession,
+  obtainSessionID,
+  obtainTeaches,
+  obtainTeachingCourses
 };

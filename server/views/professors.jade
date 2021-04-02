@@ -121,14 +121,16 @@ html
                     img(src='/images/person.png' alt='Avatar')
                   else
                     img(src='/images/person_offline.png' alt='Avatar')
-                  .cardContainer
-                    .d-flex.justify-content-center
-                      h3.text-center
-                        a(href='schedule/'+ names.name) Check Schedule
-                    if names.available == 1
+                  if names.available == 1
+                    .cardContainer 
                       h3.text-center #{names.name}
                       h5.text-center Available
-                    else
+                  else
+                    .cardContainer 
                       h4.text-center #{names.name}
                       h4.text-center Not Available
+                  .button_container
+                    br
+                    a.btn.btn-primary.btn-block(href='schedule/'+ names.name id='schedule_button') Check Schedule
+                  
     .overlay

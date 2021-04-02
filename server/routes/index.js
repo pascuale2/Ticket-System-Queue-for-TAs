@@ -101,13 +101,13 @@ router.post('/course_search', function(req, res, next) {
  * db.obtainAllCourses-> the courses the student is enrolled in which is used to
  *                       populate the comboBox.
  */
- router.get('/questions', function(req, res, next) {
+router.get('/questions', function(req, res, next) {
   db.obtainQuestions(connection, function(questionResults) {
     db.obtainAllCourses(connection, function(courseResults) {
       var c = "(";
       for (var i=0; i<questionResults.length; i++){
           c += (questionResults[i].question_id);
-          c+=","
+          c += ","
         }
         var c = c.replace(/.$/,")");
         if(c.length<2){
@@ -117,8 +117,13 @@ router.post('/course_search', function(req, res, next) {
         }
         else{
           db.obtainAllQuestionInfo(connection, c, function(allresults) {
-            console.log(allresults);
-            res.render('questions2', {"data": allresults});
+            db.obtainAllCourses(connection, function(courseResults) {
+              res.render('questions', {
+                "data": allresults,
+                "courses": courseResults});
+            });
+          });
+        } 
       //db.obtainCourseByQuestionId(connection, c, function(coursename) {
         //  db.findCurrentPosition(connection, c, function(position){
           //res.render('questions',
@@ -128,9 +133,7 @@ router.post('/course_search', function(req, res, next) {
         //    "coursenames": coursename});
         //  });
     //  });
-          });
-        }
-            });
+      });
   });
 });
 
@@ -144,11 +147,13 @@ router.post('/course_search', function(req, res, next) {
  *                       populate the comboBox.
  */
 router.post('/questions', function(req, res, next) {
+  //TODO: CHANGE THIS PLSSSSSSSS 
+  var temp_student_id = 100;
   db.getQuestionID(connection, function(largestid) {
     // TODO: Replace with Student ID and insert DISCIPLINE
     var courseid = req.body.course_combobox;
     //var quest_id = req.body.question_ask;
-    db.askQuestion(connection, req.body.question_ask, 100, req.body.text_area, req.body.label, 200, req.body.course_combobox, largestid, function(question_id) {
+    db.askQuestion(connection, req.body.question_ask, temp_student_id, req.body.text_area, req.body.label, 200, req.body.course_combobox, largestid, function(question_id) {
       db.obtainQuestions(connection, function(questionResults) {
         db.obtainAllCourses(connection, function(courseResults) {
 
@@ -161,14 +166,13 @@ router.post('/questions', function(req, res, next) {
             temp += question_id;
             temp += ")";
             db.findCurrentPosition(connection, temp, function(position){
-            console.log('Success: ',queue_id, "position: ",position);
-            res.render('questions',
-            {"data": questionResults,
-            "courses": courseResults,
-            "queue": position});
-            //"coursenames": coursename});
+              db.obtainAllQuestionInfoByStudentID(connection, temp_student_id, function(allResults) {
+                res.render('questions',
+                {"data": allResults,
+                "courses": courseResults,
+                "queue": position});
               });
-          //});
+            });
           });
         });
       });
@@ -190,16 +194,8 @@ router.post('/questions_search', function(req, res, next) {                    /
 /**
  * Get request for "Search a Question" page
  */
- router.get('/questions_search', function(req, res, next) {
+router.get('/questions_search', function(req, res, next) {
   res.render('questions_search');
-});
-
-router.get('/question_success', function(req, res, next) {
-  res.render('question_success');
-});
-
-router.get('/question_ask', function(req, res, next) {
-  res.render('question_ask');
 });
 
 /**
@@ -215,9 +211,7 @@ router.post('/professors', function(req, res, next){                    // For a
  * 
  */
 router.get('/professors', function(req, res, next) {
-    db.obtainAllProfessors(connection, function(result) {
-      res.render('professors', {data: result});
-    });
+  res.render('professors');
 });
 
 router.get('/discussions', function(req, res, next) {

@@ -149,7 +149,6 @@ a:focus {
     transition: .25s all ease;
 }
 
-
 #clear_button {
     font-size: 20px;
     border: none;
@@ -166,4 +165,26 @@ button i{
 
 #list_group {
     background-color: #353b48;
+}
+
+table thead tr th{
+    font-size: 22px;
+    color: #eeeeee;
+    transition: .25s all ease;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111)
+}
+
+table thead tr th:hover{
+    font-size: 26px;
+}
+
+table tbody tr td{
+    font-size: 18px;
+    color: #eeeeeeee;
+    transition: .25s all ease;
+}
+
+table tbody tr td:hover{
+    font-size: 24px;
+    color: #FCA926;
 }

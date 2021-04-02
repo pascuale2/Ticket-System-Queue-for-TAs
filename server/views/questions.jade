@@ -41,8 +41,9 @@ html
           .row.justify-content-center
             .profile
               .row.justify-content-center
-                img#profilepic(src='/images/donut.png')
-          h2#profilename.text-center  username
+                img(src='/images/donut.png')
+          h2.text-center  Username
+          h3.text-center  Biography
         hr
         ul.list-unstyled.components
           li
@@ -105,7 +106,6 @@ html
         #content
           br
           br
-          br
           h3.text-center Do you have a question?
           hr#hr_modified
           form(action='/questions' method='post')
@@ -132,7 +132,7 @@ html
                   option(selected) What course is this for?
                   if locals.courses != Null
                     for courses in locals.courses
-                      option(type='text' value=courses.course_id) #{courses.course_name}
+                      option(type='text' value= courses.course_id) #{courses.course_name}
             br
             h3.text-center Additional Details
             hr#hr_modified
@@ -148,7 +148,7 @@ html
             // Submit Button for Form
             // ------------------------------ //
             .d-xl-flex.justify-content-center.h-100
-              button.btn.btn-success(type='submit' id='submit_button') Submit Question
+              button.btn.btn-primary(type='submit' id='submit_button') Submit Question
                 i.fab.fa-telegram-plane
               .col-md-auto
               button.btn.btn-danger(type='reset' id='clear_button') Clear
@@ -158,41 +158,28 @@ html
           br
           br
           br
-          br
           hr#hr_modified
           .card(id="questionAskInput").p-3.container-fluid
             h2.text-center Your outgoing questions and their queues.
+            hr
             .row
               .d-flex.justify-content-center
-                .col-md-5
-                  h5 Question
-                  // loops through locals.data and assigns a list-group-item for each question string
-                  ul.list-group(id="list_group")
-                  if locals.data != Null
-                    for questions in locals.data
-                      if questions.question_title != Null
-                        a.list-group-item.list-group-item-action #{questions.question_title}
-                .col-md-auto
-                  h5 Course
-                  ul.list_group(id="list_group")
-                  if locals.coursenames != Null
-                    for courses in locals.coursenames
-                      li.list-group-item #{courses.course_name}
-                .col-md-auto
-                  h5 Status
-                  // loops through locals.data again and states whether question is answered or not
-                  ul.list-group(id="list_group")
-                  if locals.data != Null
-                    for questions in locals.data
-                        if questions.question_status == 0
-                          li.list-group-item Not Answered
-                        else
-                          li.list-group-item Answered
-                .col-md-auto
-                  h5 Queue Position
-                  // loops through locals.data again and states whether question is answered or not
-                  ul.list-group(id="list_group")
-                  if locals.queue != Null
-                    for pos in locals.queue
-                      li.list-group-item #{pos.position}
+              table
+                thead
+                  tr
+                    th.text-center Question
+                    th.text-center Course Name
+                    th.text-center Question Status
+                    th.text-center Position
+                tbody
+                  for questions in locals.data
+                    tr
+                      td.text-center #{questions.question_title}
+                      td.text-center #{questions.course_name}
+                      if questions.question_status == 0
+                        td.text-center Not Answered
+                      else
+                        td.text-center Answered
+                      td.text-center #{questions.position}
+
     .overlay

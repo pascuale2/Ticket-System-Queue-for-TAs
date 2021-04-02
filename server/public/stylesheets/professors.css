@@ -126,6 +126,11 @@ a:focus {
 
 .cardContainer {
     padding: 2px 8px;
+    height: 50px;
+}
+
+.button_container{
+    margin: 10px;
 }
 
 h5 {

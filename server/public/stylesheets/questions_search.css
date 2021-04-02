@@ -95,6 +95,13 @@ a:focus {
     width: 600px;
     background-color: #252525;
     box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
+    transition: all 0.5s ease;
+}
+
+.card:hover{
+    background-color: #252525;
+    box-shadow: 0 0px 8px 0 #FCA926;
+    transition: all 0.25s ease;
 }
 
 .card h3{
