@@ -125,7 +125,7 @@ html
                   select(name="sort_combobox" id="sortComboBox")
                     option(selected='selected' value='') Sort by
                     option(type='text' value='question_id') Recent
-
+                    option(type='text' value='question_status') Answered
             hr
             .searchResultContainer
               if locals.data != Null
@@ -134,6 +134,10 @@ html
                     .card
                       h3.text-center #{questions.question_title}
                       p.text-center  Label: #{questions.label} | Course: #{questions.course_name}
+                      if questions.question_status == 0
+                        p.text-center Status: Answered
+                      else 
+                        p.text-center Status Unanswered
                       hr(id='hr_light')
                       .cardContainer
                         p(id='desc_header').text-center Description:

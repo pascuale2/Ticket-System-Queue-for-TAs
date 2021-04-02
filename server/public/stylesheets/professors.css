@@ -5,6 +5,7 @@
 @import './layout/scrollbar.css';
 @import './layout/sidebar.css';
 @import './layout/searchbar.css';
+@import './layout/combobox.css';
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -126,7 +127,7 @@ a:focus {
 
 .cardContainer {
     padding: 2px 8px;
-    height: 50px;
+    height: 30px;
 }
 
 .button_container{
@@ -162,4 +163,30 @@ h5 {
     font-weight: 400;
     font-size: 16px;
     color: rgba(211, 211, 211, 0.8);
+}
+
+/* COMBO BOX PROPERTY @OVERRIDE */
+.select {
+    position: relative;
+    display: flex;
+    margin: 5px;
+    left: 90px;
+    width: 180px;
+    height: 42px;
+    background: #252525;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+select {
+    flex: 1;
+    padding: 5px;
+    text-align-last: auto;
+    font-size: 18px;
+    color: #bbbbbb;
+    cursor: pointer;
+}
+
+#order_combobox{
+    width: 160px;
 }

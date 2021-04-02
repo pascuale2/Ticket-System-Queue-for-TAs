@@ -115,9 +115,17 @@ html
             .d-flex.justify-content-center
               for courses in locals.data
                 .card(id='courseCard')
-                  .cardContainer(id='courseCardContainer')
-                    a(href='professors/'+courses.course_name) #{courses.course_name}
-
+                  h3.text-center #{courses.course_name}
+                  .title_container(id='cardTitle')
+                    p(id='card_text').text-center  #{courses.course_title}
+                  hr(id='no_margin_line_break')
+                  p(id='no_margin_paragraph').text-center 
+                    small 
+                      small 
+                        small COURSE OPTIONS
+                  .cardContainer(id='cardOptions')
+                    a.btn.btn-primary.btn-block.btn-lg(href='#') Questions Overview
+                    hr#invisible_line_break
+                    a.btn.btn-danger.btn-block.btn-lg(href='professors/'+courses.course_name id='available_prof_button') Check Available Professors
     .overlay
-    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
+

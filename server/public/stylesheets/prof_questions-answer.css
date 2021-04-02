@@ -87,20 +87,27 @@ a:focus {
 ----------------------------------------------------- */
 
 #link_card, #link_card_active{
+    padding: 15px;
     width: 1200px;
 }
 
 #link_card{
     background-color: #252525;
     width: 1200px;
-    transition: all 0.3s;
+    transition: all 0.5s ease;
 }
 
 #link_card:hover{
     background-color: #252525;
     opacity: 0.8;
     box-shadow: 0 0px 8px 0 #FCA926;
-    width: 1300px;
+    width: 1250px;
+    height: absolute;
+}
+
+#description_container{
+    width: 1200px;
+    margin: 10px;
 }
 
 #link_card:active{
@@ -114,7 +121,7 @@ a:focus {
 #link_card_active:hover{
     opacity: 0.8;
     box-shadow: 0 0px 8px 0 #FCA926;
-    width: 1300px;
+    width: 1250px;
 }
 
 #link_card_active:active{

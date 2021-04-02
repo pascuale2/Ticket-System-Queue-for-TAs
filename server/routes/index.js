@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
   res.render('login');
 });
 
-
 router.get('/home', function(req, res, next) {
   res.render('home');
 });
@@ -23,6 +22,7 @@ router.get('/discussions', function(req, res, next) {
   res.render('discussions');
 });
 
+//TODO: FIX THIS SHIT
 router.get('/professors/:coursename', function(req, res, next){
   var id = req.params.coursename;
   db.obtainTeaches(connection, id, function(result) {
@@ -68,11 +68,6 @@ router.get('/professors/schedule/:profname', function(req, res, next){
   });
 });
 
-router.get('/professors', function(req, res, next) {
-    db.obtainAllProfessors(connection, function(result) {
-      res.render('professors', {data: JSON.stringify(result)});
-    });
-});
 router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
@@ -124,15 +119,6 @@ router.get('/questions', function(req, res, next) {
             });
           });
         } 
-      //db.obtainCourseByQuestionId(connection, c, function(coursename) {
-        //  db.findCurrentPosition(connection, c, function(position){
-          //res.render('questions',
-        //    {"data": questionResults,
-        //    "courses": courseResults,
-        //    "queue": position,
-        //    "coursenames": coursename});
-        //  });
-    //  });
       });
   });
 });
@@ -185,7 +171,7 @@ router.post('/questions', function(req, res, next) {
  *
  * db.searchQuestions -> obtains the questions for the page to display
  */
-router.post('/questions_search', function(req, res, next) {                    // For a question search
+router.post('/questions_search', function(req, res, next) {                    // For question search
   db.searchQuestions(connection,req.body.sort_combobox, req.body.filter_combobox, req.body.question_search, function(searchQuestionResults) {
     res.render('questions_search', {data: searchQuestionResults});
   });
@@ -202,7 +188,7 @@ router.get('/questions_search', function(req, res, next) {
  * 
  */
 router.post('/professors', function(req, res, next){                    // For a professor search
-  db.searchProfessor(connection, req.body.professor, function(result) {
+  db.searchProfessor(connection, req.body.professor, req.body.sort_combobox, req.body. order_combobox, function(result) {
     res.render('professors', {data: result});
   });
 });
@@ -286,9 +272,13 @@ router.post('/chat/redirect', function (req, res) {
   res.end("yes");
 })
 
+/**
+ * 
+ */
 router.post('/home/idtoken', function (req, res) {
   var idtoken = req.body.token;
   console.log(idtoken);
+  console.log(idtoken.toString().length);
   res.end("yes");
 })
 

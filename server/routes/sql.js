@@ -192,9 +192,14 @@ function obtainAllQuestions(connection, callback) {
  * @param {*} input
  * @param {*} callback
  */
-function searchProfessor(connection, input, callback) {
+function searchProfessor(connection, input, sort, order, callback) {
   let replacement = `'%${input}%'`;
   let query = 'SELECT * FROM Teacher WHERE name like '+replacement;
+
+  if (!(sort === "")) {
+    query += ' ORDER BY ' + sort + ' ' + order;
+  }
+
   connection.query(query, (err, result) => {
     if (err) {
       console.log("CANNOT execute search", err);
@@ -221,10 +226,8 @@ function searchQuestions(connection, sort, category, input, callback) {
   FROM Question INNER JOIN Course ON Question.course_id = Course.course_id\
   WHERE ' + category + ' like ' + replacement;
 
-  console.log("TYPE: ",typeof sort);
   if (!(sort === "")) {
-    query = query +'\
-    ORDER BY ' + sort + ' DESC';
+    query += ' ORDER BY ' + sort + ' ASC';
   }
 
   console.log("FILTER IS: ",category)

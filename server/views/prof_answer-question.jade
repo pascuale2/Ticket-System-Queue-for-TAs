@@ -88,6 +88,7 @@ html
                   h2.text-center #{locals.data[0].question_title}
                   small Position: #{locals.data[0].position}
                 p(id='question_card_desc').mb-1 #{locals.data[0].question_desc}
+                hr
                 small Label/Tag: #{locals.data[0].label} 
           .d-flex.justify-content-center
             textarea.form-control(maxlength="3000" name="text_area" id="textArea" aria-label="Question Description" placeholder="Answer Question Here\n(3000 Characters Max)")

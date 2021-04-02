@@ -90,7 +90,8 @@ html
                     .d-flex.w-100.justify-content-between
                       h5.mb-1 #{questions.question_title}
                       small Position: #{questions.position}
-                    p(id='question_card_desc').mb-1 #{questions.question_desc}
+                    .description_container(id='description_container')
+                      p(id='question_card_desc').mb-1 #{questions.question_desc}
                     hr(id='no_margin_line_break')
                     small Tags: #{questions.label}
                 else 
@@ -98,7 +99,8 @@ html
                     .d-flex.w-100.justify-content-between
                       h5.mb-1 #{questions.question_title}
                       small Position: #{questions.position}
-                    p.mb-1 #{questions.question_desc}
+                    .description_container(id='description_container')
+                      p.mb-1 #{questions.question_desc}
                     hr(id='no_margin_line_break')
                     small Tags: #{questions.label}
     .overlay

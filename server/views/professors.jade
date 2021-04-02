@@ -111,26 +111,38 @@ html
                   input.searchInput(id='search_input' type='text' name='professor' placeholder='e.g. Brian Franczak')
                   button.searchIcon(id='search_icon' type='submit')
                     i.fas.fa-search
+                .d-flex.justify-content-center
+                  .select(id="sort_combobox")
+                    select(name="sort_combobox" id="sortComboBox")
+                      option(selected='selected' value='') Sort by
+                      option(type='text' value='available') Status
+                      option(type='text' value='name') Name
+                  .select(id="order_combobox")
+                    select(name="order_combobox" id="orderComboBox")
+                      option(selected='selected' value='ASC') Order
+                      option(type='text' value='ASC') Ascending
+                      option(type='text' value='DESC') Descending
+          br
+          if locals.data != Null
+            .searchResultContainer
+              for names in locals.data
+                if names.name != ""
+                  .card
+                    if names.available == 1
+                      img(src='/images/person.png' alt='Avatar')
+                      .cardContainer 
+                        h3.text-center #{names.name}
+                    else
+                      img(src='/images/person_offline.png' alt='Avatar')
+                      .cardContainer 
+                        h3.text-center(style='color: gray;') #{names.name}
 
-          hr
-          .searchResultContainer
-            for names in locals.data
-              if names.name != Null
-                .card
-                  if names.available == 1
-                    img(src='/images/person.png' alt='Avatar')
-                  else
-                    img(src='/images/person_offline.png' alt='Avatar')
-                  if names.available == 1
-                    .cardContainer 
-                      h3.text-center #{names.name}
-                      h5.text-center Available
-                  else
-                    .cardContainer 
-                      h4.text-center #{names.name}
-                      h4.text-center Not Available
-                  .button_container
-                    br
-                    a.btn.btn-primary.btn-block(href='schedule/'+ names.name id='schedule_button') Check Schedule
+                    .button_container
+                      hr
+                      if names.available == 1
+                        h5.text-center Available
+                      else
+                        h5.text-center(style='color: gray;') Not Available
+                      a.btn.btn-primary.btn-block(href='schedule/'+ names.name id='schedule_button') Check Schedule
                   
     .overlay
