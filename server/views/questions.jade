@@ -171,10 +171,11 @@ html
                     th.text-center Course Name
                     th.text-center Position
                 tbody
-                  for questions in locals.data
-                    tr
-                      td.text-center #{questions.question_title}
-                      td.text-center #{questions.course_name}
-                      td.text-center #{questions.position}
+                  if locals.data != Null
+                    for questions in locals.data
+                      tr
+                        td.text-center #{questions.question_title}
+                        td.text-center #{questions.course_name}
+                        td.text-center #{questions.position}
 
     .overlay

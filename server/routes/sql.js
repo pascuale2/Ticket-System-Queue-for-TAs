@@ -1,10 +1,10 @@
 var mysql = require('mysql');
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
  */
 function configDatabase(req, res) {
   var connection = mysql.createConnection({
@@ -34,12 +34,12 @@ function configDatabase(req, res) {
  * @param {*} connection
  * @param {*} callback
  */
-function obtainAllCourses(connection, callback){
+function obtainAllCourses(connection, stud_id, callback){
   let query = 'SELECT * \
   FROM Takes INNER JOIN Student ON Takes.student_id = Student.student_id \
   INNER JOIN Course ON Course.course_id = Takes.course_id \
-  WHERE Student.student_id = 100';
-  connection.query(query, (err, result) => {
+  WHERE Student.student_id = ?';
+  connection.query(query, stud_id, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
     }else{
@@ -53,9 +53,9 @@ function obtainAllCourses(connection, callback){
 
 /**
  * obtains all the addable courses for the teacher to teach
- * 
- * @param {*} connection 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} callback
  */
 function obtainAddableCourses(connection, callback){
   let query = 'SELECT course_id, course_name, course_title \
@@ -74,9 +74,9 @@ function obtainAddableCourses(connection, callback){
 
 /**
  * obtains all the courses that the professor is teaching
- * 
- * @param {*} connection 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} callback
  */
  function obtainTeachingCourses(connection, callback){
   let query = 'SELECT Course.course_id, Course.course_name, Course.course_title \
@@ -150,13 +150,13 @@ function obtainTeaches(connection, coursename, callback) {
  * @param {*} connection
  * @param {*} callback
  */
-function obtainQuestions(connection, callback) {
+function obtainQuestions(connection, stud_id, callback) {
   let query = '\
      SELECT DISTINCT * \
      FROM Question INNER JOIN Student \
      ON Question.student_id = Student.student_id \
-     WHERE Question.student_id = 100';
-  connection.query(query, (err, result) => {
+     WHERE Question.student_id = ?';
+  connection.query(query, stud_id, (err, result) => {
     if (err) {
       console.log("CANNOT execute query", err);
     }else {
@@ -337,7 +337,7 @@ function obtainSession(connection, teacher, callback) {
 /**
  *
  * @param {*} connection
- * @param {string} teach_id 
+ * @param {string} teach_id
  * @param {string} course_id
  * @param {*} callback
  */
@@ -383,13 +383,13 @@ function getQueueID(connection, callback){
 
 /**
  * Obtains the user inputted course information.
- * 
+ *
  * This function is primarily used for displaying the course information when the user
  * clicks on the course they are trying to answers questions from.
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {string} course_id the course id we are trying to get questions from
- * @param {*} callback 
+ * @param {*} callback
  */
  function obtainCourseInfo(connection, course_id, callback) {
   let query = '\
@@ -409,13 +409,13 @@ function getQueueID(connection, callback){
 
 /**
  * obtains all the questions from a single course.
- * 
+ *
  * This function is primarily used for displaying all the questions related
  * to the course the professor picks.
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {string} course_id the course id we are trying to get questions from
- * @param {*} callback 
+ * @param {*} callback
  */
  function obtainQuestionFromACourse(connection, course_name, question_id, callback) {
   let query = "\
@@ -452,10 +452,10 @@ function locateQueue(connection, sess_id, callback) {
 
 /**
  * obtains all the questions from course that professors teach and orders them by course
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {string} teacher_id the teacher id of the professor
- * @param {*} callback 
+ * @param {*} callback
  */
 function obtainQuestionFromCourses(connection, teacher_id, callback) {
   let query = '\
@@ -507,7 +507,7 @@ function getDiscipline(connection, courseid, callback) {
   let query = 'SELECT discipline_id FROM Course WHERE course_id = ?';
   connection.query(query, courseid, (err, result) => {
     if (err) {
-      console.log("CANNOT insert into question", err);
+      console.log("CANNOT find discipline_id", err);
     } else {
       result = JSON.parse(JSON.stringify(result))[0].discipline_id;
       callback(result);
@@ -517,10 +517,10 @@ function getDiscipline(connection, courseid, callback) {
 
 /**
  * obtains all the question count from course that professors teach and orders them by course
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {string} teacher_id the teacher id of the professor
- * @param {*} callback 
+ * @param {*} callback
  */
  function obtainQuestionCountFromCoursesTaught(connection, teacher_id, callback) {
   let query = '\
@@ -548,26 +548,15 @@ function getDiscipline(connection, courseid, callback) {
 //// TODO: Implement the following
 //// Queue section
 
-function getQueueID(connection){
+function getQueueID(connection, callback){
  let query = 'SELECT MAX(queue_id) FROM Queue WHERE 1=1';
   connection.query(query, (err, result) => {
     if (err) {
     console.log("Cannot find max queue_id");
     } else {
-    return result;
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
     }
-  });
-}
-
-function getDiscipline(connection, teach_id) {
-  let query = 'SELECT discipline_id FROM discipline, Teacher WHERE Teacher.teacher_id = teach_id';
-  connection.query(query, (err, result) => {
-  if (err) {
-    console.log("CANNOT insert into question", err);
-  } else {
-    result = JSON.parse(JSON.stringify(result));
-    return result;
-  }
   });
 }
 
@@ -642,9 +631,8 @@ function insertStudentIntoQueue(connection, stud_id, quest_id, queue_id, callbac
 function insertIntoQueue(connection, course_id, callback) {
   getQueueID(connection, function(que_id) {
     que_id +=1;
-
     getDiscipline(connection, course_id, function(discipline) {
-      //question = obtainQuestionID(connection, question_str);
+      console.log(que_id, course_id);
       obtainSessionID(connection, course_id, function(session) {
         console.log('insert is ', que_id, discipline, session[0].session_id);
         var sesh_id = session[0].session_id;
@@ -726,36 +714,73 @@ function obtainAllQuestionInfoByStudentID(connection, student_id, callback) {
    });
 }
 
+function checkIfExists(connection, stud_id, callback) {
+  let query = 'SELECT * FROM Student WHERE student_id = ?';
+  connection.query(query, stud_id, (err, result) => {
+    if(err) {
+      console.log("Cannot locate student with id: ", stud_id, err);
+      callback(result);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function insertStudent(connection, stud_id, stud_email, stud_name, callback) {
+  checkIfExists(connection, stud_id, function(results) {
+    // If the student already exists do not try to re-insert
+    console.log(typeof results, results);
+    if(!results) {
+      console.log("Student already exists");
+      callback(results);
+    } else {
+      let query = 'INSERT INTO Student(student_id, email, name) VALUES(?, ?, ?)';
+      connection.query(query, [stud_id, stud_email, stud_name], (err, result) => {
+        if(err) {
+          console.log("Could not insert student with ID: ", stud_id, err);
+          callback(result);
+        } else {
+          console.log(result);
+          result = JSON.parse(JSON.stringify(result));
+          callback(result);
+        }
+      });
+    }
+  });
+}
+
 /**
  * exports the modules for the other .js files to use
  */
 module.exports = {
-  configDatabase, 
+  configDatabase,
   askQuestion,
   createSession,
   insertIntoQueue,
   insertStudentIntoQueue,
   findCurrentPosition,
-  getQuestionID, 
+  getQuestionID,
   locateQueue,
-  searchProfessor, 
-  searchCourses, 
-  searchQuestions, 
-  obtainAddableCourses, 
-  obtainAllCourses, 
+  searchProfessor,
+  searchCourses,
+  searchQuestions,
+  obtainAddableCourses,
+  obtainAllCourses,
   obtainAllProfessors,
   obtainAllQuestionInfo,
   obtainAllQuestionInfoByStudentID,
   obtainAllQuestions,
-  obtainAllTaught,  
+  obtainAllTaught,
   obtainCourseByQuestionId,
   obtainCourseInfo,
   obtainQuestions,
-  obtainQuestionFromACourse, 
+  obtainQuestionFromACourse,
   obtainQuestionFromCourses,
   obtainQuestionCountFromCoursesTaught,
   obtainSession,
   obtainSessionID,
   obtainTeaches,
-  obtainTeachingCourses
+  obtainTeachingCourses,
+  insertStudent
 };
