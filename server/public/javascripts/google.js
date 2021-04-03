@@ -16,7 +16,7 @@ function onLoadLogin() {
     cookiepolicy: 'single_host_origin',
     ux_mode: 'redirect',
     redirect_uri: 'https://localhost:3000/home',
-    hosted_domain: 'mymacewan.ca',
+    hosted_domain: 'macewan.ca',
     });
   });
 }
@@ -50,10 +50,11 @@ function onLoadHome() {
     cookiepolicy: 'single_host_origin',
     ux_mode: 'redirect',
     redirect_uri: 'https://localhost:3000/home',
-    hosted_domain: 'mymacewan.ca',
+    hosted_domain: 'macewan.ca',
   }).then(function(auth2){
     console.log("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
     console.log("Am I allowed to smash?: ",auth2.isSignedIn.get());
+    console.log(auth2.currentUser.get().getBasicProfile());
     if(auth2.isSignedIn.get()){
       var profile=auth2.currentUser.get().getBasicProfile();
       var id_token = profile.getId();
@@ -65,11 +66,13 @@ function onLoadHome() {
       if(profemail.localeCompare(email)==0){
         window.location = "https://localhost:3000/prof_home";
       }
+      console.log(profile);
       var data = JSON.stringify({
         "token": id_token,
         "name": profile_name,
         "email": long_email
       });
+      console.log("HERE IS THE JSON FILE: ", data);
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
@@ -98,7 +101,6 @@ function onLoad() {
     redirect_uri: 'https://localhost:3000/home',
     hosted_domain: 'mymacewan.ca',
   }).then(function(auth2) {
-    console.log("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
     if(auth2.isSignedIn.get()){
       var profile=auth2.currentUser.get().getBasicProfile();
       var pic=document.getElementById('profilepic');
@@ -117,13 +119,17 @@ function onLoadProfHome() {
     cookiepolicy: 'single_host_origin',
     ux_mode: 'redirect',
     redirect_uri: 'https://localhost:3000/prof_home',
-    hosted_domain: 'mymacewan.ca',
+    hosted_domain: 'macewan.ca',
   }).then(function(auth2){
     if(auth2.isSignedIn.get()){
       var profile=auth2.currentUser.get().getBasicProfile();
       var id_token = profile.getId();
+      var long_email = profile.getEmail();
+      var profile_name = profile.getName();
       var data = JSON.stringify({
         "token": id_token,
+        "name": profile_name,
+        "email": long_email
       });
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("readystatechange", function () {

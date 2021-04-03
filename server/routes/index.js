@@ -328,25 +328,28 @@ router.post('/chat/redirect', function (req, res) {
  *
  */
 router.post('/home/idtoken', function (req, res) {
+  console.log("-------------------------------START /home/idtoken--------------------------------------------");
   var idtoken = req.body.token;
   console.log(req.body);
   student.id = parseInt(idtoken);
   student.email = req.body.email;
   student.name = req.body.name;
 
+  console.log("STUDENT EMAIL: ",student.email);
+
   // get mymacewan.ca or macewan.ca
   var fields = student.email.split(/@/)[1];
   var profemail = 'macewan.ca';
 
+  console.log("FIELDS IS: ", fields);
   if(profemail.localeCompare(fields)==0){
     console.log("logged in as a professor");
   } else {
-
-  // After logging in, insert the student into the database
-  db.insertStudent(connection, student.id, student.email, student.name, function(result) {
-    console.log("Success, added to the database", student.id);
-  });
-}
+    // After logging in, insert the student into the database
+    db.insertStudent(connection, student.id, student.email, student.name, function(result) {
+      console.log("Success, added to the database", student.id);
+    });
+  }
   res.end("yes");
 })
 
