@@ -52,6 +52,8 @@ function onLoadHome() {
     redirect_uri: 'https://localhost:3000/home',
     hosted_domain: 'mymacewan.ca',
   }).then(function(auth2){
+    console.log("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+    console.log("Am I allowed to smash?: ",auth2.isSignedIn.get());
     if(auth2.isSignedIn.get()){
       var profile=auth2.currentUser.get().getBasicProfile();
       var id_token = profile.getId();
@@ -59,6 +61,7 @@ function onLoadHome() {
       var long_email = profile.getEmail();
       var profemail="macewan.ca";
       var profile_name = profile.getName();
+      console.log("BOOOOOOOOOOOOOOOOOOOOOOO");
       if(profemail.localeCompare(email)==0){
         window.location = "https://localhost:3000/prof_home";
       }
@@ -82,6 +85,7 @@ function onLoadHome() {
       pic.innerText=profile.getName();
 
     }});
+    console.log("I DIDNT SIGN IN AGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
   });
 }
 

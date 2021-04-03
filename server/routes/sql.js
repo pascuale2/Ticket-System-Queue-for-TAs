@@ -34,12 +34,12 @@ function configDatabase(req, res) {
  * @param {*} connection
  * @param {*} callback
  */
-function obtainAllCourses(connection, stud_id, callback){
+function obtainAllCourses(connection, student_id, callback){
   let query = 'SELECT * \
   FROM Takes INNER JOIN Student ON Takes.student_id = Student.student_id \
   INNER JOIN Course ON Course.course_id = Takes.course_id \
   WHERE Student.student_id = ?';
-  connection.query(query, stud_id, (err, result) => {
+  connection.query(query, student_id, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
     }else{
@@ -57,12 +57,12 @@ function obtainAllCourses(connection, stud_id, callback){
  * @param {*} connection
  * @param {*} callback
  */
-function obtainAddableCourses(connection, callback){
+function obtainAddableCourses(connection, teacher_id, callback){
   let query = 'SELECT course_id, course_name, course_title \
   FROM Teacher INNER JOIN Course ON Teacher.discipline_id = Course.discipline_id \
-  WHERE Teacher.teacher_id = 4000011';
+  WHERE Teacher.teacher_id = ?';
 
-  connection.query(query, (err, result) => {
+  connection.query(query, teacher_id, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
     }else{
@@ -78,13 +78,13 @@ function obtainAddableCourses(connection, callback){
  * @param {*} connection
  * @param {*} callback
  */
- function obtainTeachingCourses(connection, callback){
+ function obtainTeachingCourses(connection, teacher_id, callback){
   let query = 'SELECT Course.course_id, Course.course_name, Course.course_title \
   FROM Teacher INNER JOIN Teaches ON Teacher.teacher_id = Teaches.teacher_id \
   INNER JOIN Course ON Teaches.course_id = Course.course_id \
-  WHERE Teacher.teacher_id = 4000011';
+  WHERE Teacher.teacher_id = ?';
 
-  connection.query(query, (err, result) => {
+  connection.query(query, teacher_id, (err, result) => {
     if(err) {                                               // query failed
       console.log(err);
     }else{
@@ -100,14 +100,14 @@ function obtainAddableCourses(connection, callback){
  * @param {*} connection
  * @param {*} callback
  */
-function obtainAllProfessors(connection, callback){
+function obtainAllProfessors(connection, student_id, callback){
   let query = '\
   SELECT name\
   FROM Teacher, Teaches, Course \
   WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
   AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student \
-  WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
-  connection.query(query, (err, result) => {
+  WHERE Course.course_id = Takes.course_id AND Takes.student_id = ? )';
+  connection.query(query, student_id, (err, result) => {
     if(err) {                                               // query failed
       console.log(err);
     } else {

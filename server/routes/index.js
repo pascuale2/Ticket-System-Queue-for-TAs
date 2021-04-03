@@ -153,7 +153,7 @@ router.post('/questions/professor', function(req, res, next) {
             temp += question_id;
             temp += ")";
             db.findCurrentPosition(connection, temp, function(position){
-              db.obtainAllQuestionInfoByStudentID(connection, temp_student_id, function(allResults) {
+              db.obtainAllQuestionInfoByStudentID(connection, student.id, function(allResults) {
                 res.render('questions',
                 {"data": allResults,
                 "courses": courseResults,
@@ -227,9 +227,8 @@ router.get('/questions_search', function(req, res, next) {
  * Get request for "Asked Questions" page
  */
 router.get('/questions_asked', function(req, res, next) {
-  var temp_student_id = 100;
-  db.obtainAllQuestionInfoByStudentID(connection, temp_student_id, function(allResults) {
-    db.obtainAnsweredQuestionsByStudentID(connection, temp_student_id, function(answerResults) {
+  db.obtainAllQuestionInfoByStudentID(connection, student.id, function(allResults) {
+    db.obtainAnsweredQuestionsByStudentID(connection, student.id, function(answerResults) {
       res.render('questions_asked', {
         "data": allResults,
         "answers": answerResults});
