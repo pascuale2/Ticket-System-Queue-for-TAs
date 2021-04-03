@@ -363,24 +363,6 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
 }
 
 
-//// TODO: Implement the following
-//// Queue section
-
-function getQueueID(connection, callback){
- let query = 'SELECT MAX(queue_id) AS max_num FROM Queue WHERE 1=1';
-  connection.query(query, (err, result) => {
-    if (err) {
-      console.log("Cannot find max queue_id");
-    } else {
-      result = JSON.parse(JSON.stringify(result))[0].max_num;
-      if (result == null) {
-        result = 0
-      }
-      callback(result);
-    }
-  });
-}
-
 /**
  * Obtains the user inputted course information.
  *
@@ -545,16 +527,18 @@ function getDiscipline(connection, courseid, callback) {
   });
 }
 
-//// TODO: Implement the following
 //// Queue section
 
 function getQueueID(connection, callback){
- let query = 'SELECT MAX(queue_id) FROM Queue WHERE 1=1';
+ let query = 'SELECT MAX(queue_id) AS max_num FROM Queue WHERE 1=1';
   connection.query(query, (err, result) => {
     if (err) {
-    console.log("Cannot find max queue_id");
+      console.log("Cannot find max queue_id");
     } else {
-      result = JSON.parse(JSON.stringify(result));
+      result = JSON.parse(JSON.stringify(result))[0].max_num;
+      if (result == null) {
+        result = 0
+      }
       callback(result);
     }
   });
@@ -752,10 +736,10 @@ function insertStudent(connection, stud_id, stud_email, stud_name, callback) {
 
 /**
  * Obtains all the answered questions by the inputted student_id
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {string|number} student_id the inputted student id we are trying to get answers from
- * @param {*} callback 
+ * @param {*} callback
  */
 function obtainAnsweredQuestionsByStudentID(connection, student_id, callback) {
   let query = 'SELECT * FROM \
@@ -794,7 +778,7 @@ module.exports = {
   obtainAllQuestionInfoByStudentID,
   obtainAllQuestions,
   obtainAllTaught,
-  obtainAnsweredQuestionsByStudentID,  
+  obtainAnsweredQuestionsByStudentID,
   obtainCourseByQuestionId,
   obtainCourseInfo,
   obtainQuestions,
