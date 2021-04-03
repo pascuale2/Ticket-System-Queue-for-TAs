@@ -56,10 +56,10 @@ function renderButtonProf() {
 function onLoadLoginProf() {
   gapi.load('auth2', function() {
     auth2 = gapi.auth2.init({
-    client_id: '474415988486-13no8mch713spmi8vt0b5i2fj2607ol6.apps.googleusercontent.com',
+    client_id: '798834471674-2hla9ttcnoausu8a6e2gsoo4j0f70v7u.apps.googleusercontent.com',
     cookiepolicy: 'single_host_origin',
     ux_mode: 'redirect',
-    redirect_uri: 'https://mapledonut.ca:3000/prof_home',
+    redirect_uri: 'https://localhost:3000/prof_home',
     hosted_domain: 'macewan.ca',
     });
   });
