@@ -10,6 +10,10 @@ const cors = require("cors");
 router.use(cors());
 /* GET home page. */
 
+var student = {
+  'email': 'null', 'id': 0, 'name': 'null',
+};
+
 var connection;
 router.get('/', function(req, res, next) {
   connection = db.configDatabase(req, res);
@@ -76,7 +80,8 @@ router.get('/settings', function(req, res, next) {
 
 router.get('/courses', function(req, res, next) {
   // student_id is in /public/google.js
-    db.obtainAllCourses(connection, function(result) {
+  console.log(typeof student.id, student.id);
+    db.obtainAllCourses(connection, student.id, function(result) {
       console.log("courses are",result);
         res.render('courses', {data: result});
     });
@@ -99,8 +104,8 @@ router.post('/course_search', function(req, res, next) {
  *                       populate the comboBox.
  */
 router.get('/questions', function(req, res, next) {
-  db.obtainQuestions(connection, function(questionResults) {
-    db.obtainAllCourses(connection, function(courseResults) {
+  db.obtainQuestions(connection, student.id, function(questionResults) {
+    db.obtainAllCourses(connection, student.id, function(courseResults) {
       var c = "(";
       for (var i=0; i<questionResults.length; i++){
           c += (questionResults[i].question_id);
@@ -114,13 +119,13 @@ router.get('/questions', function(req, res, next) {
         }
         else{
           db.obtainAllQuestionInfo(connection, c, function(allresults) {
-            db.obtainAllCourses(connection, function(courseResults) {
+            db.obtainAllCourses(connection, student.id, function(courseResults) {
               res.render('questions', {
                 "data": allresults,
                 "courses": courseResults});
             });
           });
-        } 
+        }
       });
   });
 });
@@ -135,17 +140,15 @@ router.get('/questions', function(req, res, next) {
  *                       populate the comboBox.
  */
 router.post('/questions/professor', function(req, res, next) {
-  //TODO: CHANGE THIS PLSSSSSSSS
-  var temp_student_id = 100;
+  //TODO: CHANGE DISCIPLINE ID!!!!!!!!!!!
   db.getQuestionID(connection, function(largestid) {
-    // TODO: Replace with Student ID and insert DISCIPLINE
     var courseid = req.body.course_combobox;
     //var quest_id = req.body.question_ask;
-    db.askQuestion(connection, req.body.question_ask, temp_student_id, req.body.text_area, req.body.label, 200, req.body.course_combobox, largestid, function(question_id) {
-      db.obtainQuestions(connection, function(questionResults) {
-        db.obtainAllCourses(connection, function(courseResults) {
+    db.askQuestion(connection, req.body.question_ask, student.id, req.body.text_area, req.body.label, 200, req.body.course_combobox, largestid, function(question_id) {
+      db.obtainQuestions(connection, student.id, function(questionResults) {
+        db.obtainAllCourses(connection, student.id, function(courseResults) {
           console.log('question id is ',question_id);
-          queue.generateQueue(connection, courseid, question_id, function(queue_id) {
+          queue.generateQueue(connection, courseid, question_id, student.id, function(queue_id) {
             var temp = "(";
             temp += question_id;
             temp += ")";
@@ -176,7 +179,6 @@ router.post('/questions/professor', function(req, res, next) {
  */
  router.post('/questions/advisor', function(req, res, next) {
   //TODO: CHANGE THIS PLSSSSSSSS
-  var temp_student_id = 100;
   var courseid = (1800 + parseInt(req.body.dept_combobox)).toString();
 
   db.getQuestionID(connection, function(largestid) {
@@ -184,12 +186,12 @@ router.post('/questions/professor', function(req, res, next) {
       db.obtainQuestions(connection, function(questionResults) {
         db.obtainAllCourses(connection, function(courseResults) {
           console.log('question id is ',question_id);
-          queue.generateQueue(connection, courseid, question_id, function(queue_id) {
+          queue.generateQueue(connection, courseid, question_id, student.id, function(queue_id) {
             var temp = "(";
             temp += question_id;
             temp += ")";
             db.findCurrentPosition(connection, temp, function(position){
-              db.obtainAllQuestionInfoByStudentID(connection, temp_student_id, function(allResults) {
+              db.obtainAllQuestionInfoByStudentID(connection, student.id, function(allResults) {
                 res.render('questions',
                 {"data": allResults,
                 "courses": courseResults,
@@ -324,12 +326,19 @@ router.post('/chat/redirect', function (req, res) {
 })
 
 /**
- * 
+ *
  */
 router.post('/home/idtoken', function (req, res) {
   var idtoken = req.body.token;
-  console.log(idtoken);
-  console.log(idtoken.toString().length);
+  console.log(req.body);
+  student.id = parseInt(idtoken);
+  student.email = req.body.email;
+  student.name = req.body.name;
+
+  // After logging in, insert the student into the database
+  db.insertStudent(connection, student.id, student.email, student.name, function(result) {
+    console.log("Success, added to the database", student.id);
+  });
   res.end("yes");
 })
 

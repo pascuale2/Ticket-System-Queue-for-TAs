@@ -1,3 +1,4 @@
+
 function logOut() {
   var auth2 = gapi.auth2.getAuthInstance();
   if (auth2.isSignedIn.get()) {
@@ -55,13 +56,17 @@ function onLoadHome() {
       var profile=auth2.currentUser.get().getBasicProfile();
       var id_token = profile.getId();
       var email=profile.getEmail().split("@")[1];
-      var profemail="macewan.ca"
+      var long_email = profile.getEmail();
+      var profemail="macewan.ca";
+      var profile_name = profile.getName();
       if(profemail.localeCompare(email)==0){
         window.location = "https://localhost:3000/prof_home";
       }
       var data = JSON.stringify({
         "token": id_token,
-      });  
+        "name": profile_name,
+        "email": long_email
+      });
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
@@ -75,9 +80,9 @@ function onLoadHome() {
       pic.src=profile.getImageUrl();
       var pic=document.getElementById('profilename');
       pic.innerText=profile.getName();
-      
+
     }});
-  });  
+  });
 }
 
 function onLoad() {
@@ -96,7 +101,7 @@ function onLoad() {
       pic.src=profile.getImageUrl();
       var pic=document.getElementById('profilename');
       pic.innerText=profile.getName();
-      
+
     }});
   });
 }
@@ -115,7 +120,7 @@ function onLoadProfHome() {
       var id_token = profile.getId();
       var data = JSON.stringify({
         "token": id_token,
-      });  
+      });
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
@@ -129,7 +134,7 @@ function onLoadProfHome() {
       pic.src=profile.getImageUrl();
       var pic=document.getElementById('profilename');
       pic.innerText=profile.getName();
-      
+
     }});
   });
 }
