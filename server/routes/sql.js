@@ -211,6 +211,27 @@ function searchProfessor(connection, input, sort, order, callback) {
 }
 
 /**
+ * searches professor from user input.
+ *
+ * @param {*} connection
+ * @param {*} input
+ * @param {*} callback
+ */
+function searchProfessorByName(connection, input, callback) {
+  let replacement = `'%${input}%'`;
+  let query = 'SELECT * FROM Teacher WHERE name like '+replacement;
+
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("CANNOT execute search", err);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
  * searches questions from user inputted filter and search query.
  *
  * @param {*} connection
@@ -789,5 +810,6 @@ module.exports = {
   obtainSessionID,
   obtainTeaches,
   obtainTeachingCourses,
-  insertStudent
+  insertStudent,
+  searchProfessorByName
 };
