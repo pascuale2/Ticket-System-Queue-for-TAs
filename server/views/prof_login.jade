@@ -1,0 +1,36 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    title Maple Donut - Login
+    
+    // 1,2 - CSS BOOTSTRAP LINK
+    // 3 - CUSTOM CSS LINKS
+    // 4 - FAVICON LINK
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
+    link(rel='stylesheet' type='text/css' href='/stylesheets/login-page.css')
+    link(rel='icon' type='image/png' href='/images/donut.png')
+
+    // 1,2 - JQUERY SCRIPTS
+    // 3,4 - GOOGLE AUTH SCRIPTS
+    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js' integrity='sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0' crossorigin='anonymous')
+    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
+    script(src='https://apis.google.com/js/platform.js?onload=renderButton' async='' defer='')
+  body
+    .background-image
+    .loginBox
+      img#avatar.rotate(src='/images/donut.png')
+      h2.text-center Maple Donut
+      h3.text-center Login
+      form
+        p Username
+        input(type='text' name='' placeholder='')
+        p Password
+        input(type='password' name='' placeholder='')
+        input(type='submit' name='' value='Login')
+        // google sign in button
+        #my-signin2
