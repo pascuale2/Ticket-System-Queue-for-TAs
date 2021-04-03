@@ -43,6 +43,7 @@ function renderButton() {
 }
 
 function onLoadHome() {
+  console.log("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
   gapi.load('auth2', function() {
   auth2 = gapi.auth2.init({
     client_id: '798834471674-2hla9ttcnoausu8a6e2gsoo4j0f70v7u.apps.googleusercontent.com',
@@ -59,7 +60,7 @@ function onLoadHome() {
       var profemail="macewan.ca";
       var profile_name = profile.getName();
       if(profemail.localeCompare(email)==0){
-        window.location.replace("https://localhost:3000/prof_home");
+        window.location = "https://localhost:3000/prof_home";
       }
       var data = JSON.stringify({
         "token": id_token,
@@ -92,7 +93,8 @@ function onLoad() {
     ux_mode: 'redirect',
     redirect_uri: 'https://localhost:3000/home',
     hosted_domain: 'mymacewan.ca',
-  }).then(function(auth2){
+  }).then(function(auth2) {
+    console.log("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
     if(auth2.isSignedIn.get()){
       var profile=auth2.currentUser.get().getBasicProfile();
       var pic=document.getElementById('profilepic');

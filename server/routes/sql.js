@@ -751,6 +751,28 @@ function insertStudent(connection, stud_id, stud_email, stud_name, callback) {
 }
 
 /**
+ * Obtains all the answered questions by the inputted student_id
+ * 
+ * @param {*} connection 
+ * @param {string|number} student_id the inputted student id we are trying to get answers from
+ * @param {*} callback 
+ */
+function obtainAnsweredQuestionsByStudentID(connection, student_id, callback) {
+  let query = 'SELECT * FROM \
+  Question INNER JOIN Answer \
+  ON Question.question_id = Answer.question_id \
+  WHERE Question.student_id = '+student_id;
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("Cannot obtain the answered questions by student ID !!!!");
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
  * exports the modules for the other .js files to use
  */
 module.exports = {
@@ -772,6 +794,7 @@ module.exports = {
   obtainAllQuestionInfoByStudentID,
   obtainAllQuestions,
   obtainAllTaught,
+  obtainAnsweredQuestionsByStudentID,  
   obtainCourseByQuestionId,
   obtainCourseInfo,
   obtainQuestions,

@@ -79,30 +79,30 @@ function updateCurrentQueue(connection, quest_id, c_id, callback) {
  * @param {*} c_id - course id of the question
  */
 function insertAnswer(connection, ans_str, ans_date, quest_id, c_id, callback) {
- getAnswerID(connection, function(ans_id) {
-   ans_id +=1;
-   let query = 'INSERT INTO Answer(answer_id, answer_string, answer_date, question_id, course_id) \
-   VALUES(?, ?, ?, ?, ?)';
-   console.log(ans_id, ans_str, ans_date, parseInt(quest_id), c_id.course_id);
-   connection.query(query, [ans_id, ans_str, ans_date, parseInt(quest_id), c_id.course_id], (err, result) => {
-     if(err) {
-       console.log("Could not answer question with quest_id: ", parseInt(quest_id), err);
-     } else {
-       result = JSON.parse(JSON.stringify(result));
-       if(result != null) {
-         updateQuestionStatus(connection, parseInt(quest_id), function(updated) {
-           updateCurrentQueue(connection, parseInt(quest_id), c_id.course_id, function(queue) {
-             console.log("Successfully updated top row with quest_id ",parseInt(quest_id),
-              "and moved all positions by 1");
-             callback(result);
-           });
-         });
-       } else {
-         callback("could not insert answer into table", err);
-       }
-     }
-   });
- });
+  getAnswerID(connection, function(ans_id) {
+    ans_id +=1;
+    let query = 'INSERT INTO Answer(answer_id, answer_string, answer_date, question_id, course_id) \
+    VALUES(?, ?, ?, ?, ?)';
+    console.log(ans_id, ans_str, ans_date, parseInt(quest_id), c_id.course_id);
+    connection.query(query, [ans_id, ans_str, ans_date, parseInt(quest_id), c_id.course_id], (err, result) => {
+      if(err) {
+        console.log("Could not answer question with quest_id: ", parseInt(quest_id), err);
+      } else {
+        result = JSON.parse(JSON.stringify(result));
+        if(result != null) {
+          updateQuestionStatus(connection, parseInt(quest_id), function(updated) {
+            updateCurrentQueue(connection, parseInt(quest_id), c_id.course_id, function(queue) {
+              console.log("Successfully updated top row with quest_id ",parseInt(quest_id),
+                "and moved all positions by 1");
+              callback(result);
+            });
+          });
+        } else {
+          callback("could not insert answer into table", err);
+        }
+      }
+    });
+  });
 }
 
 module.exports = {insertAnswer};
