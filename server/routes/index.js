@@ -334,10 +334,19 @@ router.post('/home/idtoken', function (req, res) {
   student.email = req.body.email;
   student.name = req.body.name;
 
+  // get mymacewan.ca or macewan.ca
+  var fields = student.email.split(/@/)[1];
+  var profemail = 'macewan.ca';
+
+  if(profemail.localeCompare(fields)==0){
+    console.log("logged in as a professor");
+  } else {
+
   // After logging in, insert the student into the database
   db.insertStudent(connection, student.id, student.email, student.name, function(result) {
     console.log("Success, added to the database", student.id);
   });
+}
   res.end("yes");
 })
 
