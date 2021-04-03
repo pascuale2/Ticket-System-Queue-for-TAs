@@ -41,7 +41,29 @@ function renderButton() {
   'onfailure': onFailure
   });
 }
-
+function renderButtonProf() {
+  onLoadLoginProf();
+  gapi.signin2.render('my-signin2', {
+  'scope': 'profile email',
+  'width': 260,
+  'height': 45,
+  'longtitle': true,
+  'theme': 'dark',
+  'onsuccess': onSuccess,
+  'onfailure': onFailure
+  });
+}
+function onLoadLoginProf() {
+  gapi.load('auth2', function() {
+    auth2 = gapi.auth2.init({
+    client_id: '474415988486-13no8mch713spmi8vt0b5i2fj2607ol6.apps.googleusercontent.com',
+    cookiepolicy: 'single_host_origin',
+    ux_mode: 'redirect',
+    redirect_uri: 'https://mapledonut.ca:3000/prof_home',
+    hosted_domain: 'macewan.ca',
+    });
+  });
+}
 function onLoadHome() {
   console.log("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
   gapi.load('auth2', function() {
