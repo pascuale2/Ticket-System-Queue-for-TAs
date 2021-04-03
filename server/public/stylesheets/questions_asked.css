@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.google.com/specimen/Roboto+Slab');
+@import url('https://fonts.googleapis.com/css2?family=RocknRoll+One&display=swap');
+
+@import './layout/navbar.css';
+@import './layout/scrollbar.css';
+@import './layout/sidebar.css';
+@import './layout/searchbar.css';
+@import './layout/combobox.css';
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #0f0f0f;
+}
+
+h2 {
+    font-family: 'RocknRoll One', sans-serif;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1em;
+    font-weight: 400;
+    line-height: 1.7em;
+    color: #ddd;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+    width: 100%;
+    padding: 50px;
+    transition: all 0.3s;
+    align-items: justify;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+#page #navbar-header h3{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    padding-top: 5px;
+    letter-spacing: 2px;
+    color: #FFF;
+    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+
+}
+#questionAskInput{
+    width: 80%;
+    background-color: #181818;
+}
+
+.card{
+    background-color: #181818;
+    box-shadow: 0 2px 4px 0 rgba(111,111,111,0.2);
+}
+
+#content h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: #FCA926;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
+#content h3{
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: #FCA926;
+  text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
+#content h4{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #eeeeeecc;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111)
+}
+
+#content h5 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #FCA926;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
+#myTab{
+    margin: 10px;
+    margin-top: -4px;
+    font-size: 22px;
+    color: #eeeeeebb;
+}
+
+li.nav-item:hover{
+    color: #FCA926;
+}
+
+#link_card, #link_card_active{
+    background-color: #252525;
+    padding: 15px;
+    width: 1200px;
+}
+
+#link_card{
+    background-color: #252525;
+    width: 1200px;
+    transition: all 0.5s ease;
+}
+
+#link_card:hover{
+    background-color: #252525;
+    opacity: 0.8;
+    box-shadow: 0 0px 8px 0 #FCA926;
+    width: 1250px;
+    height: absolute;
+}
+
+#description_container{
+    width: 1200px;
+    margin: 10px;
+}
+
+#link_card:active{
+    color: #000000;
+    opacity: 0.8;
+    box-shadow: 0 0px 8px 0 #FCA926;
+    width: 1290px;
+}
+
+#question_card_desc{
+    margin: 5px;
+    padding-left: 20px;
+}
+
+#hr_modified{
+    color: transparent;
+}
+
+#prepend {
+    background-color: #353b48;;
+    border: none;
+    color: #f7f6e7;
+} 
+
+#textArea {
+    max-width: 550px;
+    max-height: 300px;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    background-color: #252525;
+    border: none;
+    border-radius: 10px;
+    color: #eeeeeecc;
+    font-size: 18px;
+    transition: .25s all ease;
+}
+#textArea:hover{
+    opacity: 0.8;
+}
+
+#submit_button {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 350px;
+    padding: 5px;
+    transition: .25s all ease;
+}
+
+#clear_button {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    padding: 5px;
+    transition: .25s all ease;
+}
+
+button i{
+    padding-left: 10px;
+    font-size: 20px;
+}
+
+table thead tr th{
+    font-size: 28px;
+    color: #eeeeee;
+    transition: .25s all ease;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111)
+}
+
+table thead tr th:hover{
+    color: #FCA926;
+}
+
+table tbody tr td{
+    font-size: 22px;
+    color: #eeeeeeee;
+    transition: .25s all ease;
+}
+
+table tbody tr td:hover{
+    background-color: #353b48;
+    color: #FCA926;
+}

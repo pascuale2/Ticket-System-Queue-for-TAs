@@ -10,8 +10,8 @@ html
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
-    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/questions.css')
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
+    link(rel='stylesheet' href='/stylesheets/questions_asked.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
     // 1 - FONT AWESOME SCRIPT
@@ -20,15 +20,15 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
+    // 7,8 - Google Auth 
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
-    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js', integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
-    // Bruce's Scripts
+    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
-    script(type='text/javascript' src='/javascripts/google.js')
 
   body
     .wrapper
@@ -42,7 +42,8 @@ html
             .profile
               .row.justify-content-center
                 img#profilepic(src='/images/donut.png')
-          h2#profilename.text-center  username
+          h2#profilename.text-center Seth Thompson
+          h3.text-center  
         hr
         ul.list-unstyled.components
           li
@@ -67,6 +68,8 @@ html
                   a(href='questions') Ask a Question
                 li
                   a(href='questions_search') Search Questions
+                li
+                  a(href='questions_asked') Asked Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -97,21 +100,54 @@ html
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
             .logo
-              a(href='Home')
+              a(href='/home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
-        .card.p-3.container-fluid
-          h2.text-center Your outgoing questions and their queues.
-          questions_stated = []
-          index_counter = 0
-          .row
-            .col-md-9
-              h5 Question
-              // loops through locals.data and assigns a list-group-item for each question string
-              ul.list-group
-          
+          .d-flex.justify-content-center
+            ul#myTab.nav.nav-pills(role='tablist')
+              li.nav-item
+                a#home-tab.nav-link.active(data-toggle='tab' href='#home' role='tab' aria-controls='home' aria-selected='true') Outgoing Questions
+              li.nav-item
+                a#profile-tab.nav-link(data-toggle='tab' href='#profile' role='tab' aria-controls='profile' aria-selected='false') Answered Questions
+          hr
+          #myTabContent.tab-content
+            #home.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='home-tab') 
+              hr#hr_modified
+              h2.text-center Your outgoing questions and their queues.
+              .card(id="questionAskInput").p-2.container-fluid
+                .row
+                  table
+                    thead
+                      tr
+                        th.text-center Question
+                        th.text-center Course Name
+                        th.text-center Position
+                    tbody
+                      if locals.data != Null
+                        for questions in locals.data
+                          tr
+                            td.text-center #{questions.question_title}
+                            td.text-center #{questions.course_name}
+                            if questions.position == 1
+                              td.text-center(style='color: #FCA926;') #{questions.position}
+                            else 
+                              td.text-center #{questions.position}
+            #profile.tab-pane.fade(role='tabpanel' aria-labelledby='profile-tab')
+              hr#hr_modified
+              h2.text-center Answered Questions
+              if locals.answers != null
+                .list-group
+                  for answer in locals.answers
+                    .d-flex.justify-content-center
+                      a.list-group-item.list-group-item-action.flex-column.align-items-start(href='#' id='link_card')
+                        .d-flex.w-100.justify-content-between
+                          h5.mb-1 #{answer.question_title}
+                          small Answered By: INSERT PROF HERE 
+                        .description_container(id='description_container')
+                          p.mb-1 #{answer.answer_string}
+                        hr(id='no_margin_line_break')
+                        small Date Answered: #{answer.answer_date}
+    .overlay        
+            
 
-    .overlay
-    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')

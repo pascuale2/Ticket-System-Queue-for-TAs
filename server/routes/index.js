@@ -19,6 +19,7 @@ router.get('/', function(req, res, next) {
 router.get('/home', function(req, res, next) {
   res.render('home');
 });
+
 router.get('/discussions', function(req, res, next) {
   res.render('discussions');
 });
@@ -125,7 +126,7 @@ router.get('/questions', function(req, res, next) {
 });
 
 /**
- * Post request for "Ask a Question" page
+ * Post request for "Ask a Question" page (FOR PROFESSORS)
  *
  * db.getQuestionID   -> gets the largest question id
  * db.askQuestion     -> inserts the question into the database
@@ -133,7 +134,7 @@ router.get('/questions', function(req, res, next) {
  * db.obtainAllCourses-> the courses the student is enrolled in which is used to
  *                       populate the comboBox.
  */
-router.post('/questions', function(req, res, next) {
+router.post('/questions/professor', function(req, res, next) {
   //TODO: CHANGE THIS PLSSSSSSSS
   var temp_student_id = 100;
   db.getQuestionID(connection, function(largestid) {
@@ -143,11 +144,46 @@ router.post('/questions', function(req, res, next) {
     db.askQuestion(connection, req.body.question_ask, temp_student_id, req.body.text_area, req.body.label, 200, req.body.course_combobox, largestid, function(question_id) {
       db.obtainQuestions(connection, function(questionResults) {
         db.obtainAllCourses(connection, function(courseResults) {
-
-          //db.obtainCourseByQuestionId(connection, temp, function(coursename) {
-          // TODO: queue stuff
           console.log('question id is ',question_id);
-          //var queue_id =
+          queue.generateQueue(connection, courseid, question_id, function(queue_id) {
+            var temp = "(";
+            temp += question_id;
+            temp += ")";
+            db.findCurrentPosition(connection, temp, function(position){
+              db.obtainAllQuestionInfoByStudentID(connection, temp_student_id, function(allResults) {
+                res.render('questions',
+                {"data": allResults,
+                "courses": courseResults,
+                "queue": position});
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+});
+
+
+/**
+ * Post request for "Ask a Question" page (FOR ADVISORS)
+ *
+ * db.getQuestionID   -> gets the largest question id
+ * db.askQuestion     -> inserts the question into the database
+ * db.obtainQuestions -> obtains the questions for the homepage to display
+ * db.obtainAllCourses-> the courses the student is enrolled in which is used to
+ *                       populate the comboBox.
+ */
+ router.post('/questions/advisor', function(req, res, next) {
+  //TODO: CHANGE THIS PLSSSSSSSS
+  var temp_student_id = 100;
+  var courseid = (1800 + parseInt(req.body.dept_combobox)).toString();
+
+  db.getQuestionID(connection, function(largestid) {
+    db.askQuestion(connection, req.body.question_ask, temp_student_id, req.body.text_area, req.body.label, req.body.dept_combobox, courseid, largestid, function(question_id) {
+      db.obtainQuestions(connection, function(questionResults) {
+        db.obtainAllCourses(connection, function(courseResults) {
+          console.log('question id is ',question_id);
           queue.generateQueue(connection, courseid, question_id, function(queue_id) {
             var temp = "(";
             temp += question_id;
@@ -183,6 +219,20 @@ router.post('/questions_search', function(req, res, next) {                    /
  */
 router.get('/questions_search', function(req, res, next) {
   res.render('questions_search');
+});
+
+/**
+ * Get request for "Asked Questions" page
+ */
+router.get('/questions_asked', function(req, res, next) {
+  var temp_student_id = 100;
+  db.obtainAllQuestionInfoByStudentID(connection, temp_student_id, function(allResults) {
+    db.obtainAnsweredQuestionsByStudentID(connection, temp_student_id, function(answerResults) {
+      res.render('questions_asked', {
+        "data": allResults,
+        "answers": answerResults});
+    });
+  });
 });
 
 /**
@@ -363,21 +413,21 @@ router.get('/prof_questions', function(req, res, next) {
    });
  });
 
- /**
-  * Post request for professor answer a question page
-  *
-  * db.obtainQuestionFromACourse -> obtains the question information from the user inputted course
-  */
-  router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
-    var course_name = req.params.courses;
-    var question_id = req.params.question_id;
-    console.log(req.body);
-    db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
-      console.log(question_id, questionResult[0].course_id, req.body.text_area);
-      answers.insertAnswer(connection, req.body.text_area, "DATE Not applicable", question_id, questionResult[0], function(answerResult) {
-        res.render('prof_home');
-      });
+/**
+* Post request for professor answer a question page
+*
+* db.obtainQuestionFromACourse -> obtains the question information from the user inputted course
+*/
+router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
+  var course_name = req.params.courses;
+  var question_id = req.params.question_id;
+  console.log(req.body);
+  db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+    console.log(question_id, questionResult[0].course_id, req.body.text_area);
+    answers.insertAnswer(connection, req.body.text_area, "DATE Not applicable", question_id, questionResult[0], function(answerResult) {
+      res.render('prof_home');
     });
   });
+});
 
 module.exports = router;

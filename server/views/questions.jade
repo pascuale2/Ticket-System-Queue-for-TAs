@@ -7,10 +7,10 @@ html
     title Maple Donut - Ask a Question
 
     // 1,2 - CSS BOOTSTRAP LINK
-    // 3 - CUSTOM CSS LINK
+    // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
-    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
     link(rel='stylesheet' href='/stylesheets/questions.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
@@ -20,15 +20,15 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth
+    // 7,8 - Google Auth 
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
-    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js', integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
+    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
-    script(type='text/javascript' src='/javascripts/google.js')
 
   body
     .wrapper
@@ -41,9 +41,9 @@ html
           .row.justify-content-center
             .profile
               .row.justify-content-center
-                img(src='/images/donut.png')
-          h2.text-center  Username
-          h3.text-center  Biography
+                img#profilepic(src='/images/donut.png')
+          h2#profilename.text-center Seth Thompson
+          h3.text-center  
         hr
         ul.list-unstyled.components
           li
@@ -68,6 +68,8 @@ html
                   a(href='questions') Ask a Question
                 li
                   a(href='questions_search') Search Questions
+                li
+                  a(href='questions_asked') Asked Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -104,77 +106,117 @@ html
             a(href='#')
 
         #content
-          br
-          br
-          h3.text-center Do you have a question?
-          hr#hr_modified
-          form(action='/questions' method='post')
-            // ------------------------------ //
-            // Search bar
-            // ------------------------------ //
-            h4.text-center 1) Add a question topic
-            .d-xl-flex.justify-content-center.h-100
-              .searchBar(id='search_bar')
-                input.searchInput(id='search_input' type='text' name='question_ask' placeholder='e.g. What is the difference between FFT and DFT')
-            br
-            h4.text-center 2) Add a label/tag
-            .d-xl-flex.justify-content-center.h-100
-              .searchBar(id='search_bar')
-                input.searchInput(id='search_input' type='text' name='label' placeholder='e.g. Assignment 5 / Week 8')
-            br
-            h4.text-center 3) Select a course
-            .d-xl-flex.justify-content-center
-              // ------------------------------ //
-              // Select Course ComboBox
-              // ------------------------------ //
-              .select
-                select(name="course_combobox" id="courseComboBox")
-                  option(selected) What course is this for?
-                  if locals.courses != Null
-                    for courses in locals.courses
-                      option(type='text' value= courses.course_id) #{courses.course_name}
-            br
-            h3.text-center Additional Details
-            hr#hr_modified
-            // ------------------------------ //
-            // Text Area Code
-            // ------------------------------ //
-            h4.text-center 4) Add a description
-            .d-flex.justify-content-center
-              textarea.form-control(name="text_area" id="textArea" aria-label="Question Description" placeholder="e.g. I'm just confused as to how Fast Fourier Transform is a particular implementation of a Discrete Fourier Transform")
-            br
-            br
-            // ------------------------------ //
-            // Submit Button for Form
-            // ------------------------------ //
-            .d-xl-flex.justify-content-center.h-100
-              button.btn.btn-primary(type='submit' id='submit_button') Submit Question
-                i.fab.fa-telegram-plane
-              .col-md-auto
-              button.btn.btn-danger(type='reset' id='clear_button') Clear
-                i.fas.fa-trash
-          br
-          br
-          br
-          br
-          br
-          hr#hr_modified
-          .card(id="questionAskInput").p-3.container-fluid
-            h2.text-center Your outgoing questions and their queues.
-            hr
-            .row
-              .d-flex.justify-content-center
-              table
-                thead
-                  tr
-                    th.text-center Question
-                    th.text-center Course Name
-                    th.text-center Position
-                tbody
-                  for questions in locals.data
-                    tr
-                      td.text-center #{questions.question_title}
-                      td.text-center #{questions.course_name}
-                      td.text-center #{questions.position}
+          .d-flex.justify-content-center
+            ul#myTab.nav.nav-pills(role='tablist')
+              li.nav-item
+                a#home-tab.nav-link.active(data-toggle='tab' href='#home' role='tab' aria-controls='home' aria-selected='true') Ask a Professor
+              li.nav-item
+                a#profile-tab.nav-link(data-toggle='tab' href='#profile' role='tab' aria-controls='profile' aria-selected='false') Ask an Academic Advisor
+          hr
+          #myTabContent.tab-content
+            // ------------------------------------------------------------ //
+            // ASK A PROFESSOR A QUESTION CONTENT
+            // ------------------------------------------------------------ //
+            #home.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='home-tab') 
+              br
+              h3.text-center Do you have a question for a Professor?
+              hr#hr_modified
+              form(action='/questions/professor' method='post')
+                // ------------------------------ //
+                // Search bar (PROFESSORS)
+                // ------------------------------ //
+                h4.text-center 1) Add a question topic
+                .d-xl-flex.justify-content-center.h-100
+                  .searchBar(id='search_bar')
+                    input.searchInput(id='search_input' type='text' name='question_ask' placeholder='e.g. What is the difference between FFT and DFT')
+                br
+                h4.text-center 2) Add a label/tag
+                .d-xl-flex.justify-content-center.h-100
+                  .searchBar(id='search_bar')
+                    input.searchInput(id='search_input' type='text' name='label' placeholder='e.g. Assignment 5 / Week 8')
+                br
+                h4.text-center 3) Select a course
+                .d-xl-flex.justify-content-center
+                  // ------------------------------ //
+                  // Select Course ComboBox (PROFESSORS)
+                  // ------------------------------ //
+                  .select
+                    select(name="course_combobox" id="courseComboBox")
+                      option(selected) What course is this for?
+                      if locals.courses != Null
+                        for courses in locals.courses
+                          option(type='text' value= courses.course_id) #{courses.course_name}
+                br
+                h3.text-center Additional Details
+                hr#hr_modified
+                // ------------------------------ //
+                // Text Area Code (PROFESSORS)
+                // ------------------------------ //
+                h4.text-center 4) Add a description
+                .d-flex.justify-content-center
+                  textarea.form-control(name="text_area" id="textArea" aria-label="Question Description" placeholder="e.g. I'm just confused as to how Fast Fourier Transform is a particular implementation of a Discrete Fourier Transform")
+                br
+                br
+                // ------------------------------ //
+                // Submit Button for Form (PROFESSORS)
+                // ------------------------------ //
+                .d-xl-flex.justify-content-center.h-100
+                  button.btn.btn-primary(type='submit' id='submit_button') Submit Question
+                    i.fab.fa-telegram-plane
+                  .col-md-auto
+                  button.btn.btn-danger(type='reset' id='clear_button') Clear
+                    i.fas.fa-trash
+
+            // ------------------------------------------------------------ //
+            // ASK AN ADVISOR A QUESTION CONTENT
+            // ------------------------------------------------------------ //
+            #profile.tab-pane.fade(role='tabpanel' aria-labelledby='profile-tab')
+              br
+              h3.text-center Do you have a question for an Advisor?
+              hr#hr_modified
+              form(action='/questions/advisor' method='post')
+                // ------------------------------ //
+                // Search bar (ADVISORS)
+                // ------------------------------ //
+                h4.text-center 1) Add a question topic
+                .d-xl-flex.justify-content-center.h-100
+                  .searchBar(id='search_bar')
+                    input.searchInput(id='search_input' type='text' name='question_ask' placeholder='e.g. Where can I access my tax forms?')
+                br
+                h4.text-center 2) Add a label/tag
+                .d-xl-flex.justify-content-center.h-100
+                  .searchBar(id='search_bar')
+                    input.searchInput(id='search_input' type='text' name='label' placeholder='e.g. #T2202A / #T4')
+                br
+                h4.text-center 3) Select a department
+                .d-xl-flex.justify-content-center
+                  // ------------------------------ //
+                  // Select Department ComboBox (ADVISORS)
+                  // ------------------------------ //
+                  .select
+                    select(name="dept_combobox" id="deptComboBox")
+                      option(selected) Which department is this for?
+                      option(type='text' value=200) Academic Advisor
+                      option(type='text' value=201) Registrar Advisor
+                br
+                h3.text-center Additional Details
+                hr#hr_modified
+                // ------------------------------ //
+                // Text Area Code
+                // ------------------------------ //
+                h4.text-center 4) Add a description
+                .d-flex.justify-content-center
+                  textarea.form-control(name="text_area" id="textArea" aria-label="Question Description" placeholder="e.g. My accountant says they need the T2202A and the T4 form. I just don't know where to access it")
+                br
+                br
+                // ------------------------------ //
+                // Submit Button for Form
+                // ------------------------------ //
+                .d-xl-flex.justify-content-center.h-100
+                  button.btn.btn-primary(type='submit' id='submit_button') Submit Question
+                    i.fab.fa-telegram-plane
+                  .col-md-auto
+                  button.btn.btn-danger(type='reset' id='clear_button') Clear
+                    i.fas.fa-trash
 
     .overlay
