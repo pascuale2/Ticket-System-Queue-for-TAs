@@ -20,7 +20,7 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth 
+    // 7,8 - Google Auth
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
@@ -43,7 +43,7 @@ html
               .row.justify-content-center
                 img#profilepic(src='/images/donut.png')
           h2#profilename.text-center Seth Thompson
-          h3.text-center  
+          h3.text-center
         hr
         ul.list-unstyled.components
           li
@@ -116,8 +116,8 @@ html
                   h4.text-center #{session.course_name}
                   h3.text-center #{session.available_day}
                   h4.text-center #{session.from_time}
-                  h4.text-center -
                   h4.text-center #{session.to_time}
+                  a.btn.btn-primary.btn-block.btn-lg(href='https://us05web.zoom.us/s/81138724882?pwd=NmtNTGExdFZaVGdKOXlDYW4xWjUvdz09') Zoom Link
 
         else
           .d-flex.justify-content-center
