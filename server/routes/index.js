@@ -23,7 +23,9 @@ router.get('/', function(req, res, next) {
 router.get('/home', function(req, res, next) {
   res.render('home');
 });
-
+router.get('/prof_login', function(req, res, next) {
+  res.render('hprof_login');
+});
 router.get('/discussions', function(req, res, next) {
   res.render('discussions');
 });
@@ -291,7 +293,8 @@ router.get('/token/code', function (req, res) {
     var authtokn = JSON.parse(body).access_token;
     req.app.locals.zoomtokn=body;
     req.app.locals.authtokn=authtokn;
-    zoom.getchannels(authtokn,res,req);
+    //zoom.getchannels(authtokn,res,req);
+    res.render('chat');
   });
 })
 
