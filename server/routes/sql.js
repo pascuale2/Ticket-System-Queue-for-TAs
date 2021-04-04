@@ -777,6 +777,53 @@ function obtainAnsweredQuestionsByStudentID(connection, student_id, callback) {
   });
 }
 
+function getQuestionLabel(connection, teachesid, callback) {
+  let query = 'SELECT DISTINCT Question.label, Course.course_name \
+  FROM Question \
+  INNER JOIN Session \
+  ON Session.course_id = Question.course_id \
+  INNER JOIN Answer \
+  ON Answer.question_id = Question.question_id \
+  INNER JOIN Course \
+  ON Course.course_id = Question.course_id \
+  WHERE Answer.teacher_id = ?';
+
+  connection.query(query, teachesid, (err, result) => {
+    if(err) {
+      console.log("Could not find label with teacherid: ", teachesid, err);
+      callback(result)
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function getQuestionInfo(connection, label, teachesid, callback) {
+  let query = 'SELECT DISTINCT * \
+  FROM Question \
+  INNER JOIN Session \
+  ON Session.course_id = Question.course_id \
+  INNER JOIN Answer \
+  ON Answer.question_id = Question.question_id \
+  WHERE Answer.teacher_id = ?';
+
+  if (!(label === "")){
+  query += " AND Question.label = '"+label+"' ";
+  }
+
+  connection.query(query, teachesid, (err, result) => {
+    if(err) {
+      console.log("Could not find label with teacherid: ", teachesid, err);
+      callback(result)
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+
 /**
  * exports the modules for the other .js files to use
  */
@@ -811,5 +858,7 @@ module.exports = {
   obtainTeaches,
   obtainTeachingCourses,
   insertStudent,
-  searchProfessorByName
+  searchProfessorByName,
+  getQuestionLabel,
+  getQuestionInfo
 };
