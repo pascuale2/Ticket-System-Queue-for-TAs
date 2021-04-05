@@ -109,20 +109,14 @@ html
         hr
         .d-flex.justify-content-center
         .searchResultContainer
-        if locals.course[0].course_name != Null
-          for session in locals.course
-            .card
-              .cardContainer
-                  h4.text-center #{session.course_name}
-                  h3.text-center #{session.available_day}
-                  h4.text-center #{session.from_time}
-                  h4.text-center #{session.to_time}
-                  a.btn.btn-primary.btn-block.btn-lg(href='https://us05web.zoom.us/s/81138724882?pwd=NmtNTGExdFZaVGdKOXlDYW4xWjUvdz09') Zoom Link
+          if locals.data != Null
+            for session in locals.data
+              .card
+                .cardContainer
+                    h4.text-center #{session.label}
+                    h4.text-center #{session.course_name}
+                    a.btn.btn-primary.btn-block.btn-lg(href='/'+locals.teacher+'/'+session.label) View Questions
+                    a.btn.btn-primary.btn-block.btn-lg(href='https://us05web.zoom.us/s/81138724882?pwd=NmtNTGExdFZaVGdKOXlDYW4xWjUvdz09') Zoom Link
 
-        else
-          .d-flex.justify-content-center
-          .searchResultContainer
-          .card
-            .cardContainer
-              h4.text-center No sessions are currently available for this week
+
     .overlay

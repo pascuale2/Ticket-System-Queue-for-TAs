@@ -4,13 +4,13 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    title Maple Donut - Queues
+    title Maple Donut - Professors
 
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
-    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
     link(rel='stylesheet' href='/stylesheets/professors.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
@@ -100,32 +100,28 @@ html
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
             .logo
-              a(href='/home')
+              a(href='Home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
-        #content
-          .h-100.d-inline-block
-          // Search bar
-          h3.text-center Available Professors
+      #content
+        h3.text-center Answered Questions for #{locals.labeltitle} taught by #{locals.teacher}
 
-          .d-flex.justify-content-center
-            for names in locals.data
-              .card
-                img(src='/images/person.png' alt='Avatar')
-                hr
-                .cardContainer
-                  h3.text-center
-                    a(href='/schedule/'+ names.name) Check Schedule
-                  if names.available == 1
-                    h3.text-center #{names.name}
-                    h4.text-center Available: Yes
-                    h5.text-center
-                      a(href='/questions') Ask Question
-                  else
-                    h3.text-center #{names.name}
-                    h4.text-center Available: No
+        if locals.data != null
+          .list-group
+            for answer in locals.data
+              .d-flex.justify-content-center
+                a.list-group-item.list-group-item-action.flex-column.align-items-start(href='#' id='link_card')
+                  .d-flex.w-100.justify-content-between
+                    h5.mb-1 #{answer.question_title}
+                    small Answered By: #{locals.teacher}
+                    small Importance: #{answer.upvote}
+                  .description_container(id='description_container')
+                    hr(id='no_margin_line_break')
+                    small Date Answered: #{answer.answer_date}
+                    .d-flex.w-100.justify-content-between
+                      h5.mb-1 Answer: #{answer.answer_string}
+
+                  //a.btn.btn-primary.btn-block.btn-lg(href='https://us05web.zoom.us/s/81138724882?pwd=NmtNTGExdFZaVGdKOXlDYW4xWjUvdz09') Zoom Link
+
 
     .overlay
-
-    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')

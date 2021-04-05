@@ -47,6 +47,9 @@ router.get('/professors/:coursename', function(req, res, next){
   });
 });
 
+/*
+ * Displays a professors schedule with each label
+ */
 router.get('/schedule/:profname', function(req, res, next){
   var id = req.params.profname;
   db.searchProfessorByName(connection, id, function(result) {
@@ -59,28 +62,27 @@ router.get('/schedule/:profname', function(req, res, next){
         }
         var c = c.replace(/.$/,")");
 
-        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
-        res.render('schedule', {"data": result, "teacher":id, "course": courses});
+      db.obtainAllTaught(connection, teaches_id, c, function(courses) {
+        db.getQuestionLabel(connection, teaches_id, function(labels) {
+          console.log(labels);
+          res.render('schedule', {"data": labels, "course": courses, "teacher": id});
+        });
       });
     });
   });
 });
 
-router.get('/professors/schedule/:profname', function(req, res, next){
+/*
+ * Displays the courses by each label from /schedule
+ */
+router.get('/:profname/:label', function(req, res, next) {
+  var label = req.params.label;
   var id = req.params.profname;
   db.searchProfessorByName(connection, id, function(result) {
     var teaches_id = result[0].teacher_id;
-    db.obtainSession(connection, teaches_id, function(result) {
-      var c = "(";
-      for (var i=0; i<result.length; i++){
-          c += (result[i].course_id);
-          c+=","
-        }
-        var c = c.replace(/.$/,")");
-
-        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
-        res.render('schedule', {"data": result, "teacher":id, "course": courses});
-      });
+    db.getQuestionInfo(connection, label, teaches_id, function(result) {
+      console.log("sorted labels are : ",result);
+      res.render('question_overview', {"data": result, "labeltitle": label, "teacher":id});
     });
   });
 });
@@ -302,8 +304,7 @@ router.get('/token/code', function (req, res) {
     var authtokn = JSON.parse(body).access_token;
     req.app.locals.zoomtokn=body;
     req.app.locals.authtokn=authtokn;
-    //zoom.getchannels(authtokn,res,req);
-    res.render('chat');
+    zoom.getchannels(authtokn,res,req);
   });
 })
 
