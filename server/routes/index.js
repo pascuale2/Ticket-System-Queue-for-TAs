@@ -21,10 +21,19 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/home', function(req, res, next) {
-  res.render('home');
+  console.log({data: student});
+  console.log("THIS SHIT SHOULD BE LOADED SECOND!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  db.obtainAllCourses(connection, student.id, function(courseResults){
+    console.log(courseResults);
+    res.render('home', {
+      "data": student,
+      "courses": courseResults
+    });
+  });
 });
 router.get('/prof_login', function(req, res, next) {
-  res.render('hprof_login');
+  connection = db.configDatabase(req, res);
+  res.render('prof_login');
 });
 router.get('/discussions', function(req, res, next) {
   res.render('discussions');
@@ -184,7 +193,7 @@ router.post('/questions/professor', function(req, res, next) {
   var courseid = (1800 + parseInt(req.body.dept_combobox)).toString();
 
   db.getQuestionID(connection, function(largestid) {
-    db.askQuestion(connection, req.body.question_ask, temp_student_id, req.body.text_area, req.body.label, req.body.dept_combobox, courseid, largestid, function(question_id) {
+    db.askQuestion(connection, req.body.question_ask, student.id, req.body.text_area, req.body.label, req.body.dept_combobox, courseid, largestid, function(question_id) {
       db.obtainQuestions(connection, function(questionResults) {
         db.obtainAllCourses(connection, function(courseResults) {
           console.log('question id is ',question_id);
@@ -336,15 +345,15 @@ router.post('/home/idtoken', function (req, res) {
   student.id = parseInt(idtoken);
   student.email = req.body.email;
   student.name = req.body.name;
-
+  
   // get mymacewan.ca or macewan.ca
   var fields = student.email.split(/@/)[1];
   var profemail = 'macewan.ca';
-
+  console.log("THIS SHIT SHOULD BE LOADED FIRST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   if(profemail.localeCompare(fields)==0){
     console.log("logged in as a professor");
   } else {
-
+  
   // After logging in, insert the student into the database
   db.insertStudent(connection, student.id, student.email, student.name, function(result) {
     console.log("Success, added to the database", student.id);
@@ -444,7 +453,12 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
   console.log(req.body);
   db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
     console.log(question_id, questionResult[0].course_id, req.body.text_area);
-    answers.insertAnswer(connection, req.body.text_area, "DATE Not applicable", question_id, questionResult[0], function(answerResult) {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = mm + '/' + dd + '/' + yyyy;
+    answers.insertAnswer(connection, req.body.text_area, today, question_id, questionResult[0], function(answerResult) {
       res.render('prof_home');
     });
   });

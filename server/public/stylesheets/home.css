@@ -40,6 +40,41 @@ a:focus {
     font-family: 'Roboto', sans-serif;
 }
 
+#content h1{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #FCA926;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
+#content h3{
+    margin: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #FCA926;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119)
+}
+
+#content h4{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #eeeeeecc;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111)
+}
+
+#content h5{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: #eeeeeecc;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111)
+}
+
+
 #page #navbar-header h3{
     font-family: 'Roboto', sans-serif;
     font-weight: 600;
@@ -48,4 +83,49 @@ a:focus {
     letter-spacing: 2px;
     color: #FFF;
     text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ---------------------------------------------------
+    CARD STYLE
+----------------------------------------------------- */
+
+.searchResultContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card{
+    padding: 15px;
+    margin: 15px;
+    width: 450px;
+    
+    background-color: #252525;
+    box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
+    transition: all 0.5s ease;
+}
+
+.card:hover{
+    background-color: #252525;
+    box-shadow: 0 0px 8px 0 #FCA926;
+    transition: all 0.25s ease;
+}
+
+.card h3{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #FCA926;
+}
+
+.card p{
+    margin-bottom: 2px;
+    font-weight: 400;
+    font-size: 18px;
+    color: #eeeeeecc;
+    text-shadow: 0px 1px 2px rgb(111, 111, 111);
+    letter-spacing: 1px;
 }
