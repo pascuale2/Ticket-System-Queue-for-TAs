@@ -115,12 +115,12 @@ html
                   .title_container(id='cardTitle')
                     p(id='card_text').text-center  #{session.course_name}
                   hr(id='no_margin_line_break')
-                  p(id='no_margin_paragraph').text-center 
-                    small 
-                      small 
+                  p(id='no_margin_paragraph').text-center
+                    small
+                      small
                         small COURSE OPTIONS
                   .cardContainer(id='cardOptions')
-                    a.btn.btn-primary.btn-block.btn-lg(href='/'+locals.teacher+'/'+session.label) View Questions
+                    a.btn.btn-primary.btn-block.btn-lg(href='/schedule/'+locals.teacher+'/'+session.label) View Questions
                     a.btn.btn-danger.btn-block.btn-lg(href='https://us05web.zoom.us/s/81138724882?pwd=NmtNTGExdFZaVGdKOXlDYW4xWjUvdz09') Zoom Link
-                      i.fas.fa-video.fa-fw 
+                      i.fas.fa-video.fa-fw
     .overlay
