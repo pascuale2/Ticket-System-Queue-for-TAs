@@ -4,14 +4,14 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    title Maple Donut - Home
+    title Maple Donut - Professors
 
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/prof_home.css')
+    link(rel='stylesheet' href='/stylesheets/prof_add-schedule.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
     // 1 - FONT AWESOME SCRIPT
@@ -28,7 +28,7 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=onLoadProfHome' async='' defer='')
+    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
 
   body
     .wrapper
@@ -88,22 +88,69 @@ html
               a(href='/prof_home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
-        #content
-          h2 Homepage
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          .line
-          h2 Lorem Ipsum Dolor
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          .line
-          h2 Lorem Ipsum Dolor
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          .line
-          h3 Lorem Ipsum Dolor
-          p
-            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      #content
+        #courseContainer
+          h1.text-center Add Schedule
+          br
+          h4.text-center.mb-0 1) What Course is this for?
+          .d-flex.justify-content-center
+            // ------------------------------ //
+            // Add Schedule ComboBox
+            // ------------------------------ //
+            .select
+              select(name="course_combobox" id="courseComboBox")
+                option(selected) Select a Course
+                if locals.data != Null
+                  for courses in locals.data
+                    option(type='text' value=courses.course_id) #{courses.course_name}
+          br
+          h4.text-center.mb-0 2) What Day?
+          .d-flex.justify-content-center
+            .select
+              select(name="day_combobox" id="dayComboBox")
+                option(selected) Select a Day
+                option(type='text' value='Monday') Monday
+                option(type='text' value='Tuesday') Tuesday
+                option(type='text' value='Wednesday') Wednesday
+                option(type='text' value='Thursday') Thursday
+                option(type='text' value='Friday') Friday
+                option(type='text' value='Saturday') Saturday
+                option(type='text' value='Sunday') Sunday
+
+          br
+          h4.text-center.mb-0 3) What Time slot fits best for you?
+          .d-flex.justify-content-center
+            .select
+              select(name="start_time_combobox" id="startTimeComboBox")
+                option(selected) Starting Time
+                option(type='text' value='8:00AM') 8:00 AM
+                option(type='text' value='9:00AM') 9:00 AM
+                option(type='text' value='10:00AM') 10:00 AM
+                option(type='text' value='11:00AM') 11:00 AM
+                option(type='text' value='12:00PM') 12:00 PM
+                option(type='text' value='1:00PM') 1:00 PM
+                option(type='text' value='2:00PM') 2:00 PM
+                option(type='text' value='3:00PM') 3:00 PM
+                option(type='text' value='4:00PM') 4:00 PM
+                option(type='text' value='5:00PM') 5:00 PM
+                option(type='text' value='6:00PM') 6:00 PM
+                option(type='text' value='7:00PM') 7:00 PM
+                option(type='text' value='8:00PM') 8:00 PM
+            .col-md-auto
+            .select
+              select(name="end_time_combobox" id="EndTimeComboBox")
+                option(selected) Ending Time
+                option(type='text' value='9:00AM') 9:00 AM
+                option(type='text' value='10:00AM') 10:00 AM
+                option(type='text' value='11:00AM') 11:00 AM
+                option(type='text' value='12:00PM') 12:00 PM
+                option(type='text' value='1:00PM') 1:00 PM
+                option(type='text' value='2:00PM') 2:00 PM
+                option(type='text' value='3:00PM') 3:00 PM
+                option(type='text' value='4:00PM') 4:00 PM
+                option(type='text' value='5:00PM') 5:00 PM
+                option(type='text' value='6:00PM') 6:00 PM
+                option(type='text' value='7:00PM') 7:00 PM
+                option(type='text' value='8:00PM') 8:00 PM
+                option(type='text' value='9:00PM') 9:00 PM
     .overlay

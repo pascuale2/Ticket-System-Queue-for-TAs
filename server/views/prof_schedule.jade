@@ -4,14 +4,14 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    title Maple Donut - Questions
+    title Maple Donut - Professors
 
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/prof_questions.css')
+    link(rel='stylesheet' href='/stylesheets/prof_schedule.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
     // 1 - FONT AWESOME SCRIPT
@@ -20,16 +20,15 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth 
+    // 7,8 - Google Auth
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
-    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js', integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=onLoadProfHome' async='' defer='')
-
+    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
 
   body
     .wrapper
@@ -89,45 +88,27 @@ html
               a(href='/prof_home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
-        #content
-          #courseContainer
-            h1.text-center Questions
-            hr
-            .d-flex.justify-content-center.h-100
-              if locals.data != null
-                for courses in locals.data
-                  .card(id='courseCard')
-                    h3.text-center #{courses.course_name}
-                    .title_container(id='cardTitle')
-                      p(id='card_text').text-center  #{courses.course_title}
-                    hr(id='no_margin_line_break')
-                    p.text-center 
+      #content
+        #courseContainer
+          h1.text-center Your Schedules
+          .d-flex.justify-content-center
+            if locals.data != Null
+              for courses in locals.data
+                .card(id='courseCard')
+                  h3.text-center #{courses.course_name}
+                  .title_container(id='cardTitle')
+                    p(id='card_text').text-center  #{courses.course_title}
+                  hr(id='no_margin_line_break')
+                  p(id='no_margin_paragraph').text-center 
+                    small 
                       small 
-                        small 
-                          small QUESTION STATUS:
-                    
-                    // IF THE QUESTION COUNT ISNT 0
-                    // THEN YOU CAN CHECK THE QUESTIONS
-                    // OTHERWISE BUTTON IS DISABLED
-                    if courses.questionCount != 0 
-                      h1.text-center #{courses.questionCount}
-                      p(id='no_margin_paragraph').text-center 
-                        small 
-                          small Questions Unanswered
-                      hr
-                      .cardContainer(id='cardOptions')
-                        a.btn.btn-success.btn-block(href='/prof_questions/'+courses.course_name name='answer_question' value=courses.course_id) Answer Questions
-                    else 
-                      h1.text-center #{courses.questionCount}
-                      p(id='no_margin_paragraph').text-center 
-                        small 
-                          small Questions Unanswered
-                      hr
-                      .cardContainer(id='cardOptions')
-                        button.btn.btn-secondary.btn-block(disabled)
-                          a(href='#') No Questions to Answer
-
-              else
-                br
-                h4#desc.text-center You currently are not teaching any courses :(
+                        small COURSE OPTIONS
+                  .cardContainer(id='cardOptions')
+                    a.btn.btn-primary.btn-block.btn-lg(href='/questions_asked') Questions Overview
+                    hr#invisible_line_break
+                    a.btn.btn-danger.btn-block.btn-lg(href='professors/'+courses.course_name id='available_prof_button') Check Available Professors
+            else
+              br
+              h4.text-center You currently don't have any schedules :(
+        hr
     .overlay

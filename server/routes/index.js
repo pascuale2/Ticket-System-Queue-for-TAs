@@ -465,7 +465,12 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
 
 router.get('/prof_schedule', function(req, res, next) {
   console.log('made it to prof schedule');
-  res.render('schedule');
+  res.render('prof_schedule');
+});
+
+router.get('/prof_schedule/add_schedule', function(req, res, next) {
+  console.log('made it to prof add schedule');
+  res.render('prof_add-schedule');
 });
 
 module.exports = router;
