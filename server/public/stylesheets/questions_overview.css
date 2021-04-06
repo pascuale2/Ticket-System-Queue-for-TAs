@@ -100,22 +100,13 @@ a:focus {
 #link_card:hover{
     background-color: #252525;
     opacity: 0.8;
-    box-shadow: 0 0px 8px 0 #FCA926;
-    width: 1250px;
+    box-shadow: 0 0px 2px 0 #FCA926;
     height: absolute;
 }
 
 #description_container{
     width: 1200px;
     margin: 10px;
-}
-
-#link_card:active{
-    background-color: #eeeeee;
-    color: #000000;
-    opacity: 0.8;
-    box-shadow: 0 0px 8px 0 #FCA926;
-    width: 1290px;
 }
 
 #link_card_active:hover{
@@ -143,6 +134,11 @@ a:focus {
 
 #no_margin_paragraph{
     margin: 0px;
+}
+
+#faded_paragraph{
+    margin: 0px;
+    opacity: 0.5;
 }
 
 

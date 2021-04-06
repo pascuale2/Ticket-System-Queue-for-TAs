@@ -104,20 +104,24 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
       #content
-        h3.text-center Answered Questions for #{locals.labeltitle} taught by #{locals.teacher}
+        h1.text-center Answered Questions for Label/Tag: #{locals.labeltitle}
+        h4.text-center #{locals.teacher}
         hr
         if locals.data != null
           .list-group
             for answer in locals.data
               .d-flex.justify-content-center
-                a.list-group-item.list-group-item-action.flex-column.align-items-start(href='#' id='link_card')
+                .list-group-item.list-group-item-action.flex-column.align-items-start(href='#' id='link_card')
                   .d-flex.w-100.justify-content-between
-                    h5.mb-1 #{answer.question_title}
-                    small Answered By: #{locals.teacher}
-                    small Importance: #{answer.upvote}
+                    h3.mb-1 #{answer.question_title}
+                    button.btn.btn-outline-warning #{answer.upvote}
+                      i.fas.fa-star
                   .description_container(id='description_container')
-                    hr(id='no_margin_line_break')
-                    small Date Answered: #{answer.answer_date}
+                    p(id='question_card_desc').mb-1 #{answer.question_desc}
+                  hr(id='no_margin_line_break') 
+                  .description_container(id='description_container')
                     .d-flex.w-100.justify-content-between
-                      h5.mb-1 Answer: #{answer.answer_string}
+                      p(id='question_card_desc').mb-1 A: #{answer.answer_string}
+                  p(id='faded_paragraph') 
+                    small Date Answered: #{answer.answer_date} | Answered By: #{locals.teacher}
     .overlay

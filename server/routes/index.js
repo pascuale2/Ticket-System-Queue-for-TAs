@@ -22,7 +22,6 @@ router.get('/', function(req, res, next) {
 
 router.get('/home', function(req, res, next) {
   console.log({data: student});
-  console.log("THIS SHIT SHOULD BE LOADED SECOND!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   db.obtainAllCourses(connection, student.id, function(courseResults){
     console.log(courseResults);
     res.render('home', {
@@ -75,7 +74,7 @@ router.get('/schedule/:profname', function(req, res, next){
 /*
  * Displays the courses by each label from /schedule
  */
-router.get('/:profname/:label', function(req, res, next) {
+router.get('/schedule/:profname/:label', function(req, res, next) {
   var label = req.params.label;
   var id = req.params.profname;
   db.searchProfessorByName(connection, id, function(result) {
@@ -350,7 +349,6 @@ router.post('/home/idtoken', function (req, res) {
   // get mymacewan.ca or macewan.ca
   var fields = student.email.split(/@/)[1];
   var profemail = 'macewan.ca';
-  console.log("THIS SHIT SHOULD BE LOADED FIRST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   if(profemail.localeCompare(fields)==0){
     console.log("logged in as a professor");
   } else {
