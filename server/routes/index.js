@@ -75,7 +75,7 @@ router.get('/schedule/:profname', function(req, res, next){
 /*
  * Displays the courses by each label from /schedule
  */
-router.get('/:profname/:label', function(req, res, next) {
+router.get('/schedule/:profname/:label', function(req, res, next) {
   var label = req.params.label;
   var id = req.params.profname;
   db.searchProfessorByName(connection, id, function(result) {
@@ -346,7 +346,7 @@ router.post('/home/idtoken', function (req, res) {
   student.id = parseInt(idtoken);
   student.email = req.body.email;
   student.name = req.body.name;
-  
+
   // get mymacewan.ca or macewan.ca
   var fields = student.email.split(/@/)[1];
   var profemail = 'macewan.ca';
@@ -354,7 +354,7 @@ router.post('/home/idtoken', function (req, res) {
   if(profemail.localeCompare(fields)==0){
     console.log("logged in as a professor");
   } else {
-  
+
   // After logging in, insert the student into the database
   db.insertStudent(connection, student.id, student.email, student.name, function(result) {
     console.log("Success, added to the database", student.id);
@@ -463,6 +463,11 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
       res.render('prof_home');
     });
   });
+});
+
+router.get('/prof_schedule', function(req, res, next) {
+  console.log('made it to prof schedule');
+  res.render('schedule');
 });
 
 module.exports = router;
