@@ -876,37 +876,47 @@ function editSchedule(connection, available_day, from_day, to_time, teaches_id, 
   });
 }
 
-function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback) {
+function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback,authtokn) {
   //TODO: SETH THIS ZOOM VARIABLE IS FOR YOU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  var request = require("request");
   var zoom = "";
-
-  obtainScheduleID(connection, function(sched_id) {
-    console.log("max schedule id is: ",sched_id);
-    sched_id +=1;
-    console.log("max schedule id AFTER INCREMENTING: ",sched_id);
-    obtainSessionID(connection, courseid, function(sesh_id) {
-
-      // session already created, insert into schedule table
-      if(sesh_id.length > 0) {
-        console.log("session already created for session: ",sesh_id);
-
-        let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
-        VALUES(?, ?, ?, ?, ?, ?, ?)';
-        connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
-          if (err) {
-            console.log("Could not create schedule for: ", teaches_id);
-            callback(err);
-          } else {
-            callback(result);
-          }
-        });
+  var options = {
+    method: 'POST',
+    url: 'https://api.zoom.us/v2/users/me/meetings',
+    headers: {'content-type': 'application/json', authorization: 'Bearer' +authtokn},
+    body: {
+      topic: 'it works',
+      type: '3',
+      password: 'password',
+      agenda: 'stuff',
+      settings: {
+        join_before_host: 'True',
+        watermark: 'False',
+        use_pmi: 'True',
+        audio: 'both',
+        auto_recording: 'none'
       }
-      // Session not created, create session and add new schedule
-      else {
-        createSession(connection, courseid, function(result) {
+    },
+    json: true
+  };
+
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+
+    zoom=body.join_url;
+    obtainScheduleID(connection, function(sched_id) {
+      console.log("max schedule id is: ",sched_id);
+      sched_id +=1;
+      console.log("max schedule id AFTER INCREMENTING: ",sched_id);
+      obtainSessionID(connection, courseid, function(sesh_id) {
+  
+        // session already created, insert into schedule table
+        if(sesh_id.length > 0) {
+          console.log("session already created for session: ",sesh_id);
+          //console.log(zoom);
           let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
           VALUES(?, ?, ?, ?, ?, ?, ?)';
-          connection.query(query, [teaches_id, sched_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+          connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
             if (err) {
               console.log("Could not create schedule for: ", teaches_id);
               callback(err);
@@ -914,10 +924,28 @@ function createSchedule(connection, courseid, teaches_id, available_day, from, t
               callback(result);
             }
           });
-        });
-      }
+        }
+        // Session not created, create session and add new schedule
+        else {
+          createSession(connection, courseid, function(result) {
+            let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
+            VALUES(?, ?, ?, ?, ?, ?, ?)';
+            connection.query(query, [teaches_id, sched_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+              if (err) {
+                console.log("Could not create schedule for: ", teaches_id);
+                callback(err);
+              } else {
+                callback(result);
+              }
+            });
+          });
+        }
+      });
     });
+    //console.log(body.join_url);
   });
+
+
 }
 
 function obtainSchedule(connection, teacher, callback) {
