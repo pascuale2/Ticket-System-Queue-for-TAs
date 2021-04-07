@@ -1,13 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.google.com/specimen/Roboto+Slab');
+@import url('https://fonts.googleapis.com/css2?family=RocknRoll+One&display=swap');
 
 @import './layout/navbar.css';
 @import './layout/scrollbar.css';
 @import './layout/sidebar.css';
+@import './layout/searchbar.css';
+@import './layout/combobox.css';
 
 body {
     font-family: 'Roboto', sans-serif;
     background: #0f0f0f;
+}
+
+h2 {
+    font-family: 'RocknRoll One', sans-serif;
 }
 
 p {
@@ -25,10 +32,10 @@ a:focus {
     text-decoration: none;
     transition: all 0.3s;
 }
-
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
+
 #content {
     width: 100%;
     padding: 50px;
@@ -75,57 +82,63 @@ a:focus {
 }
 
 
-#page #navbar-header h3{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    font-size: 28px;
-    padding-top: 5px;
-    letter-spacing: 2px;
-    color: #FFF;
-    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
-}
-
-
 /* ---------------------------------------------------
-    CARD STYLE
+    LIST CARD STYLE
 ----------------------------------------------------- */
 
-.searchResultContainer{
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+#link_card, #link_card_active{
+    padding: 15px;
+    width: 1200px;
 }
 
-.card{
-    padding: 15px;
-    margin: 15px;
-    width: 450px;
-    
+#link_card{
     background-color: #252525;
-    box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
+    width: 1200px;
     transition: all 0.5s ease;
 }
 
-.card:hover{
+#link_card:hover{
     background-color: #252525;
+    opacity: 0.8;
+    box-shadow: 0 0px 2px 0 #FCA926;
+    height: absolute;
+}
+
+#description_container{
+    width: 1200px;
+    margin: 10px;
+}
+
+#link_card_active:hover{
+    opacity: 0.8;
     box-shadow: 0 0px 8px 0 #FCA926;
-    transition: all 0.25s ease;
+    width: 1250px;
 }
 
-.card h3{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 22px;
-    letter-spacing: 1px;
-    color: #FCA926;
+#link_card_active:active{
+    background-color: #eeeeee;
+    color: #000000;
+    opacity: 0.8;
+    box-shadow: 0 0px 8px 0 #FCA926;
+    width: 1290px;
 }
 
-.card p{
-    margin-bottom: 2px;
-    font-weight: 400;
-    font-size: 18px;
-    color: #eeeeeecc;
-    text-shadow: 0px 1px 2px rgb(111, 111, 111);
-    letter-spacing: 1px;
+#question_card_desc{
+    margin: 5px;
+    padding-left: 20px;
 }
+
+#no_margin_line_break{
+    margin: 0px;
+}
+
+#no_margin_paragraph{
+    margin: 0px;
+}
+
+#faded_paragraph{
+    margin: 0px;
+    opacity: 0.5;
+}
+
+

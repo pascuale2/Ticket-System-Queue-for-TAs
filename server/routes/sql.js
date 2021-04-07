@@ -944,6 +944,24 @@ function obtainScheduleAndSession(connection, teacher, callback) {
     }
   });
 }
+
+function obtainProfessorSchedule(connection, teacher_id, callback) {
+  let query = '\
+  SELECT * \
+  FROM Session INNER JOIN Schedule ON Session.schedule_id = Schedule.schedule_id \
+  INNER JOIN Course ON Course.course_id = Session.course_id \
+  WHERE Schedule.teacher_id= ?';
+  connection.query(query, teacher_id, (err, result) => {
+    if (err) {
+      console.log("Could not find schedule for: ", teacher_id);
+      callback(err);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
 /**
  * exports the modules for the other .js files to use
  */
@@ -969,6 +987,7 @@ module.exports = {
   obtainAnsweredQuestionsByStudentID,
   obtainCourseByQuestionId,
   obtainCourseInfo,
+  obtainProfessorSchedule,
   obtainQuestions,
   obtainQuestionFromACourse,
   obtainQuestionFromCourses,
@@ -986,4 +1005,5 @@ module.exports = {
   createSchedule,
   obtainSchedule,
   obtainScheduleAndSession
+
 };

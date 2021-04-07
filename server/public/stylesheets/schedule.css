@@ -4,6 +4,9 @@
 @import './layout/navbar.css';
 @import './layout/scrollbar.css';
 @import './layout/sidebar.css';
+@import './layout/searchbar.css';
+@import './layout/combobox.css';
+
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -66,66 +69,68 @@ a:focus {
     text-shadow: 0px 1px 2px rgb(111, 111, 111)
 }
 
-#content h5{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 24px;
-    color: #eeeeeecc;
-    text-shadow: 0px 1px 2px rgb(111, 111, 111)
-}
-
-
-#page #navbar-header h3{
-    font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    font-size: 28px;
-    padding-top: 5px;
-    letter-spacing: 2px;
-    color: #FFF;
-    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
-}
-
-
-/* ---------------------------------------------------
-    CARD STYLE
------------------------------------------------------ */
-
-.searchResultContainer{
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.card{
+#courseCard {
+    margin: 10px;
     padding: 15px;
-    margin: 15px;
-    width: 450px;
-    
+    width: 250px;
     background-color: #252525;
     box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
-    transition: all 0.5s ease;
-}
+    transition: 0.3s;
+    border-radius: 5px;
 
-.card:hover{
-    background-color: #252525;
-    box-shadow: 0 0px 8px 0 #FCA926;
-    transition: all 0.25s ease;
-}
-
-.card h3{
+    text-align: center;
+    font-size: 20px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 22px;
-    letter-spacing: 1px;
-    color: #FCA926;
+    color: #F7F6E7;
+    text-shadow: 0px 1px 2px rgb(197, 161, 119);
 }
 
-.card p{
-    margin-bottom: 2px;
-    font-weight: 400;
+#courseCard:hover {
+    background-color: #353b48;
+    box-shadow: 0 0px 8px 0 #FCA926;
+}
+
+.title_container {
+    height: 80px;
+}
+
+#options_text{
+    font-size: 12px;
+}
+
+#invisible_line_break{
+    margin: 5px;
+    color: transparent;
+}
+
+#no_margin_line_break{
+    margin: 0px;
+}
+
+#no_margin_paragraph{
+    margin: 0px;
+}
+
+#card_text{
     font-size: 18px;
-    color: #eeeeeecc;
-    text-shadow: 0px 1px 2px rgb(111, 111, 111);
-    letter-spacing: 1px;
+}
+
+/* COMBO BOX PROPERTY @OVERRIDE */
+.select {
+    position: relative;
+    display: flex;
+    width: 250px;
+    height: 3em;
+    line-height: 3;
+    background: #252525;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+select {
+    flex: 1;
+    text-align-last: auto;
+    font-size: 18px;
+    color: #bbbbbb;
+    cursor: pointer;
 }

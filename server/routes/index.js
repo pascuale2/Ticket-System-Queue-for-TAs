@@ -62,17 +62,16 @@ router.get('/schedule/:profname', function(req, res, next){
   db.searchProfessorByName(connection, id, function(result) {
     var teaches_id = result[0].teacher_id;
     db.obtainSchedule(connection, teaches_id, function(result) {
-
       var c = "(";
       for (var i=0; i<result.length; i++){
           c += (result[i].course_id);
           c+=","
         }
         var c = c.replace(/.$/,")");
+      
       db.obtainAllTaught(connection, teaches_id, c, function(courses) {
         db.getQuestionLabel(connection, teaches_id, function(labels) {
           console.log(labels);
-
           res.render('schedule', {"data": labels, "course": courses, "teacher": id});
         });
       });
@@ -488,14 +487,15 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
   });
 });
 
-/********************
- * Schedule routing
- *********************/
+/**********************************************
+ *            SCHEDULE ROUTING
+ **********************************************/
 
 router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
-  //db.getProfSchedule(connection, prof, );
-  console.log('made it to prof schedule');
-  res.render('prof_schedule');
+  var temp_prof_id = 4000011;
+  db.obtainProfessorSchedule(connection, temp_prof_id, function(scheduleResults) {
+    res.render('prof_schedule',{schedules: scheduleResults});
+  });
 });
 
 router.get('/prof_schedule/add_schedule', function(req, res, next) {    // Add new schedule

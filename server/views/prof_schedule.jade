@@ -92,21 +92,29 @@ html
         #courseContainer
           h1.text-center Your Schedules
           .d-flex.justify-content-center
-            if locals.data != Null
-              for courses in locals.data
+            if locals.schedules != Null
+              for schedule in locals.schedules
                 .card(id='courseCard')
-                  h3.text-center #{courses.course_name}
+                  h3.text-center #{schedule.course_name}
                   .title_container(id='cardTitle')
-                    p(id='card_text').text-center  #{courses.course_title}
+                    p(id='card_text').text-center  #{schedule.course_title}
                   hr(id='no_margin_line_break')
                   p(id='no_margin_paragraph').text-center 
                     small 
                       small 
-                        small COURSE OPTIONS
+                        small CURRENT SCHEDULE
+                  h3.text-center #{schedule.available_day}
+                  .title_container(id='scheduleTitle')
+                    p(id='card_text').text-center  #{schedule.from_time} - #{schedule.to_time}
+                  hr(id='no_margin_line_break')
+                  p(id='no_margin_paragraph').text-center 
+                    small 
+                      small 
+                        small SCHEDULE OPTIONS
                   .cardContainer(id='cardOptions')
-                    a.btn.btn-primary.btn-block.btn-lg(href='/questions_asked') Questions Overview
+                    a.btn.btn-info.btn-block.btn-lg(href='#') Edit Schedule
                     hr#invisible_line_break
-                    a.btn.btn-danger.btn-block.btn-lg(href='professors/'+courses.course_name id='available_prof_button') Check Available Professors
+                    a.btn.btn-danger.btn-block.btn-lg(href='#') Delete Schedule
             else
               br
               h4.text-center You currently don't have any schedules :(
