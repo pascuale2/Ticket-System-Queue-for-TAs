@@ -107,7 +107,6 @@ html
           .h-100.d-inline-block
           // Search bar
           h3.text-center Available Professors
-
           .d-flex.justify-content-center
             for names in locals.data
               .card
@@ -115,12 +114,12 @@ html
                 hr
                 .cardContainer
                   h3.text-center
-                    a(href='/schedule/'+ names.name) Check Schedule
+                    a.btn.btn-danger.btn-block(href='/schedule/'+names.name+'/current_prof_schedule') Check Schedule
                   if names.available == 1
                     h3.text-center #{names.name}
                     h4.text-center Available: Yes
                     h5.text-center
-                      a(href='/questions') Ask Question
+                      a.btn.btn-primary.btn-block(href='/questions') Ask Question
                   else
                     h3.text-center #{names.name}
                     h4.text-center Available: No

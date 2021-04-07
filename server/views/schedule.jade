@@ -105,7 +105,6 @@ html
             a(href='#')
 
       #content
-        a(href='/schedule/'+locals.teacher+'/current_prof_schedule') Check #{locals.teacher} Schedule
         #courseContainer
           h1.text-center #{locals.teacher}
           h4.text-center Labels/Tags used for Questions Asked:
@@ -120,9 +119,9 @@ html
                   h3.text-center #{session.label}
                   hr
                   .title_container(id='cardTitle')
-                    p(id='no_margin_paragraph').text-center 
-                    small 
-                      small 
+                    p(id='no_margin_paragraph').text-center
+                    small
+                      small
                         small COURSE:
                     p(id='card_text').text-center  #{session.course_name}
                   hr(id='no_margin_line_break')
