@@ -945,7 +945,7 @@ function obtainScheduleAndSession(connection, teacher, callback) {
   });
 }
 
-function obtainProfessorSchedule(connection, teacher_id, callback) {
+function obtainProfessorSchedule(connection, teacher_id, course_id, callback) {
   let query = '\
   SELECT * \
   FROM Session INNER JOIN Schedule ON Session.schedule_id = Schedule.schedule_id \
