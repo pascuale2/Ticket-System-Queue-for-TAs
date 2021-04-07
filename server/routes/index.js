@@ -483,7 +483,10 @@ router.get('/prof_schedule', function(req, res, next) {                 // Edit 
 
 router.get('/prof_schedule/add_schedule', function(req, res, next) {    // Add new schedule
   console.log('made it to prof add schedule');
-  res.render('prof_add-schedule');
+  var temp_prof_id = 4000011;
+  db.obtainTeachingCourses(connection, temp_prof_id, function(courseResults) {
+    res.render('prof_add-schedule', {courses: courseResults});
+  });
 });
 
 // POST request to edit an existing schedule
@@ -497,8 +500,12 @@ router.post('/prof_schedule', function(req, res, next) {
 
 // POST request to create a new schedule
 router.post('/prof_schedule/add_schedule', function(req, res, next) {
-  console.log('creating new schedule', req.params);
-  db.createSchedule(connection, function(result) {
+  console.log('creating new schedule', req.body);
+  var temp_prof_id = 4000011;
+  console.log('COURSE FROM COMBOBOX: ', req.body.course_combobox);
+  db.createSchedule(connection, req.body.course_combobox, temp_prof_id, req.body.day_combobox, 
+    req.body.start_time_combobox, req.body.end_time_combobox, "", function(result) {
+
     console.log(result);
     res.render('prof_add-schedule');
   });

@@ -842,7 +842,7 @@ function matchEmailInfo(connection, email, callback) {
  *****************/
 
 function obtainScheduleID(connection, callback) {
-  let query = 'SELECT MAX(schedule_id) AS max_id FROM Schedule WHERE 1=1';
+  let query = 'SELECT MAX(schedule_id) AS max_id FROM Session WHERE 1=1';
    connection.query(query, (err, result) => {
      if (err) {
        console.log("Cannot find max schedule id");
@@ -870,27 +870,49 @@ function editSchedule(connection, avail, from, to, zoom, passwd, teaches_id, cal
   });
 }
 
-function createSchedule(connection, courseid, teaches_id, callback) {
+function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback) {
+  //TODO: SETH THIS ZOOM VARIABLE IS FOR YOU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  var zoom = "";
+
   obtainScheduleID(connection, function(sched_id) {
     console.log("max schedule id is: ",sched_id);
     sched_id +=1;
+    console.log("max schedule id AFTER INCREMENTING: ",sched_id);
+    obtainSessionID(connection, courseid, function(sesh_id) {
 
-    createSession(connection, courseid, function(result) {
+      // session already created, insert into schedule table
+      if(sesh_id.length > 0) {
+        console.log("session already created for session: ",sesh_id);
 
-      let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
-      VALUES(?, ?, ?, ?, ?, ?, ?)';
-      connection.query(query, [teaches_id, sched_id, avail, from, to, zoom, passwd, teaches_id], (err, result) => {
-        if (err) {
-          console.log("Could not create schedule for: ", teaches_id);
-          callback(err);
-        } else {
-          callback(result);
-        }
-      });
+        let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
+        VALUES(?, ?, ?, ?, ?, ?, ?)';
+        connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+          if (err) {
+            console.log("Could not create schedule for: ", teaches_id);
+            callback(err);
+          } else {
+            callback(result);
+          }
+        });
+      }
+      // Session not created, create session and add new schedule
+      else {
+        createSession(connection, courseid, function(result) {
+          let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
+          VALUES(?, ?, ?, ?, ?, ?, ?)';
+          connection.query(query, [teaches_id, sched_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+            if (err) {
+              console.log("Could not create schedule for: ", teaches_id);
+              callback(err);
+            } else {
+              callback(result);
+            }
+          });
+        });
+      }
     });
   });
 }
-
 
 /**
  * exports the modules for the other .js files to use

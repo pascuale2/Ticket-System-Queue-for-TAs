@@ -92,65 +92,73 @@ html
         #courseContainer
           h1.text-center Add Schedule
           br
-          h4.text-center.mb-0 1) What Course is this for?
-          .d-flex.justify-content-center
-            // ------------------------------ //
-            // Add Schedule ComboBox
-            // ------------------------------ //
-            .select
-              select(name="course_combobox" id="courseComboBox")
-                option(selected) Select a Course
-                if locals.data != Null
-                  for courses in locals.data
-                    option(type='text' value=courses.course_id) #{courses.course_name}
-          br
-          h4.text-center.mb-0 2) What Day?
-          .d-flex.justify-content-center
-            .select
-              select(name="day_combobox" id="dayComboBox")
-                option(selected) Select a Day
-                option(type='text' value='Monday') Monday
-                option(type='text' value='Tuesday') Tuesday
-                option(type='text' value='Wednesday') Wednesday
-                option(type='text' value='Thursday') Thursday
-                option(type='text' value='Friday') Friday
-                option(type='text' value='Saturday') Saturday
-                option(type='text' value='Sunday') Sunday
+          form(action='/prof_schedule/add_schedule' method='post')
+            h4.text-center.mb-0 1) What Course is this for?
+            .d-flex.justify-content-center
+              // ------------------------------ //
+              // Add Schedule ComboBox
+              // ------------------------------ //
+              .select
+                select(name="course_combobox" id="courseComboBox")
+                  option(selected) Select a Course
+                  if locals.courses != Null
+                    for courses in locals.courses
+                      option(type='text' value=courses.course_id) #{courses.course_name}
+            br
+            h4.text-center.mb-0 2) What Day?
+            .d-flex.justify-content-center
+              .select
+                select(name="day_combobox" id="dayComboBox")
+                  option(selected) Select a Day
+                  option(type='text' value='Monday') Monday
+                  option(type='text' value='Tuesday') Tuesday
+                  option(type='text' value='Wednesday') Wednesday
+                  option(type='text' value='Thursday') Thursday
+                  option(type='text' value='Friday') Friday
+                  option(type='text' value='Saturday') Saturday
+                  option(type='text' value='Sunday') Sunday
 
-          br
-          h4.text-center.mb-0 3) What Time slot fits best for you?
-          .d-flex.justify-content-center
-            .select
-              select(name="start_time_combobox" id="startTimeComboBox")
-                option(selected) Starting Time
-                option(type='text' value='8:00AM') 8:00 AM
-                option(type='text' value='9:00AM') 9:00 AM
-                option(type='text' value='10:00AM') 10:00 AM
-                option(type='text' value='11:00AM') 11:00 AM
-                option(type='text' value='12:00PM') 12:00 PM
-                option(type='text' value='1:00PM') 1:00 PM
-                option(type='text' value='2:00PM') 2:00 PM
-                option(type='text' value='3:00PM') 3:00 PM
-                option(type='text' value='4:00PM') 4:00 PM
-                option(type='text' value='5:00PM') 5:00 PM
-                option(type='text' value='6:00PM') 6:00 PM
-                option(type='text' value='7:00PM') 7:00 PM
-                option(type='text' value='8:00PM') 8:00 PM
-            .col-md-auto
-            .select
-              select(name="end_time_combobox" id="EndTimeComboBox")
-                option(selected) Ending Time
-                option(type='text' value='9:00AM') 9:00 AM
-                option(type='text' value='10:00AM') 10:00 AM
-                option(type='text' value='11:00AM') 11:00 AM
-                option(type='text' value='12:00PM') 12:00 PM
-                option(type='text' value='1:00PM') 1:00 PM
-                option(type='text' value='2:00PM') 2:00 PM
-                option(type='text' value='3:00PM') 3:00 PM
-                option(type='text' value='4:00PM') 4:00 PM
-                option(type='text' value='5:00PM') 5:00 PM
-                option(type='text' value='6:00PM') 6:00 PM
-                option(type='text' value='7:00PM') 7:00 PM
-                option(type='text' value='8:00PM') 8:00 PM
-                option(type='text' value='9:00PM') 9:00 PM
+            br
+            h4.text-center.mb-0 3) What Time slot fits best for you?
+            .d-flex.justify-content-center
+              .select
+                select(name="start_time_combobox" id="startTimeComboBox")
+                  option(selected) Starting Time
+                  option(type='text' value='8:00AM') 8:00 AM
+                  option(type='text' value='9:00AM') 9:00 AM
+                  option(type='text' value='10:00AM') 10:00 AM
+                  option(type='text' value='11:00AM') 11:00 AM
+                  option(type='text' value='12:00PM') 12:00 PM
+                  option(type='text' value='1:00PM') 1:00 PM
+                  option(type='text' value='2:00PM') 2:00 PM
+                  option(type='text' value='3:00PM') 3:00 PM
+                  option(type='text' value='4:00PM') 4:00 PM
+                  option(type='text' value='5:00PM') 5:00 PM
+                  option(type='text' value='6:00PM') 6:00 PM
+                  option(type='text' value='7:00PM') 7:00 PM
+                  option(type='text' value='8:00PM') 8:00 PM
+              .col-md-auto
+              .select
+                select(name="end_time_combobox" id="EndTimeComboBox")
+                  option(selected) Ending Time
+                  option(type='text' value='9:00AM') 9:00 AM
+                  option(type='text' value='10:00AM') 10:00 AM
+                  option(type='text' value='11:00AM') 11:00 AM
+                  option(type='text' value='12:00PM') 12:00 PM
+                  option(type='text' value='1:00PM') 1:00 PM
+                  option(type='text' value='2:00PM') 2:00 PM
+                  option(type='text' value='3:00PM') 3:00 PM
+                  option(type='text' value='4:00PM') 4:00 PM
+                  option(type='text' value='5:00PM') 5:00 PM
+                  option(type='text' value='6:00PM') 6:00 PM
+                  option(type='text' value='7:00PM') 7:00 PM
+                  option(type='text' value='8:00PM') 8:00 PM
+                  option(type='text' value='9:00PM') 9:00 PM
+
+            .d-xl-flex.justify-content-center.h-100
+              button.btn.btn-primary(type='submit' id='submit_button') Submit Question
+                i.fab.fa-telegram-plane
+              .col-md-auto
+              button.btn.btn-danger(type='reset' id='clear_button') Clear
+                i.fas.fa-trash
     .overlay
