@@ -471,14 +471,15 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
   });
 });
 
-/********************
- * Schedule routing
- *********************/
+/**********************************************
+ *            SCHEDULE ROUTING
+ **********************************************/
 
 router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
-  //db.getProfSchedule(connection, prof, );
-  console.log('made it to prof schedule');
-  res.render('prof_schedule');
+  var temp_prof_id = 4000011;
+  db.obtainProfessorSchedule(connection, temp_prof_id, function(scheduleResults) {
+    res.render('prof_schedule',{schedules: scheduleResults});
+  });
 });
 
 router.get('/prof_schedule/add_schedule', function(req, res, next) {    // Add new schedule

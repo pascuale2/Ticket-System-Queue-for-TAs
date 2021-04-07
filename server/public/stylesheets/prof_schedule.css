@@ -94,6 +94,11 @@ a:focus {
     height: 80px;
 }
 
+#scheduleTitle {
+    height: 50px;
+}
+
+
 #options_text{
     font-size: 12px;
 }
