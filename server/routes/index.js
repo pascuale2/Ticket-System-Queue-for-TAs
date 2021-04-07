@@ -293,6 +293,8 @@ router.get('/discussions', function(req, res, next) {
 });
 
 router.get('/chat', function(req, res, next) {
+  //console.log("test");
+  //console.log(req.app.locals.authtokn);
   res.render('chat');
 });
 
@@ -327,7 +329,9 @@ router.get('/token/code', function (req, res) {
     var authtokn = JSON.parse(body).access_token;
     req.app.locals.zoomtokn=body;
     req.app.locals.authtokn=authtokn;
-    zoom.getchannels(authtokn,res,req);
+    //console.log(authtokn);
+    res.redirect("https://localhost:3000/home");
+    //zoom.getchannels(authtokn,res,req);
   });
 })
 
@@ -534,7 +538,7 @@ router.post('/prof_schedule/add_schedule', function(req, res, next) {
   db.createSchedule(connection, req.body.course_combobox, temp_prof_id, req.body.day_combobox,
     req.body.start_time_combobox, req.body.end_time_combobox, "", function(result) {
     res.render('prof_add-schedule');
-  });
+  },req.app.locals.authtokn);
 });
 
 module.exports = router;
