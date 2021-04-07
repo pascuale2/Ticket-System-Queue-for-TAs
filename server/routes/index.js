@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var db = require('./sql');
+var queue = require('./queue');
+var answers = require('./prof_answer');
 
 var request = require("request");
 var zoom = require("./zoom.js");
@@ -8,16 +10,39 @@ const cors = require("cors");
 router.use(cors());
 /* GET home page. */
 
+var student = {
+  'email': 'null', 'id': 0, 'name': 'null',
+};
+
 var connection;
 router.get('/', function(req, res, next) {
   connection = db.configDatabase(req, res);
   res.render('login');
 });
 
+router.post('/login', function(req, res, next) {
+  console.log(req.body.email_input)
+  db.matchEmailInfo(connection, req.body.email_input, function(teacherID) {
+    console.log("TEACHER ID RESULTS: ", teacherID);
+  });
+});
 
 router.get('/home', function(req, res, next) {
-  res.render('home');
+  console.log({data: student});
+  db.obtainAllCourses(connection, student.id, function(courseResults){
+    console.log(courseResults);
+    res.render('home', {
+      "data": student,
+      "courses": courseResults
+    });
+  });
 });
+
+router.get('/prof_login', function(req, res, next) {
+  connection = db.configDatabase(req, res);
+  res.render('prof_login');
+});
+
 router.get('/discussions', function(req, res, next) {
   res.render('discussions');
 });
@@ -29,56 +54,70 @@ router.get('/professors/:coursename', function(req, res, next){
   });
 });
 
+/*
+ * Displays a professors schedule with each label
+ */
 router.get('/schedule/:profname', function(req, res, next){
   var id = req.params.profname;
-  db.searchProfessor(connection, id, function(result) {
+  db.searchProfessorByName(connection, id, function(result) {
     var teaches_id = result[0].teacher_id;
-    db.obtainSession(connection, teaches_id, function(result) {
+    db.obtainSchedule(connection, teaches_id, function(result) {
       var c = "(";
       for (var i=0; i<result.length; i++){
           c += (result[i].course_id);
           c+=","
         }
         var c = c.replace(/.$/,")");
-
-        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
-        res.render('schedule', {"data": result, "teacher":id, "course": courses});
+      
+      db.obtainAllTaught(connection, teaches_id, c, function(courses) {
+        db.getQuestionLabel(connection, teaches_id, function(labels) {
+          console.log(labels);
+          res.render('schedule', {"data": labels, "course": courses, "teacher": id});
+        });
       });
     });
   });
 });
 
-router.get('/professors/schedule/:profname', function(req, res, next){
+/*
+ * Displays the courses by each label from /schedule
+ */
+router.get('/schedule/:profname/:label/view_answers', function(req, res, next) {
+  var label = req.params.label;
   var id = req.params.profname;
-  db.searchProfessor(connection, id, function(result) {
+  db.searchProfessorByName(connection, id, function(result) {
     var teaches_id = result[0].teacher_id;
-    db.obtainSession(connection, teaches_id, function(result) {
-      var c = "(";
-      for (var i=0; i<result.length; i++){
-          c += (result[i].course_id);
-          c+=","
-        }
-        var c = c.replace(/.$/,")");
-
-        db.obtainAllTaught(connection, teaches_id, c, function(courses) {
-        res.render('schedule', {"data": result, "teacher":id, "course": courses});
-      });
+    db.getQuestionInfo(connection, label, teaches_id, function(result) {
+      console.log("sorted labels are : ",result);
+      res.render('question_overview', {"data": result, "labeltitle": label, "teacher":id});
     });
   });
 });
 
-router.get('/professors', function(req, res, next) {
-    db.obtainAllProfessors(connection, function(result) {
-      res.render('professors', {data: JSON.stringify(result)});
+/*
+ * Gets the current profs schedule
+*/
+router.get('/schedule/:profname/current_prof_schedule', function(req, res, next) {
+  var id = req.params.profname;
+  console.log(id);
+  db.searchProfessorByName(connection, id, function(result) {
+    var teaches_id = result[0].teacher_id;
+    var temp_prof_id = 4000011;
+    db.obtainScheduleAndSession(connection, temp_prof_id, function(sched) {
+        console.log(sched);
+        res.render('view_prof_schedule', {"schedule": sched});
     });
+  });
 });
+
 router.get('/settings', function(req, res, next) {
   res.render('settings');
 });
 
 router.get('/courses', function(req, res, next) {
   // student_id is in /public/google.js
-    db.obtainAllCourses(connection, function(result) {
+  console.log(typeof student.id, student.id);
+    db.obtainAllCourses(connection, student.id, function(result) {
       console.log("courses are",result);
         res.render('courses', {data: result});
     });
@@ -100,19 +139,35 @@ router.post('/course_search', function(req, res, next) {
  * db.obtainAllCourses-> the courses the student is enrolled in which is used to
  *                       populate the comboBox.
  */
- router.get('/questions', function(req, res, next) {
-  db.obtainQuestions(connection, function(questionResults) {
-    db.obtainAllCourses(connection, function(courseResults) {
-      console.log(courseResults, questionResults);
-      res.render('questions',
-        {"data": questionResults,
-        "courses": courseResults});
-    });
+router.get('/questions', function(req, res, next) {
+  db.obtainQuestions(connection, student.id, function(questionResults) {
+    db.obtainAllCourses(connection, student.id, function(courseResults) {
+      var c = "(";
+      for (var i=0; i<questionResults.length; i++){
+          c += (questionResults[i].question_id);
+          c += ","
+        }
+        var c = c.replace(/.$/,")");
+        if(c.length<2){
+          res.render('questions', {
+            "courses": courseResults
+          });
+        }
+        else{
+          db.obtainAllQuestionInfo(connection, c, function(allresults) {
+            db.obtainAllCourses(connection, student.id, function(courseResults) {
+              res.render('questions', {
+                "data": allresults,
+                "courses": courseResults});
+            });
+          });
+        }
+      });
   });
 });
 
 /**
- * Post request for "Ask a Question" page
+ * Post request for "Ask a Question" page (FOR PROFESSORS)
  *
  * db.getQuestionID   -> gets the largest question id
  * db.askQuestion     -> inserts the question into the database
@@ -120,15 +175,66 @@ router.post('/course_search', function(req, res, next) {
  * db.obtainAllCourses-> the courses the student is enrolled in which is used to
  *                       populate the comboBox.
  */
-router.post('/questions', function(req, res, next) {
+router.post('/questions/professor', function(req, res, next) {
+  //TODO: CHANGE DISCIPLINE ID!!!!!!!!!!!
   db.getQuestionID(connection, function(largestid) {
-    // TODO: Replace with Student ID and insert DISCIPLINE
-    db.askQuestion(connection, req.body.question_ask, 100, req.body.text_area, req.body.label, 200, req.body.course_combobox, largestid, function(result) {
+    var courseid = req.body.course_combobox;
+    //var quest_id = req.body.question_ask;
+    db.askQuestion(connection, req.body.question_ask, student.id, req.body.text_area, req.body.label, 200, req.body.course_combobox, largestid, function(question_id) {
+      db.obtainQuestions(connection, student.id, function(questionResults) {
+        db.obtainAllCourses(connection, student.id, function(courseResults) {
+          console.log('question id is ',question_id);
+          queue.generateQueue(connection, courseid, question_id, student.id, function(queue_id) {
+            var temp = "(";
+            temp += question_id;
+            temp += ")";
+            db.findCurrentPosition(connection, temp, function(position){
+              db.obtainAllQuestionInfoByStudentID(connection, student.id, function(allResults) {
+                res.render('questions',
+                {"data": allResults,
+                "courses": courseResults,
+                "queue": position});
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+});
+
+
+/**
+ * Post request for "Ask a Question" page (FOR ADVISORS)
+ *
+ * db.getQuestionID   -> gets the largest question id
+ * db.askQuestion     -> inserts the question into the database
+ * db.obtainQuestions -> obtains the questions for the homepage to display
+ * db.obtainAllCourses-> the courses the student is enrolled in which is used to
+ *                       populate the comboBox.
+ */
+ router.post('/questions/advisor', function(req, res, next) {
+  //TODO: CHANGE THIS PLSSSSSSSS
+  var courseid = (1800 + parseInt(req.body.dept_combobox)).toString();
+
+  db.getQuestionID(connection, function(largestid) {
+    db.askQuestion(connection, req.body.question_ask, student.id, req.body.text_area, req.body.label, req.body.dept_combobox, courseid, largestid, function(question_id) {
       db.obtainQuestions(connection, function(questionResults) {
         db.obtainAllCourses(connection, function(courseResults) {
-          res.render('questions',
-          {"data": questionResults,
-          "courses": courseResults});
+          console.log('question id is ',question_id);
+          queue.generateQueue(connection, courseid, question_id, student.id, function(queue_id) {
+            var temp = "(";
+            temp += question_id;
+            temp += ")";
+            db.findCurrentPosition(connection, temp, function(position){
+              db.obtainAllQuestionInfoByStudentID(connection, student.id, function(allResults) {
+                res.render('questions',
+                {"data": allResults,
+                "courses": courseResults,
+                "queue": position});
+              });
+            });
+          });
         });
       });
     });
@@ -140,7 +246,7 @@ router.post('/questions', function(req, res, next) {
  *
  * db.searchQuestions -> obtains the questions for the page to display
  */
-router.post('/questions_search', function(req, res, next) {                    // For a question search
+router.post('/questions_search', function(req, res, next) {                    // For question search
   db.searchQuestions(connection,req.body.sort_combobox, req.body.filter_combobox, req.body.question_search, function(searchQuestionResults) {
     res.render('questions_search', {data: searchQuestionResults});
   });
@@ -149,30 +255,37 @@ router.post('/questions_search', function(req, res, next) {                    /
 /**
  * Get request for "Search a Question" page
  */
- router.get('/questions_search', function(req, res, next) {
+router.get('/questions_search', function(req, res, next) {
   res.render('questions_search');
 });
 
-router.get('/question_success', function(req, res, next) {
-  res.render('question_success');
+/**
+ * Get request for "Asked Questions" page
+ */
+router.get('/questions_asked', function(req, res, next) {
+  db.obtainAllQuestionInfoByStudentID(connection, student.id, function(allResults) {
+    db.obtainAnsweredQuestionsByStudentID(connection, student.id, function(answerResults) {
+      res.render('questions_asked', {
+        "data": allResults,
+        "answers": answerResults});
+    });
+  });
 });
 
-router.get('/question_ask', function(req, res, next) {
-  res.render('question_ask');
-});
-
-
-
+/**
+ *
+ */
 router.post('/professors', function(req, res, next){                    // For a professor search
-  db.searchProfessor(connection, req.body.professor, function(result) {
+  db.searchProfessor(connection, req.body.professor, req.body.sort_combobox, req.body. order_combobox, function(result) {
     res.render('professors', {data: result});
   });
 });
 
+/**
+ *
+ */
 router.get('/professors', function(req, res, next) {
-    db.obtainAllProfessors(connection, function(result) {
-      res.render('professors', {data: result});
-    });
+  res.render('professors');
 });
 
 router.get('/discussions', function(req, res, next) {
@@ -182,6 +295,11 @@ router.get('/discussions', function(req, res, next) {
 router.get('/chat', function(req, res, next) {
   res.render('chat');
 });
+
+router.get('/settings_edit', function(req, res, next) {
+  res.render('settings_edit');
+});
+
 router.get('/home/:userId', function (req, res) {
   // Access userId via: req.params.userId
   res.render('home');
@@ -204,19 +322,21 @@ router.get('/token/code', function (req, res) {
     }
   };
 
-    request(options, function(error, response, body) {
-      if (error) throw new Error(error);
-      var authtokn = JSON.parse(body).access_token;
-      req.app.locals.zoomtokn=body;
-      req.app.locals.authtokn=authtokn;
-      zoom.getchannels(authtokn,res,req);
-    });
+  request(options, function(error, response, body) {
+    if (error) throw new Error(error);
+    var authtokn = JSON.parse(body).access_token;
+    req.app.locals.zoomtokn=body;
+    req.app.locals.authtokn=authtokn;
+    zoom.getchannels(authtokn,res,req);
+  });
 })
+
 router.get('/token', function (req, res) {
   // Access userId via: req.params.userId
   console.log(req.params);
   res.redirect('https://zoom.us/oauth/authorize?response_type=code&client_id=uqERGEzQThSiyeVrlQlMvQ&redirect_uri=https://localhost:3000/token/code');
 })
+
 router.post('/chat/redirect', function (req, res) {
   var message = req.body.message;
   var channel = req.body.to_channel;
@@ -239,29 +359,182 @@ router.post('/chat/redirect', function (req, res) {
   });
   res.end("yes");
 })
+
+/**
+ *
+ */
 router.post('/home/idtoken', function (req, res) {
   var idtoken = req.body.token;
-  console.log(idtoken);
+  console.log(req.body);
+  student.id = parseInt(idtoken);
+  student.email = req.body.email;
+  student.name = req.body.name;
+
+  // get mymacewan.ca or macewan.ca
+  var fields = student.email.split(/@/)[1];
+  var profemail = 'macewan.ca';
+  if(profemail.localeCompare(fields)==0){
+    console.log("logged in as a professor");
+  } else {
+
+  // After logging in, insert the student into the database
+  db.insertStudent(connection, student.id, student.email, student.name, function(result) {
+    console.log("Success, added to the database", student.id);
+  });
+}
   res.end("yes");
 })
-router.get('/profpage1', function(req, res, next) {
-  res.render('name of jade file here');
-});
-router.get('/profpage2', function(req, res, next) {
-  res.render('name of jade file here');
-});
-router.get('/profpage3', function(req, res, next) {
-  res.render('name of jade file here');
-});
-router.get('/profpage4', function(req, res, next) {
-  res.render('name of jade file here');
+
+/**********************************************
+ *            PROFESSOR ROUTING
+ **********************************************/
+router.get('/prof_home', function(req, res, next) {
+  res.render('prof_home');
 });
 
-
-
-router.get('/settings_edit', function(req, res, next) {
-  res.render('settings_edit');
+/**
+ * get request for professor course page
+ *
+ * db.obtainQuestionFromACourse -> obtains all the questions from the inputted course
+ * db.obtainCourseInfo -> obtains the course information we are trying to answer questions from
+ */
+ router.get('/prof_courses/:courses', function(req, res, next) {
+  var course_name = req.params.courses;
+  db.obtainQuestionFromACourse(connection, req.body.check_question, "", function(questionResults) {
+    res.render('prof_questions-answer', {
+      "questions": questionResults,
+      "courseID": course_name});
+  });
 });
 
+/**
+ * Get request for professor course page
+ *
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
+ */
+router.get('/prof_courses', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.obtainAddableCourses(connection, function(courseResults) {
+    db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+      res.render('prof_courses', {
+        "data": courseResults,
+        "count": questionCountResults});
+    });
+  });
+});
+
+/**
+ * get request for professor overview page -> professor question overview page
+ *
+ * db.obtainQuestionFromACourse -> obtains all the questions from the inputted course
+ */
+router.get('/prof_questions/:courses', function(req, res, next) {
+  var course_name = req.params.courses;
+  db.obtainQuestionFromACourse(connection, course_name, "", function(questionResults) {
+    res.render('prof_questions-answer', {
+      "questions": questionResults,
+      "courseID": course_name});
+  });
+});
+
+/**
+ * Get request for professor questions overview page
+ *
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
+ */
+router.get('/prof_questions', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+    console.log("DATA: ", questionCountResults);
+    res.render('prof_questions', {data: questionCountResults});
+  });
+});
+
+/**
+ * Get request for professor answer a question page
+ *
+ * db.obtainQuestionFromACourse -> obtains the question information from the user inputted course
+ */
+ router.get('/prof_questions/:courses/:question_id', function(req, res, next) {
+   var course_name = req.params.courses;
+   var question_id = req.params.question_id;
+   db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+     res.render('prof_answer-question', {data: questionResult});
+   });
+ });
+
+/**
+* Post request for professor answer a question page
+*
+* db.obtainQuestionFromACourse -> obtains the question information from the user inputted course
+*/
+router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
+  var course_name = req.params.courses;
+  var question_id = req.params.question_id;
+  console.log(req.body);
+  db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+    console.log(question_id, questionResult[0].course_id, req.body.text_area);
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = mm + '/' + dd + '/' + yyyy;
+    answers.insertAnswer(connection, req.body.text_area, today, question_id, questionResult[0], function(answerResult) {
+      res.render('prof_home');
+    });
+  });
+});
+
+/**********************************************
+ *            SCHEDULE ROUTING
+ **********************************************/
+
+router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
+  var temp_prof_id = 4000011;
+  db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+    res.render('prof_schedule', {schedules: scheduleResults});
+  });
+});
+
+router.get('/prof_schedule/add_schedule', function(req, res, next) {    // Add new schedule
+  console.log('made it to prof add schedule');
+  var temp_prof_id = 4000011;
+  db.obtainTeachingCourses(connection, temp_prof_id, function(courseResults) {
+    res.render('prof_add-schedule', {courses: courseResults});
+  });
+});
+
+router.get('/prof_schedule/:coursename/edit_schedule', function(req, res, next) {                 // Edit schedule, view schedule
+  var course_id = req.params.coursename;
+  var temp_prof_id = 4000011;
+  db.obtainProfessorSchedule(connection, temp_prof_id, course_id, function(scheduleResults) {
+    res.render('prof_edit-schedule', {schedules: scheduleResults});
+  });
+});
+
+// POST request to edit an existing schedule
+router.post('/prof_schedule/:coursename/edit_schedule', function(req, res, next) {
+  var course_id = req.params.coursename;
+  var temp_prof_id = 4000011;
+  db.editSchedule(connection, req.body.day_combobox, req.body.start_time_combobox,
+    req.body.end_time_combobox, temp_prof_id, course_id, function(result) {
+    console.log("Successfully edited schedule: ", result);
+    db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+      res.render('prof_schedule', {schedules: scheduleResults});
+    });
+  });
+});
+
+// POST request to create a new schedule
+router.post('/prof_schedule/add_schedule', function(req, res, next) {
+  console.log('creating new schedule', req.body);
+  var temp_prof_id = 4000011;
+  db.createSchedule(connection, req.body.course_combobox, temp_prof_id, req.body.day_combobox,
+    req.body.start_time_combobox, req.body.end_time_combobox, "", function(result) {
+    res.render('prof_add-schedule');
+  });
+});
 
 module.exports = router;

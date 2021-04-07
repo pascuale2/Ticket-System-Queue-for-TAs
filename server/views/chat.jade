@@ -5,43 +5,49 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
     title Maple Donut - Chat
+
     // 1,2 - CSS BOOTSTRAP LINK
-    // 3 - CUSTOM CSS LINK
+    // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
-    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
     link(rel='stylesheet' href='/stylesheets/chat.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
+
     // 1 - FONT AWESOME SCRIPT
     // 2 - jQuery CDN - Slim version (=without AJAX)
     // 3 - Popper.JS
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
+    // 7 - Messages JS
+    // 8,9 - Google Auth 
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
-    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js' integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ' crossorigin='anonymous')
-    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js' integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm' crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js', integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
     script(type='text/javascript' src='/javascripts/messages.js')
+    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
+    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
+    
   body
     // google auth stuff and chat message generation
     script.
       //window.onload = init(!{channels});
       window.addEventListener('DOMContentLoaded', function() {
-        init(!{channels});
+        init();
       });
 
-      function init(getchannels) {
-        getchannels.channels.forEach(addMessageGroup);
-        document.getElementById("messagesend").onclick=function(){
-          sendMessage(!{zoomtokn}.access_token,getchannels.channels[0].id,document.getElementById("messagecontent").value);
-          document.getElementById("messagecontent").value="";
-        };
-        
-        //addMessageGroup(getchannels.channels[0]);
-        //console.log(getchannels.channels[0].id);
+      function init() {
+        addMessageGroup("CMPT 101","Introduction to Computing I","1");
+        addMessageGroup("CMPT 103","Introduction to Computing II","2");
+        addMessageGroup("CMPT 104","Fluency with Information Technology","3");
+        addMessageGroup("CMPT 200","Data Structures and Algorithms","4");
+        addMessageGroup("CMPT 201","Practical Programming Methodology","5");
+        addMessageGroup("CMPT 204","Algorithms I","6");
+        addMessageGroup("CMPT 220","Unix, Scripting, and Other Tools","7");
 
       }
     .wrapper
@@ -55,7 +61,8 @@ html
             .profile
               .row.justify-content-center
                 img#profilepic(src='/images/donut.png')
-          h2#profilename.text-center  username
+          h2#profilename.text-center Seth Thompson
+          h3.text-center  
         hr
         ul.list-unstyled.components
           li
@@ -66,24 +73,22 @@ html
             a(href='#coursesSubmenu' data-toggle='collapse' aria-expanded='false')
               i.fas.fa-book
               | Courses
-            ul#coursesSubmenu.collapse.list-unstyled
-              a(href='#coursesSubmenu' data-toggle='collapse' aria-expanded='false')
-              li
-                a(href='#coursesSubmenu' data-toggle='collapse' aria-expanded='false')
-                a(href='courses') Current Courses
-              li
-                a(href='#') Search Courses
+              ul#coursesSubmenu.collapse.list-unstyled
+                li
+                  a(href='courses') Current Courses
+                li
+                  a(href='#') Search Courses
           li.active
             a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
               i.fas.fa-question-circle
               | Questions
-            ul#questionsSubmenu.collapse.list-unstyled
-              a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
-              li
-                a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
-                a(href='questions') Ask a Question
-              li
-                a(href='questions_search') Search Questions
+              ul#questionsSubmenu.collapse.list-unstyled
+                li
+                  a(href='questions') Ask a Question
+                li
+                  a(href='questions_search') Search Questions
+                li
+                  a(href='questions_asked') Asked Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -92,13 +97,11 @@ html
             a(href='#discussionsSubmenu' data-toggle='collapse' aria-expanded='false')
               i.fas.fa-comments
               | Discussions
-            ul#discussionsSubmenu.collapse.list-unstyled
-              a(href='#discussionsSubmenu' data-toggle='collapse' aria-expanded='false')
-              li
-                a(href='#discussionsSubmenu' data-toggle='collapse' aria-expanded='false')
-                a(href='discussions') Discussion Board
-              li
-                a(href='#') Group Chats
+              ul#discussionsSubmenu.collapse.list-unstyled
+                li
+                  a(href='discussions') Discussion Board
+                li
+                  a(href='chat') Group Chats
         hr
         ul.list-unstyled.components
           li
@@ -115,145 +118,12 @@ html
           #navbar-header.container-fluid
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
-            button#add Add group
-            button#add2 Add Recieved
             .logo
-              a(href='Home')
+              a(href='/home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content  
           .message-section
-            .message-section-title messages
+            .message-section-title Channels
             ul#message-list
-          .mesgs
-            #chat.msg_history
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | What do you call a factory that makes okay products?
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-o.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | I dont know
-              .incoming_msg
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p A satisfactory.
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-o.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | 3/10
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | What did the janitor say when he jumped out of the closet? Supplies!
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-o.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | pls stop
-              .incoming_msg
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | What did the ocean say to the beach? Nothing, it just waved.
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | Why do seagulls fly over the ocean? Because if they flew over the bay, we'd call them bagels.
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | I only know 25 letters of the alphabet. I don't know y.
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | What did one wall say to the other? I'll meet you at the corner.
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | What did the zero say to the eight? That belt looks good on you.
-              .incoming_msg
-                .incoming_msg_img
-                  img(src='/images/letters/letter-s.svg' alt='lettericon' width='40' height='40')
-                .received_msg
-                  .received_withd_msg
-                    .message_sender
-                      | Name
-                      span.time_date  11:01 AM | June 9
-                    p
-                      | What's the best thing about Switzerland? I don't know, but the flag is a big plus.
-            .type_msg
-              .input_msg_write
-                input#messagecontent.write_msg(type='text' placeholder='Type a message')
-                button#messagesend.msg_send_btn(type='button')
-                  img(src='/images/send.svg' alt='send' width='20' height='20')
-
     .overlay
-    script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')

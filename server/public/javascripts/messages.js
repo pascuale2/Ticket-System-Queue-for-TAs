@@ -1,4 +1,4 @@
-function addMessageGroup(channel) {
+function addMessageGroup(channelname,snippet,id) {
     var el = document.getElementById("message-list");
     var node = document.createElement("li");
     var div = document.createElement("div");
@@ -9,7 +9,7 @@ function addMessageGroup(channel) {
     var status = document.createElement("span");
     var statuscircle = document.createElement("span");
     var bttn = document.createElement("bttn");
-    var letter =channel.name.charAt(0);
+    var letter =channelname.toLowerCase().charAt(0);
     if(letter.length === 1 && letter.match(/[a-z]/i)){
         icon.src = '/images/letters/letter-'+letter+'.svg'
     }
@@ -23,24 +23,54 @@ function addMessageGroup(channel) {
     node.setAttribute('class', 'message');
     div.setAttribute('class', 'divider');
     msggrp.setAttribute('class', 'messagegroup');
-    msggrp.innerText=channel.name;
+    msggrp.innerText=channelname;
     bttnwrap.setAttribute('class', 'button-wrapper');
     menu.setAttribute('class', 'menu');
     status.setAttribute('class', 'status');
     statuscircle.setAttribute('class', "status-circle green");
     bttn.setAttribute('class', 'message-button status-button open');
-    bttn.innerText="Open";
+    bttn.setAttribute("id", id);
+    bttn.innerText="Join";
     el.appendChild(node);
-    node.setAttribute("onClick","addRecievedMessage()");
+    node.setAttribute("onClick","JoinChat("+id+")");
     node.appendChild(div);
     node.appendChild(msggrp);
-    status.innerText="message snippet";
+    status.innerText=snippet;
     node.appendChild(status);
     bttnwrap.appendChild(bttn);
     bttnwrap.appendChild(menu);
     node.appendChild(bttnwrap);
     status.appendChild(statuscircle);
     }
+function JoinChat(name){
+  var bttn = document.getElementById(name);
+  bttn.setAttribute('class','message-button status-button');
+  bttn.innerText="Joined"
+  var data = JSON.stringify({
+    "name": "string",
+    "type": 1,
+    "members": [
+      {
+        "email": "string (email)"
+      }
+    ]
+  });
+  
+  var xhr = new XMLHttpRequest();
+  xhr.withCredentials = true;
+  
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === this.DONE) {
+      console.log(this.responseText);
+    }
+  });
+  
+  xhr.open("POST", "https://api.zoom.us/v2/chat/users/me/channels");
+  xhr.setRequestHeader("content-type", "application/json");
+  xhr.setRequestHeader("authorization", "Bearer filleracesstoken");
+  
+  xhr.send(data);
+}
 function addRecievedMessage(){
     var list = document.getElementById("chat");
     var message = document.createElement("div");

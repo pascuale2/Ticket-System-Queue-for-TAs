@@ -10,7 +10,7 @@ html
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
-    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
     link(rel='stylesheet' href='/stylesheets/professors.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
@@ -20,9 +20,9 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth 
+    // 7,8 - Google Auth
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
-    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js', integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
@@ -42,7 +42,8 @@ html
             .profile
               .row.justify-content-center
                 img#profilepic(src='/images/donut.png')
-          h2#profilename.text-center  username
+          h2#profilename.text-center Seth Thompson
+          h3.text-center
         hr
         ul.list-unstyled.components
           li
@@ -67,6 +68,8 @@ html
                   a(href='questions') Ask a Question
                 li
                   a(href='questions_search') Search Questions
+                li
+                  a(href='questions_asked') Asked Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -79,7 +82,7 @@ html
                 li
                   a(href='discussions') Discussion Board
                 li
-                  a(href='#') Group Chats
+                  a(href='chat') Group Chats
         hr
         ul.list-unstyled.components
           li
@@ -111,24 +114,38 @@ html
                   input.searchInput(id='search_input' type='text' name='professor' placeholder='e.g. Brian Franczak')
                   button.searchIcon(id='search_icon' type='submit')
                     i.fas.fa-search
-
-          hr
-          .searchResultContainer
-            for names in locals.data
-              if names.name != Null
-                .card
-                  if names.available == 1
-                    img(src='/images/person.png' alt='Avatar')
-                  else
-                    img(src='/images/person_offline.png' alt='Avatar')
-                  .cardContainer
-                    .d-flex.justify-content-center
-                      h3.text-center
-                        a(href='schedule/'+ names.name) Check Schedule
+                .d-flex.justify-content-center
+                  .select(id="sort_combobox")
+                    select(name="sort_combobox" id="sortComboBox")
+                      option(selected='selected' value='') Sort by
+                      option(type='text' value='available') Status
+                      option(type='text' value='name') Name
+                  .select(id="order_combobox")
+                    select(name="order_combobox" id="orderComboBox")
+                      option(selected='selected' value='ASC') Order
+                      option(type='text' value='ASC') Ascending
+                      option(type='text' value='DESC') Descending
+          br
+          if locals.data != Null
+            .searchResultContainer
+              for names in locals.data
+                if names.name != ""
+                  .card
                     if names.available == 1
-                      h3.text-center #{names.name}
-                      h5.text-center Available
+                      img(src='/images/person.png' alt='Avatar')
+                      .cardContainer
+                        h3.text-center #{names.name}
                     else
-                      h4.text-center #{names.name}
-                      h4.text-center Not Available
+                      img(src='/images/person_offline.png' alt='Avatar')
+                      .cardContainer
+                        h3.text-center(style='color: gray;') #{names.name}
+
+                    .button_container
+                      hr
+                      if names.available == 1
+                        h5.text-center Available
+                      else
+                        h5.text-center(style='color: gray;') Not Available
+                      a.btn.btn-primary.btn-block(href='schedule/'+ names.name id='schedule_button') View Answered Questions
+
     .overlay
