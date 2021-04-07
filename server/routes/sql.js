@@ -904,35 +904,19 @@ function createSchedule(connection, courseid, teaches_id, available_day, from, t
     if (error) throw new Error(error);
 
     zoom=body.join_url;
-  });
-
-  obtainScheduleID(connection, function(sched_id) {
-    console.log("max schedule id is: ",sched_id);
-    sched_id +=1;
-    console.log("max schedule id AFTER INCREMENTING: ",sched_id);
-    obtainSessionID(connection, courseid, function(sesh_id) {
-
-      // session already created, insert into schedule table
-      if(sesh_id.length > 0) {
-        console.log("session already created for session: ",sesh_id);
-
-        let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
-        VALUES(?, ?, ?, ?, ?, ?, ?)';
-        connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
-          if (err) {
-            console.log("Could not create schedule for: ", teaches_id);
-            callback(err);
-          } else {
-            callback(result);
-          }
-        });
-      }
-      // Session not created, create session and add new schedule
-      else {
-        createSession(connection, courseid, function(result) {
+    obtainScheduleID(connection, function(sched_id) {
+      console.log("max schedule id is: ",sched_id);
+      sched_id +=1;
+      console.log("max schedule id AFTER INCREMENTING: ",sched_id);
+      obtainSessionID(connection, courseid, function(sesh_id) {
+  
+        // session already created, insert into schedule table
+        if(sesh_id.length > 0) {
+          console.log("session already created for session: ",sesh_id);
+          //console.log(zoom);
           let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
           VALUES(?, ?, ?, ?, ?, ?, ?)';
-          connection.query(query, [teaches_id, sched_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+          connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
             if (err) {
               console.log("Could not create schedule for: ", teaches_id);
               callback(err);
@@ -940,10 +924,28 @@ function createSchedule(connection, courseid, teaches_id, available_day, from, t
               callback(result);
             }
           });
-        });
-      }
+        }
+        // Session not created, create session and add new schedule
+        else {
+          createSession(connection, courseid, function(result) {
+            let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
+            VALUES(?, ?, ?, ?, ?, ?, ?)';
+            connection.query(query, [teaches_id, sched_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+              if (err) {
+                console.log("Could not create schedule for: ", teaches_id);
+                callback(err);
+              } else {
+                callback(result);
+              }
+            });
+          });
+        }
+      });
     });
+    //console.log(body.join_url);
   });
+
+
 }
 
 function obtainSchedule(connection, teacher, callback) {
