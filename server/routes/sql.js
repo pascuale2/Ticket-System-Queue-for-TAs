@@ -961,7 +961,11 @@ function obtainSchedule(connection, teacher, callback) {
 }
 
 function obtainScheduleAndSession(connection, teacher, callback) {
-  let query = 'SELECT * FROM Schedule INNER JOIN Session ON Session.schedule_id = Schedule.schedule_id \
+  let query = 'SELECT * FROM Schedule \
+  INNER JOIN Session \
+  ON Session.schedule_id = Schedule.schedule_id \
+  INNER JOIN Course \
+  ON Course.course_id = Session.course_id\
   WHERE teacher_id = ?';
   connection.query(query, teacher, (err, result) => {
     if(err) {

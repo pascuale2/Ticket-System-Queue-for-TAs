@@ -11,7 +11,7 @@ html
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/schedule.css')
+    link(rel='stylesheet' href='/stylesheets/view_prof_schedule.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
     // 1 - FONT AWESOME SCRIPT
@@ -104,15 +104,28 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
       #content
+      .d-flex.justify-content-center
+        h4.title_container(id='scheduleTitle') Schedules for #{locals.teacher}
+      #courseContainer
         .d-flex.justify-content-center
           if locals.schedule != Null
             for schedule in locals.schedule
               .card(id='courseCard')
-                h4.text-center #{schedule.course_id}
-                #{schedule.available_day}
-                #{schedule.from_time}
-                #{schedule.to_time}
-                #{schedule.zoom_link}
+                .title_container(id='scheduleTitle') #{schedule.course_name}
+                hr(id='no_margin_line_break')
+                p(id='no_margin_paragraph').text-center
+                  z #{schedule.course_title}
+                hr(id='no_margin_line_break')
+                .title_container(id='scheduleTitle') Time
+                h3.text-center #{schedule.available_day}
+                .title_container(id='scheduleTitle')
+                  p(id='card_text').text-center  #{schedule.from_time} - #{schedule.to_time}
+                hr(id='no_margin_line_break')
+                .title_container(id='scheduleTitle') Zoom link:
+                p(id='no_margin_paragraph').text-center
+                  small
+                    small
+                      a(href=schedule.zoom_link) #{schedule.zoom_link}
 
           else
             .card(id='courseCard')
