@@ -477,8 +477,8 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
 
 router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
   var temp_prof_id = 4000011;
-  db.obtainProfessorSchedule(connection, temp_prof_id, function(scheduleResults) {
-    res.render('prof_schedule',{schedules: scheduleResults});
+  db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+    res.render('prof_schedule', {schedules: scheduleResults});
   });
 });
 
@@ -490,19 +490,24 @@ router.get('/prof_schedule/add_schedule', function(req, res, next) {    // Add n
   });
 });
 
-router.get('/prof_schedule/edit_schedule', function(req, res, next) {                 // Edit schedule, view schedule
-  console.log('made it to prof edit schedule');
-  res.render('prof_edit_schedule');
+router.get('/prof_schedule/:coursename/edit_schedule', function(req, res, next) {                 // Edit schedule, view schedule
+  var course_id = req.params.coursename;
+  var temp_prof_id = 4000011;
+  db.obtainProfessorSchedule(connection, temp_prof_id, course_id, function(scheduleResults) {
+    res.render('prof_edit-schedule', {schedules: scheduleResults});
+  });
 });
 
 // POST request to edit an existing schedule
-router.post('/prof_schedule/edit_schedule', function(req, res, next) {
-  console.log('editing prof schedule: ', req.body);
+router.post('/prof_schedule/:coursename/edit_schedule', function(req, res, next) {
+  var course_id = req.params.coursename;
   var temp_prof_id = 4000011;
   db.editSchedule(connection, req.body.day_combobox, req.body.start_time_combobox,
-    req.body.end_time_combobox, temp_prof_id, req.body.course_combobox, function(result) {
+    req.body.end_time_combobox, temp_prof_id, course_id, function(result) {
     console.log("Successfully edited schedule: ", result);
-    res.render('prof_schedule')
+    db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+      res.render('prof_schedule', {schedules: scheduleResults});
+    });
   });
 });
 

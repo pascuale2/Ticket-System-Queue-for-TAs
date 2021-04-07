@@ -859,13 +859,13 @@ function obtainScheduleID(connection, callback) {
 
 function editSchedule(connection, available_day, from_day, to_time, teaches_id, course_id, callback) {
   let query = 'UPDATE Schedule \
-INNER JOIN Session \
-ON Session.schedule_id = Schedule.schedule_id \
-SET available_day = ?, from_time = ?, to_time = ? \
-WHERE \
-teacher_id = ? \
-AND \
-course_id = ?;';
+  INNER JOIN Session \
+  ON Session.schedule_id = Schedule.schedule_id \
+  SET available_day = ?, from_time = ?, to_time = ? \
+  WHERE \
+  teacher_id = ? \
+  AND \
+  course_id = ?;';
   connection.query(query, [available_day, from_day, to_time, teaches_id, course_id], (err, result) => {
     if (err) {
       console.log("Could not edit schedule for: ", teaches_id);
@@ -932,12 +932,17 @@ function obtainSchedule(connection, teacher, callback) {
   });
 }
 
-function obtainProfessorSchedule(connection, teacher_id, callback) {
+function obtainProfessorSchedule(connection, teacher_id, course_id, callback) {
   let query = '\
   SELECT * \
   FROM Session INNER JOIN Schedule ON Session.schedule_id = Schedule.schedule_id \
   INNER JOIN Course ON Course.course_id = Session.course_id \
   WHERE Schedule.teacher_id= ?';
+
+  if (!(course_id === "")) {
+    query += " AND Session.course_id = '"+ course_id +"' ";
+  }
+
   connection.query(query, teacher_id, (err, result) => {
     if (err) {
       console.log("Could not find schedule for: ", teacher_id);

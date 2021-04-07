@@ -72,7 +72,7 @@ a:focus {
 #courseCard {
     margin: 10px;
     padding: 15px;
-    width: 300px;
+    width: 250px;
     background-color: #252525;
     box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
     transition: 0.3s;
@@ -98,7 +98,6 @@ a:focus {
     height: 50px;
 }
 
-
 #options_text{
     font-size: 12px;
 }
@@ -120,8 +119,20 @@ a:focus {
     font-size: 18px;
 }
 
+
 /* COMBO BOX PROPERTY @OVERRIDE */
 .select {
+    position: relative;
+    display: flex;
+    width: 250px;
+    height: 3em;
+    line-height: 3;
+    background: #252525;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.long_select {
     position: relative;
     display: flex;
     width: 250px;
@@ -138,4 +149,23 @@ select {
     font-size: 18px;
     color: #bbbbbb;
     cursor: pointer;
+}
+
+
+#submit_button {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 350px;
+    padding: 5px;
+    transition: .25s all ease;
+}
+
+#clear_button {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    padding: 5px;
+    transition: .25s all ease;
 }
