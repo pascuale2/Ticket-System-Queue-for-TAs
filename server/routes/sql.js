@@ -34,12 +34,12 @@ function configDatabase(req, res) {
  * @param {*} connection
  * @param {*} callback
  */
-function obtainAllCourses(connection, stud_id, callback){
+function obtainAllCourses(connection, student_id, callback){
   let query = 'SELECT * \
   FROM Takes INNER JOIN Student ON Takes.student_id = Student.student_id \
   INNER JOIN Course ON Course.course_id = Takes.course_id \
   WHERE Student.student_id = ?';
-  connection.query(query, stud_id, (err, result) => {
+  connection.query(query, student_id, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
     }else{
@@ -57,12 +57,12 @@ function obtainAllCourses(connection, stud_id, callback){
  * @param {*} connection
  * @param {*} callback
  */
-function obtainAddableCourses(connection, callback){
+function obtainAddableCourses(connection, teacher_id, callback){
   let query = 'SELECT course_id, course_name, course_title \
   FROM Teacher INNER JOIN Course ON Teacher.discipline_id = Course.discipline_id \
-  WHERE Teacher.teacher_id = 4000011';
+  WHERE Teacher.teacher_id = ?';
 
-  connection.query(query, (err, result) => {
+  connection.query(query, teacher_id, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
     }else{
@@ -78,13 +78,13 @@ function obtainAddableCourses(connection, callback){
  * @param {*} connection
  * @param {*} callback
  */
- function obtainTeachingCourses(connection, callback){
+ function obtainTeachingCourses(connection, teacher_id, callback){
   let query = 'SELECT Course.course_id, Course.course_name, Course.course_title \
   FROM Teacher INNER JOIN Teaches ON Teacher.teacher_id = Teaches.teacher_id \
   INNER JOIN Course ON Teaches.course_id = Course.course_id \
-  WHERE Teacher.teacher_id = 4000011';
+  WHERE Teacher.teacher_id = ?';
 
-  connection.query(query, (err, result) => {
+  connection.query(query, teacher_id, (err, result) => {
     if(err) {                                               // query failed
       console.log(err);
     }else{
@@ -100,14 +100,14 @@ function obtainAddableCourses(connection, callback){
  * @param {*} connection
  * @param {*} callback
  */
-function obtainAllProfessors(connection, callback){
+function obtainAllProfessors(connection, student_id, callback){
   let query = '\
   SELECT name\
   FROM Teacher, Teaches, Course \
   WHERE Teacher.teacher_id = Teaches.teacher_id AND Teaches.course_id = Course.course_id \
   AND Course.course_id IN (SELECT Course.course_id FROM Course, Takes, Student \
-  WHERE Course.course_id = Takes.course_id AND Takes.student_id = 100)';
-  connection.query(query, (err, result) => {
+  WHERE Course.course_id = Takes.course_id AND Takes.student_id = ? )';
+  connection.query(query, student_id, (err, result) => {
     if(err) {                                               // query failed
       console.log(err);
     } else {
@@ -199,6 +199,27 @@ function searchProfessor(connection, input, sort, order, callback) {
   if (!(sort === "")) {
     query += ' ORDER BY ' + sort + ' ' + order;
   }
+
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("CANNOT execute search", err);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
+ * searches professor from user input.
+ *
+ * @param {*} connection
+ * @param {*} input
+ * @param {*} callback
+ */
+function searchProfessorByName(connection, input, callback) {
+  let replacement = `'%${input}%'`;
+  let query = 'SELECT * FROM Teacher WHERE name like '+replacement;
 
   connection.query(query, (err, result) => {
     if (err) {
@@ -363,24 +384,6 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
 }
 
 
-//// TODO: Implement the following
-//// Queue section
-
-function getQueueID(connection, callback){
- let query = 'SELECT MAX(queue_id) AS max_num FROM Queue WHERE 1=1';
-  connection.query(query, (err, result) => {
-    if (err) {
-      console.log("Cannot find max queue_id");
-    } else {
-      result = JSON.parse(JSON.stringify(result))[0].max_num;
-      if (result == null) {
-        result = 0
-      }
-      callback(result);
-    }
-  });
-}
-
 /**
  * Obtains the user inputted course information.
  *
@@ -490,9 +493,9 @@ function createSessionID(connection, callback) {
 function createSession(connection, courseid, callback) {
   createSessionID(connection, function(sesh_id) {
     sesh_id +=1;
-    let query = 'INSERT INTO Session(session_id, course_id, teacher_id) \
+    let query = 'INSERT INTO Session(session_id, course_id, schedule_id) \
     VALUES(?, ?, ?)';
-    connection.query(query, [sesh_id, courseid, 0000000], (err, result) => {
+    connection.query(query, [sesh_id, courseid, sesh_id], (err, result) => {
       if (err) {
         console.log("cannot create session", err);
       } else {
@@ -545,16 +548,18 @@ function getDiscipline(connection, courseid, callback) {
   });
 }
 
-//// TODO: Implement the following
 //// Queue section
 
 function getQueueID(connection, callback){
- let query = 'SELECT MAX(queue_id) FROM Queue WHERE 1=1';
+ let query = 'SELECT MAX(queue_id) AS max_num FROM Queue WHERE 1=1';
   connection.query(query, (err, result) => {
     if (err) {
-    console.log("Cannot find max queue_id");
+      console.log("Cannot find max queue_id");
     } else {
-      result = JSON.parse(JSON.stringify(result));
+      result = JSON.parse(JSON.stringify(result))[0].max_num;
+      if (result == null) {
+        result = 0
+      }
       callback(result);
     }
   });
@@ -752,10 +757,10 @@ function insertStudent(connection, stud_id, stud_email, stud_name, callback) {
 
 /**
  * Obtains all the answered questions by the inputted student_id
- * 
- * @param {*} connection 
+ *
+ * @param {*} connection
  * @param {string|number} student_id the inputted student id we are trying to get answers from
- * @param {*} callback 
+ * @param {*} callback
  */
 function obtainAnsweredQuestionsByStudentID(connection, student_id, callback) {
   let query = 'SELECT * FROM \
@@ -772,6 +777,173 @@ function obtainAnsweredQuestionsByStudentID(connection, student_id, callback) {
   });
 }
 
+function getQuestionLabel(connection, teachesid, callback) {
+  let query = 'SELECT DISTINCT Question.label, Course.course_name \
+  FROM Question \
+  INNER JOIN Session \
+  ON Session.course_id = Question.course_id \
+  INNER JOIN Answer \
+  ON Answer.question_id = Question.question_id \
+  INNER JOIN Course \
+  ON Course.course_id = Question.course_id \
+  WHERE Answer.teacher_id = ?';
+
+  connection.query(query, teachesid, (err, result) => {
+    if(err) {
+      console.log("Could not find label with teacherid: ", teachesid, err);
+      callback(result)
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function getQuestionInfo(connection, label, teachesid, callback) {
+  let query = 'SELECT DISTINCT * \
+  FROM Question \
+  INNER JOIN Session \
+  ON Session.course_id = Question.course_id \
+  INNER JOIN Answer \
+  ON Answer.question_id = Question.question_id \
+  WHERE Answer.teacher_id = ?';
+
+  if (!(label === "")){
+  query += " AND Question.label = '"+label+"' ";
+  }
+
+  connection.query(query, teachesid, (err, result) => {
+    if(err) {
+      console.log("Could not find label with teacherid: ", teachesid, err);
+      callback(result)
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function matchEmailInfo(connection, email, callback) {
+  let query = 'SELECT teacher_id \
+  FROM Teacher \
+  WHERE email= ? ';
+  connection.query(query, email, (err, result) => {
+    if(err) {
+      console.log("Could not find email from list: ", email);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/****************
+ * SCHEDULE Section
+ *****************/
+
+function obtainScheduleID(connection, callback) {
+  let query = 'SELECT MAX(schedule_id) AS max_id FROM Session WHERE 1=1';
+   connection.query(query, (err, result) => {
+     if (err) {
+       console.log("Cannot find max schedule id");
+       callback(err);
+     } else {
+       result = JSON.parse(JSON.stringify(result))[0].max_id;
+       if (result == null) {
+         result = 0
+       }
+       callback(result);
+     }
+   });
+}
+
+function editSchedule(connection, available_day, from_day, to_time, teaches_id, course_id, callback) {
+  let query = 'UPDATE Schedule \
+INNER JOIN Session \
+ON Session.schedule_id = Schedule.schedule_id \
+SET available_day = ?, from_time = ?, to_time = ? \
+WHERE \
+teacher_id = ? \
+AND \
+course_id = ?;';
+  connection.query(query, [available_day, from_day, to_time, teaches_id, course_id], (err, result) => {
+    if (err) {
+      console.log("Could not edit schedule for: ", teaches_id);
+      callback(err);
+    } else {
+      callback(result);
+    }
+  });
+}
+
+function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback) {
+  //TODO: SETH THIS ZOOM VARIABLE IS FOR YOU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  var zoom = "";
+
+  obtainScheduleID(connection, function(sched_id) {
+    console.log("max schedule id is: ",sched_id);
+    sched_id +=1;
+    console.log("max schedule id AFTER INCREMENTING: ",sched_id);
+    obtainSessionID(connection, courseid, function(sesh_id) {
+
+      // session already created, insert into schedule table
+      if(sesh_id.length > 0) {
+        console.log("session already created for session: ",sesh_id);
+
+        let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
+        VALUES(?, ?, ?, ?, ?, ?, ?)';
+        connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+          if (err) {
+            console.log("Could not create schedule for: ", teaches_id);
+            callback(err);
+          } else {
+            callback(result);
+          }
+        });
+      }
+      // Session not created, create session and add new schedule
+      else {
+        createSession(connection, courseid, function(result) {
+          let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
+          VALUES(?, ?, ?, ?, ?, ?, ?)';
+          connection.query(query, [teaches_id, sched_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+            if (err) {
+              console.log("Could not create schedule for: ", teaches_id);
+              callback(err);
+            } else {
+              callback(result);
+            }
+          });
+        });
+      }
+    });
+  });
+}
+
+function obtainSchedule(connection, teacher, callback) {
+  let query = 'SELECT * FROM Schedule WHERE teacher_id = ?';
+  connection.query(query, teacher, (err, result) => {
+    if(err) {
+      console.log("cannot find session for ",teacher);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function obtainScheduleAndSession(connection, teacher, callback) {
+  let query = 'SELECT * FROM Schedule INNER JOIN Session ON Session.schedule_id = Schedule.schedule_id \
+  WHERE teacher_id = ?';
+  connection.query(query, teacher, (err, result) => {
+    if(err) {
+      console.log("cannot find session for ",teacher);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
 /**
  * exports the modules for the other .js files to use
  */
@@ -794,7 +966,7 @@ module.exports = {
   obtainAllQuestionInfoByStudentID,
   obtainAllQuestions,
   obtainAllTaught,
-  obtainAnsweredQuestionsByStudentID,  
+  obtainAnsweredQuestionsByStudentID,
   obtainCourseByQuestionId,
   obtainCourseInfo,
   obtainQuestions,
@@ -805,5 +977,13 @@ module.exports = {
   obtainSessionID,
   obtainTeaches,
   obtainTeachingCourses,
-  insertStudent
+  insertStudent,
+  searchProfessorByName,
+  getQuestionLabel,
+  getQuestionInfo,
+  matchEmailInfo,
+  editSchedule,
+  createSchedule,
+  obtainSchedule,
+  obtainScheduleAndSession
 };

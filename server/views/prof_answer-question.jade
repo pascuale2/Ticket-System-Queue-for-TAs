@@ -58,6 +58,16 @@ html
             a(href='/prof_questions')
               i.fas.fa-question-circle
               | Questions
+
+          li.active
+            a(href='#scheduleSubmenu' data-toggle='collapse' aria-expanded='false')
+              i.fas.fa-calendar
+              | Schedule
+            ul#scheduleSubmenu.collapse.list-unstyled
+              li
+                a(href='/prof_schedule') View Schedule(s)
+              li 
+                a(href='/prof_schedule/add_schedule') Add Schedule(s)
         hr
         ul.list-unstyled.components
           li
@@ -70,7 +80,7 @@ html
               | Logout
       // Page Content
       #page
-        nav.navbar.navbar-expand-ml
+        nav.navbar.navbar-expand-md
           #navbar-header.container-fluid
             a#sidebarCollapse(href='#')
               i.fas.fa-bars

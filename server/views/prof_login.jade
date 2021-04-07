@@ -19,18 +19,18 @@ html(lang='en')
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
     script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js' integrity='sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0' crossorigin='anonymous')
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=renderButton' async='' defer='')
+    script(src='https://apis.google.com/js/platform.js?onload=renderButtonProf' async='' defer='')
   body
     .background-image
     .loginBox
       img#avatar.rotate(src='/images/donut.png')
       h2.text-center Maple Donut
       h3.text-center Login
-      form(action='/login' method='post')
+      form
         p Username
-        input(type='text' name='email_input' placeholder='')
+        input(type='text' name='' placeholder='')
         p Password
-        input(type='password' name='password_input' placeholder='')
-        input(type='submit' value='Login')
+        input(type='password' name='' placeholder='')
+        input(type='submit' name='' value='Login')
         // google sign in button
-      #my-signin2
+        #my-signin2
