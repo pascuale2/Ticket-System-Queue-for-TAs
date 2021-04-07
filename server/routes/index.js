@@ -342,23 +342,20 @@ router.get('/token', function (req, res) {
 })
 
 router.post('/chat/redirect', function (req, res) {
-  var message = req.body.message;
   var channel = req.body.to_channel;
-  //console.log(req.body.message,req.body.to_channel);
+  console.log(req.body.to_channel);
   //console.log(req.body);
   var options = {
     method: 'POST',
-    url: 'https://api.zoom.us/v2/chat/users/me/messages',
+    url: 'https://api.zoom.us/v2/chat/users/me/channels',
     headers: {'content-type': 'application/json', authorization: 'Bearer'+req.app.locals.authtokn},
-    body: {
-      message: message,
-      to_channel: channel,
-    },
+    body: {name: channel, type: 1, members: [{email: 'gamerghost23@hotmail.com'}]},
     json: true
   };
+  
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-
+  
     console.log(body);
   });
   res.end("yes");

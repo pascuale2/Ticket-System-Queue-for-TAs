@@ -29,10 +29,10 @@ function addMessageGroup(channelname,snippet,id) {
     status.setAttribute('class', 'status');
     statuscircle.setAttribute('class', "status-circle green");
     bttn.setAttribute('class', 'message-button status-button open');
-    bttn.setAttribute("id", id);
+    bttn.setAttribute("id", channelname);
     bttn.innerText="Join";
     el.appendChild(node);
-    node.setAttribute("onClick","JoinChat("+id+")");
+    node.setAttribute("onClick","JoinChat('"+channelname+"')");
     node.appendChild(div);
     node.appendChild(msggrp);
     status.innerText=snippet;
@@ -46,30 +46,7 @@ function JoinChat(name){
   var bttn = document.getElementById(name);
   bttn.setAttribute('class','message-button status-button');
   bttn.innerText="Joined"
-  var data = JSON.stringify({
-    "name": "string",
-    "type": 1,
-    "members": [
-      {
-        "email": "string (email)"
-      }
-    ]
-  });
-  
-  var xhr = new XMLHttpRequest();
-  xhr.withCredentials = true;
-  
-  xhr.addEventListener("readystatechange", function () {
-    if (this.readyState === this.DONE) {
-      console.log(this.responseText);
-    }
-  });
-  
-  xhr.open("POST", "https://api.zoom.us/v2/chat/users/me/channels");
-  xhr.setRequestHeader("content-type", "application/json");
-  xhr.setRequestHeader("authorization", "Bearer filleracesstoken");
-  
-  xhr.send(data);
+  sendMessage(name);
 }
 function addRecievedMessage(){
     var list = document.getElementById("chat");
@@ -103,9 +80,8 @@ function addRecievedMessage(){
     cont.innerText="Why do seagulls fly over the ocean? Because if they flew over the bay, we'd call them bagels.";
     rcvmsgcnt.appendChild(cont);
 }
-function sendMessage(authtokn,channel,content){
+function sendMessage(channel){
     var data = JSON.stringify({
-        "message": content,
         "to_channel": channel
       });
       
