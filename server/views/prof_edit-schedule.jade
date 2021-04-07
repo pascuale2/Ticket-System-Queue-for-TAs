@@ -11,7 +11,7 @@ html
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/prof_schedule.css')
+    link(rel='stylesheet' href='/stylesheets/prof_edit-schedule.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
     // 1 - FONT AWESOME SCRIPT
@@ -90,32 +90,73 @@ html
             a(href='#')
       #content
         #courseContainer
-          h1.text-center Your Schedules
-          .d-flex.justify-content-center
-            if locals.schedules != Null
-              for schedule in locals.schedules
-                .card(id='courseCard')
-                  h3.text-center #{schedule.course_name}
-                  .title_container(id='cardTitle')
-                    p(id='card_text').text-center  #{schedule.course_title}
-                  hr(id='no_margin_line_break')
-                  p(id='no_margin_paragraph').text-center 
-                    small 
-                      small 
-                        small CURRENT SCHEDULE
-                  h3.text-center #{schedule.available_day}
-                  .title_container(id='scheduleTitle')
-                    p(id='card_text').text-center  #{schedule.from_time} - #{schedule.to_time}
-                  hr(id='no_margin_line_break')
-                  p(id='no_margin_paragraph').text-center 
-                    small 
-                      small 
-                        small SCHEDULE OPTIONS
-                  .cardContainer(id='cardOptions')
-                    a.btn.btn-info.btn-block.btn-lg(href='/prof_schedule/'+schedule.course_id+'/edit_schedule') Edit Schedule
-                    hr#invisible_line_break
-                    a.btn.btn-danger.btn-block.btn-lg(href='#') Delete Schedule
-            else
-              br
-              h4.text-center You currently don't have any schedules :(
+          h1.text-center.mb-1 Edit Schedule
+          p(id='no_margin_paragraph').text-center 
+            small 
+              small 
+                small CURRENT SCHEDULE TIME
+          h3.text-center #{locals.schedules[0].available_day}
+          .title_container(id='scheduleTitle')
+            h4(id='card_text').text-center  #{locals.schedules[0].from_time} - #{locals.schedules[0].to_time}
+
+          hr(id='no_margin_line_break')
+          h3.text-center.mb-1 NEW SCHEDULE TIME
+          br
+          form(action='/prof_schedule/'+locals.schedules[0].course_id+'/edit_schedule' method='post')
+            h4.text-center.mb-0 1) What Day?
+            .d-flex.justify-content-center
+              .select
+                select(name="day_combobox" id="dayComboBox")
+                  option(selected) Select a Day
+                  option(type='text' value='Monday') Monday
+                  option(type='text' value='Tuesday') Tuesday
+                  option(type='text' value='Wednesday') Wednesday
+                  option(type='text' value='Thursday') Thursday
+                  option(type='text' value='Friday') Friday
+                  option(type='text' value='Saturday') Saturday
+                  option(type='text' value='Sunday') Sunday
+
+            br
+            h4.text-center.mb-0 2) What Time slot fits best for you?
+            .d-flex.justify-content-center
+              .select
+                select(name="start_time_combobox" id="startTimeComboBox")
+                  option(selected) Starting Time
+                  option(type='text' value='8:00AM') 8:00 AM
+                  option(type='text' value='9:00AM') 9:00 AM
+                  option(type='text' value='10:00AM') 10:00 AM
+                  option(type='text' value='11:00AM') 11:00 AM
+                  option(type='text' value='12:00PM') 12:00 PM
+                  option(type='text' value='1:00PM') 1:00 PM
+                  option(type='text' value='2:00PM') 2:00 PM
+                  option(type='text' value='3:00PM') 3:00 PM
+                  option(type='text' value='4:00PM') 4:00 PM
+                  option(type='text' value='5:00PM') 5:00 PM
+                  option(type='text' value='6:00PM') 6:00 PM
+                  option(type='text' value='7:00PM') 7:00 PM
+                  option(type='text' value='8:00PM') 8:00 PM
+              .col-md-auto
+              .select
+                select(name="end_time_combobox" id="EndTimeComboBox")
+                  option(selected) Ending Time
+                  option(type='text' value='9:00AM') 9:00 AM
+                  option(type='text' value='10:00AM') 10:00 AM
+                  option(type='text' value='11:00AM') 11:00 AM
+                  option(type='text' value='12:00PM') 12:00 PM
+                  option(type='text' value='1:00PM') 1:00 PM
+                  option(type='text' value='2:00PM') 2:00 PM
+                  option(type='text' value='3:00PM') 3:00 PM
+                  option(type='text' value='4:00PM') 4:00 PM
+                  option(type='text' value='5:00PM') 5:00 PM
+                  option(type='text' value='6:00PM') 6:00 PM
+                  option(type='text' value='7:00PM') 7:00 PM
+                  option(type='text' value='8:00PM') 8:00 PM
+                  option(type='text' value='9:00PM') 9:00 PM
+            br
+            .d-xl-flex.justify-content-center.h-100
+              button.btn.btn-primary(type='submit' id='submit_button') Submit 
+                i.fas.fa-check
+              .col-md-auto
+              button.btn.btn-danger(type='reset' id='clear_button') Clear
+                i.fas.fa-trash
     .overlay

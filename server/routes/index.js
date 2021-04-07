@@ -420,7 +420,7 @@ router.get('/prof_home', function(req, res, next) {
 router.get('/prof_courses', function(req, res, next) {
   var temp_prof_id = 4000011;
   db.obtainAddableCourses(connection, function(courseResults) {
-    db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+    db.obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
       res.render('prof_courses', {
         "data": courseResults,
         "count": questionCountResults});
@@ -492,7 +492,7 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
 });
 
 /**********************************************
- *            SCHEDULE ROUTING
+ *            SCHEDULE ROUTING                *
  **********************************************/
 
 router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
