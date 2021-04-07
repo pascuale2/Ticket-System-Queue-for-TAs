@@ -493,9 +493,9 @@ function createSessionID(connection, callback) {
 function createSession(connection, courseid, callback) {
   createSessionID(connection, function(sesh_id) {
     sesh_id +=1;
-    let query = 'INSERT INTO Session(session_id, course_id, teacher_id) \
+    let query = 'INSERT INTO Session(session_id, course_id, schedule_id) \
     VALUES(?, ?, ?)';
-    connection.query(query, [sesh_id, courseid, 0000000], (err, result) => {
+    connection.query(query, [sesh_id, courseid, sesh_id], (err, result) => {
       if (err) {
         console.log("cannot create session", err);
       } else {
@@ -837,6 +837,60 @@ function matchEmailInfo(connection, email, callback) {
   });
 }
 
+/****************
+ * SCHEDULE Section
+ *****************/
+
+function obtainScheduleID(connection, callback) {
+  let query = 'SELECT MAX(schedule_id) AS max_id FROM Schedule WHERE 1=1';
+   connection.query(query, (err, result) => {
+     if (err) {
+       console.log("Cannot find max schedule id");
+       callback(err);
+     } else {
+       result = JSON.parse(JSON.stringify(result))[0].max_id;
+       if (result == null) {
+         result = 0
+       }
+       callback(result);
+     }
+   });
+}
+
+function editSchedule(connection, avail, from, to, zoom, passwd, teaches_id, callback) {
+  let query = 'UPDATE Schedule SET available_day = ?, from_time = ?, to_time = ?, zoom_link = ?, zoom_passwd = ? \
+  WHERE teacher_id = ?';
+  connection.query(query, [avail, from, to, zoom, passwd, teaches_id], (err, result) => {
+    if (err) {
+      console.log("Could not edit schedule for: ", teaches_id);
+      callback(err);
+    } else {
+      callback(result);
+    }
+  });
+}
+
+function createSchedule(connection, courseid, teaches_id, callback) {
+  obtainScheduleID(connection, function(sched_id) {
+    console.log("max schedule id is: ",sched_id);
+    sched_id +=1;
+
+    createSession(connection, courseid, function(result) {
+
+      let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
+      VALUES(?, ?, ?, ?, ?, ?, ?)';
+      connection.query(query, [teaches_id, sched_id, avail, from, to, zoom, passwd, teaches_id], (err, result) => {
+        if (err) {
+          console.log("Could not create schedule for: ", teaches_id);
+          callback(err);
+        } else {
+          callback(result);
+        }
+      });
+    });
+  });
+}
+
 
 /**
  * exports the modules for the other .js files to use
@@ -875,5 +929,7 @@ module.exports = {
   searchProfessorByName,
   getQuestionLabel,
   getQuestionInfo,
-  matchEmailInfo
+  matchEmailInfo,
+  editSchedule,
+  createSchedule
 };

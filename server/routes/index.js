@@ -471,14 +471,37 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
   });
 });
 
-router.get('/prof_schedule', function(req, res, next) {
+/********************
+ * Schedule routing
+ *********************/
+
+router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
+  //db.getProfSchedule(connection, prof, );
   console.log('made it to prof schedule');
   res.render('prof_schedule');
 });
 
-router.get('/prof_schedule/add_schedule', function(req, res, next) {
+router.get('/prof_schedule/add_schedule', function(req, res, next) {    // Add new schedule
   console.log('made it to prof add schedule');
   res.render('prof_add-schedule');
+});
+
+// POST request to edit an existing schedule
+router.post('/prof_schedule', function(req, res, next) {
+  console.log('editing prof schedule', req.params);
+  db.editSchedule(connection, function(result) {
+    console.log(result);
+    res.render('prof_schedule')
+  });
+});
+
+// POST request to create a new schedule
+router.post('/prof_schedule/add_schedule', function(req, res, next) {
+  console.log('creating new schedule', req.params);
+  db.createSchedule(connection, function(result) {
+    console.log(result);
+    res.render('prof_add-schedule');
+  });
 });
 
 module.exports = router;
