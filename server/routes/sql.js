@@ -876,9 +876,35 @@ function editSchedule(connection, available_day, from_day, to_time, teaches_id, 
   });
 }
 
-function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback) {
+function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback,authtokn) {
   //TODO: SETH THIS ZOOM VARIABLE IS FOR YOU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  var request = require("request");
   var zoom = "";
+  var options = {
+    method: 'POST',
+    url: 'https://api.zoom.us/v2/users/me/meetings',
+    headers: {'content-type': 'application/json', authorization: 'Bearer' +authtokn},
+    body: {
+      topic: 'it works',
+      type: '3',
+      password: 'password',
+      agenda: 'stuff',
+      settings: {
+        join_before_host: 'True',
+        watermark: 'False',
+        use_pmi: 'True',
+        audio: 'both',
+        auto_recording: 'none'
+      }
+    },
+    json: true
+  };
+
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+
+    zoom=body.join_url;
+  });
 
   obtainScheduleID(connection, function(sched_id) {
     console.log("max schedule id is: ",sched_id);
