@@ -68,7 +68,7 @@ router.get('/schedule/:profname', function(req, res, next){
           c+=","
         }
         var c = c.replace(/.$/,")");
-      
+
       db.obtainAllTaught(connection, teaches_id, c, function(courses) {
         db.getQuestionLabel(connection, teaches_id, function(labels) {
           console.log(labels);
@@ -104,8 +104,8 @@ router.get('/schedule/:profname/current_prof_schedule', function(req, res, next)
     var teaches_id = result[0].teacher_id;
     var temp_prof_id = 4000011;
     db.obtainScheduleAndSession(connection, temp_prof_id, function(sched) {
-        console.log(sched);
-        res.render('view_prof_schedule', {"schedule": sched});
+        console.log("sched is: ", sched);
+        res.render('view_prof_schedule', {"schedule": sched, "teacher": id});
     });
   });
 });
@@ -293,6 +293,8 @@ router.get('/discussions', function(req, res, next) {
 });
 
 router.get('/chat', function(req, res, next) {
+  //console.log("test");
+  //console.log(req.app.locals.authtokn);
   res.render('chat');
 });
 
@@ -327,7 +329,9 @@ router.get('/token/code', function (req, res) {
     var authtokn = JSON.parse(body).access_token;
     req.app.locals.zoomtokn=body;
     req.app.locals.authtokn=authtokn;
-    zoom.getchannels(authtokn,res,req);
+    //console.log(authtokn);
+    res.redirect("https://localhost:3000/home");
+    //zoom.getchannels(authtokn,res,req);
   });
 })
 
@@ -493,8 +497,8 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
 
 router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
   var temp_prof_id = 4000011;
-  db.obtainProfessorSchedule(connection, temp_prof_id, function(scheduleResults) {
-    res.render('prof_schedule',{schedules: scheduleResults});
+  db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+    res.render('prof_schedule', {schedules: scheduleResults});
   });
 });
 
@@ -506,19 +510,24 @@ router.get('/prof_schedule/add_schedule', function(req, res, next) {    // Add n
   });
 });
 
-router.get('/prof_schedule/edit_schedule', function(req, res, next) {                 // Edit schedule, view schedule
-  console.log('made it to prof edit schedule');
-  res.render('prof_edit_schedule');
+router.get('/prof_schedule/:coursename/edit_schedule', function(req, res, next) {                 // Edit schedule, view schedule
+  var course_id = req.params.coursename;
+  var temp_prof_id = 4000011;
+  db.obtainProfessorSchedule(connection, temp_prof_id, course_id, function(scheduleResults) {
+    res.render('prof_edit-schedule', {schedules: scheduleResults});
+  });
 });
 
 // POST request to edit an existing schedule
-router.post('/prof_schedule/edit_schedule', function(req, res, next) {
-  console.log('editing prof schedule: ', req.body);
+router.post('/prof_schedule/:coursename/edit_schedule', function(req, res, next) {
+  var course_id = req.params.coursename;
   var temp_prof_id = 4000011;
   db.editSchedule(connection, req.body.day_combobox, req.body.start_time_combobox,
-    req.body.end_time_combobox, temp_prof_id, req.body.course_combobox, function(result) {
+    req.body.end_time_combobox, temp_prof_id, course_id, function(result) {
     console.log("Successfully edited schedule: ", result);
-    res.render('prof_schedule')
+    db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+      res.render('prof_schedule', {schedules: scheduleResults});
+    });
   });
 });
 
@@ -529,7 +538,7 @@ router.post('/prof_schedule/add_schedule', function(req, res, next) {
   db.createSchedule(connection, req.body.course_combobox, temp_prof_id, req.body.day_combobox,
     req.body.start_time_combobox, req.body.end_time_combobox, "", function(result) {
     res.render('prof_add-schedule');
-  });
+  },req.app.locals.authtokn);
 });
 
 module.exports = router;

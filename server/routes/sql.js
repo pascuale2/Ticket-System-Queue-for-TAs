@@ -859,13 +859,13 @@ function obtainScheduleID(connection, callback) {
 
 function editSchedule(connection, available_day, from_day, to_time, teaches_id, course_id, callback) {
   let query = 'UPDATE Schedule \
-INNER JOIN Session \
-ON Session.schedule_id = Schedule.schedule_id \
-SET available_day = ?, from_time = ?, to_time = ? \
-WHERE \
-teacher_id = ? \
-AND \
-course_id = ?;';
+  INNER JOIN Session \
+  ON Session.schedule_id = Schedule.schedule_id \
+  SET available_day = ?, from_time = ?, to_time = ? \
+  WHERE \
+  teacher_id = ? \
+  AND \
+  course_id = ?;';
   connection.query(query, [available_day, from_day, to_time, teaches_id, course_id], (err, result) => {
     if (err) {
       console.log("Could not edit schedule for: ", teaches_id);
@@ -876,9 +876,35 @@ course_id = ?;';
   });
 }
 
-function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback) {
+function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback,authtokn) {
   //TODO: SETH THIS ZOOM VARIABLE IS FOR YOU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  var request = require("request");
   var zoom = "";
+  var options = {
+    method: 'POST',
+    url: 'https://api.zoom.us/v2/users/me/meetings',
+    headers: {'content-type': 'application/json', authorization: 'Bearer' +authtokn},
+    body: {
+      topic: 'it works',
+      type: '3',
+      password: 'password',
+      agenda: 'stuff',
+      settings: {
+        join_before_host: 'True',
+        watermark: 'False',
+        use_pmi: 'True',
+        audio: 'both',
+        auto_recording: 'none'
+      }
+    },
+    json: true
+  };
+
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+
+    zoom=body.join_url;
+  });
 
   obtainScheduleID(connection, function(sched_id) {
     console.log("max schedule id is: ",sched_id);
@@ -933,7 +959,11 @@ function obtainSchedule(connection, teacher, callback) {
 }
 
 function obtainScheduleAndSession(connection, teacher, callback) {
-  let query = 'SELECT * FROM Schedule INNER JOIN Session ON Session.schedule_id = Schedule.schedule_id \
+  let query = 'SELECT * FROM Schedule \
+  INNER JOIN Session \
+  ON Session.schedule_id = Schedule.schedule_id \
+  INNER JOIN Course \
+  ON Course.course_id = Session.course_id\
   WHERE teacher_id = ?';
   connection.query(query, teacher, (err, result) => {
     if(err) {
@@ -945,12 +975,17 @@ function obtainScheduleAndSession(connection, teacher, callback) {
   });
 }
 
-function obtainProfessorSchedule(connection, teacher_id, callback) {
+function obtainProfessorSchedule(connection, teacher_id, course_id, callback) {
   let query = '\
   SELECT * \
   FROM Session INNER JOIN Schedule ON Session.schedule_id = Schedule.schedule_id \
   INNER JOIN Course ON Course.course_id = Session.course_id \
   WHERE Schedule.teacher_id= ?';
+
+  if (!(course_id === "")) {
+    query += " AND Session.course_id = '"+ course_id +"' ";
+  }
+
   connection.query(query, teacher_id, (err, result) => {
     if (err) {
       console.log("Could not find schedule for: ", teacher_id);
