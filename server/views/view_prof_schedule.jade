@@ -104,31 +104,30 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
       #content
-      .d-flex.justify-content-center
-        h4.title_container(id='scheduleTitle') Schedules for #{locals.teacher}
-      #courseContainer
-        .d-flex.justify-content-center
-          if locals.schedule != Null
-            for schedule in locals.schedule
-              .card(id='courseCard')
-                .title_container(id='scheduleTitle') #{schedule.course_name}
-                hr(id='no_margin_line_break')
-                p(id='no_margin_paragraph').text-center
-                  z #{schedule.course_title}
-                hr(id='no_margin_line_break')
-                .title_container(id='scheduleTitle') Time
-                h3.text-center #{schedule.available_day}
-                .title_container(id='scheduleTitle')
-                  p(id='card_text').text-center  #{schedule.from_time} - #{schedule.to_time}
-                hr(id='no_margin_line_break')
-                .title_container(id='scheduleTitle') Zoom link:
-                p(id='no_margin_paragraph').text-center
-                  small
+        h1.text-center Schedules for #{locals.teacher}
+        #courseContainer
+          .d-flex.justify-content-center
+            if locals.schedule != Null
+              for schedule in locals.schedule
+                .card(id='courseCard')
+                  .title_container(id='scheduleTitle') #{schedule.course_name}
+                  hr(id='no_margin_line_break')
+                  .course_container
+                    p(id='no_margin_paragraph').text-center
+                      z #{schedule.course_title}
+                  hr(id='no_margin_line_break')
+                  .title_container(id='scheduleTitle') Time
+                  h3.text-center #{schedule.available_day}
+                  .title_container(id='scheduleTitle')
+                    p(id='card_text').text-center  #{schedule.from_time} - #{schedule.to_time}
+                  hr(id='no_margin_line_break')
+                  .title_container(id='scheduleTitle') Zoom link:
+                  p(id='no_margin_paragraph').text-center
                     small
-                      a(href=schedule.zoom_link) #{schedule.zoom_link}
-
-          else
-            .card(id='courseCard')
-              h4.text-center No Schedules Available
+                      small
+                        a.btn.btn-danger.btn-block.btn-lg(href=schedule.zoom_link) Zoom Link
+            else
+              .card(id='courseCard')
+                h4.text-center No Schedules Available
 
     .overlay

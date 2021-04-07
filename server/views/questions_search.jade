@@ -106,8 +106,6 @@ html
         #content
           br
           br
-          br
-          br
           h2.text-center Have a question? We'll try to find an answer!
           .container.h-100
             form(action='/questions_search' method='post')
@@ -135,14 +133,18 @@ html
                 for questions in locals.data
                   if questions.question_title != Null
                     .card
-                      h3.text-center #{questions.question_title}
-                      p.text-center  Label: #{questions.label} | Course: #{questions.course_name}
-                      if questions.question_status == 0
-                        p.text-center Status: Answered
-                      else 
-                        p.text-center Status Unanswered
+                      .questionContainer
+                        h3.text-center #{questions.question_title}
+                        p.text-center  Label: #{questions.label} | Course: #{questions.course_name}
+                        if questions.question_status == 0
+                          p.text-center Status: Answered
+                        else 
+                          p.text-center Status Unanswered
                       hr(id='hr_light')
                       .cardContainer
                         p(id='desc_header').text-center Description:
                         h4.text-center #{questions.question_desc}
+                      .d-flex.justify-content-center
+                        a.btn.btn-outline-warning.btn-block.btn-lg(href='#') Star Question
+                          i.fas.fa-star
     .overlay
