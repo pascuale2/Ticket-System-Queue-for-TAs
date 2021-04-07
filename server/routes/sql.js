@@ -823,6 +823,20 @@ function getQuestionInfo(connection, label, teachesid, callback) {
   });
 }
 
+function matchEmailInfo(connection, email, callback) {
+  let query = 'SELECT teacher_id \
+  FROM Teacher \
+  WHERE email= ? ';
+  connection.query(query, email, (err, result) => {
+    if(err) {
+      console.log("Could not find email from list: ", email);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
 
 /**
  * exports the modules for the other .js files to use
@@ -860,5 +874,6 @@ module.exports = {
   insertStudent,
   searchProfessorByName,
   getQuestionLabel,
-  getQuestionInfo
+  getQuestionInfo,
+  matchEmailInfo
 };

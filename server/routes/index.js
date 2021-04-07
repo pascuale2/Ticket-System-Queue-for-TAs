@@ -20,6 +20,13 @@ router.get('/', function(req, res, next) {
   res.render('login');
 });
 
+router.post('/login', function(req, res, next) {
+  console.log(req.body.email_input)
+  db.matchEmailInfo(connection, req.body.email_input, function(teacherID) {
+    console.log("TEACHER ID RESULTS: ", teacherID);
+  });
+});
+
 router.get('/home', function(req, res, next) {
   console.log({data: student});
   db.obtainAllCourses(connection, student.id, function(courseResults){
@@ -30,15 +37,16 @@ router.get('/home', function(req, res, next) {
     });
   });
 });
+
 router.get('/prof_login', function(req, res, next) {
   connection = db.configDatabase(req, res);
   res.render('prof_login');
 });
+
 router.get('/discussions', function(req, res, next) {
   res.render('discussions');
 });
 
-//TODO: FIX THIS SHIT
 router.get('/professors/:coursename', function(req, res, next){
   var id = req.params.coursename;
   db.obtainTeaches(connection, id, function(result) {

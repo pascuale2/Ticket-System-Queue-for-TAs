@@ -26,11 +26,11 @@ html(lang='en')
       img#avatar.rotate(src='/images/donut.png')
       h2.text-center Maple Donut
       h3.text-center Login
-      form
+      form(action='/login' method='post')
         p Username
-        input(type='text' name='' placeholder='')
+        input(type='text' name='email_input' placeholder='')
         p Password
-        input(type='password' name='' placeholder='')
-        input(type='submit' name='' value='Login')
+        input(type='password' name='password_input' placeholder='')
+        input(type='submit' value='Login')
         // google sign in button
-        #my-signin2
+      #my-signin2
