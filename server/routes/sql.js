@@ -932,7 +932,20 @@ function obtainSchedule(connection, teacher, callback) {
   });
 }
 
-function obtainProfessorSchedule(connection, teacher_id, course_id, callback) {
+function obtainScheduleAndSession(connection, teacher, callback) {
+  let query = 'SELECT * FROM Schedule INNER JOIN Session ON Session.schedule_id = Schedule.schedule_id \
+  WHERE teacher_id = ?';
+  connection.query(query, teacher, (err, result) => {
+    if(err) {
+      console.log("cannot find session for ",teacher);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function obtainProfessorSchedule(connection, teacher_id, callback) {
   let query = '\
   SELECT * \
   FROM Session INNER JOIN Schedule ON Session.schedule_id = Schedule.schedule_id \
@@ -995,5 +1008,7 @@ module.exports = {
   matchEmailInfo,
   editSchedule,
   createSchedule,
-  obtainSchedule
+  obtainSchedule,
+  obtainScheduleAndSession
+
 };

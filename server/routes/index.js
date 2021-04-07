@@ -68,7 +68,7 @@ router.get('/schedule/:profname', function(req, res, next){
           c+=","
         }
         var c = c.replace(/.$/,")");
-
+      
       db.obtainAllTaught(connection, teaches_id, c, function(courses) {
         db.getQuestionLabel(connection, teaches_id, function(labels) {
           console.log(labels);
@@ -82,7 +82,7 @@ router.get('/schedule/:profname', function(req, res, next){
 /*
  * Displays the courses by each label from /schedule
  */
-router.get('/schedule/:profname/:label', function(req, res, next) {
+router.get('/schedule/:profname/:label/view_answers', function(req, res, next) {
   var label = req.params.label;
   var id = req.params.profname;
   db.searchProfessorByName(connection, id, function(result) {
@@ -90,6 +90,22 @@ router.get('/schedule/:profname/:label', function(req, res, next) {
     db.getQuestionInfo(connection, label, teaches_id, function(result) {
       console.log("sorted labels are : ",result);
       res.render('question_overview', {"data": result, "labeltitle": label, "teacher":id});
+    });
+  });
+});
+
+/*
+ * Gets the current profs schedule
+*/
+router.get('/schedule/:profname/current_prof_schedule', function(req, res, next) {
+  var id = req.params.profname;
+  console.log(id);
+  db.searchProfessorByName(connection, id, function(result) {
+    var teaches_id = result[0].teacher_id;
+    var temp_prof_id = 4000011;
+    db.obtainScheduleAndSession(connection, temp_prof_id, function(sched) {
+        console.log(sched);
+        res.render('view_prof_schedule', {"schedule": sched});
     });
   });
 });

@@ -103,7 +103,9 @@ html
               a(href='/home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
+
       #content
+        a(href='/schedule/'+locals.teacher+'/current_prof_schedule') Check #{locals.teacher} Schedule
         #courseContainer
           h1.text-center #{locals.teacher}
           h4.text-center Labels/Tags used for Questions Asked:
@@ -112,8 +114,8 @@ html
             if locals.data != Null
               for session in locals.data
                 .card(id='courseCard')
-                  p(id='no_margin_paragraph').text-center 
-                    small 
+                  p(id='no_margin_paragraph').text-center
+                    small
                       small LABEL:
                   h3.text-center #{session.label}
                   hr
@@ -129,7 +131,7 @@ html
                       small
                         small COURSE OPTIONS
                   .cardContainer(id='cardOptions')
-                    a.btn.btn-primary.btn-block.btn-lg(href='/schedule/'+locals.teacher+'/'+session.label) View Questions
+                    a.btn.btn-primary.btn-block.btn-lg(href='/schedule/'+locals.teacher+'/'+session.label+'/view_answers') View Questions
                     a.btn.btn-danger.btn-block.btn-lg(href='https://us05web.zoom.us/s/81138724882?pwd=NmtNTGExdFZaVGdKOXlDYW4xWjUvdz09') Zoom Link
                       i.fas.fa-video.fa-fw
     .overlay
