@@ -857,10 +857,16 @@ function obtainScheduleID(connection, callback) {
    });
 }
 
-function editSchedule(connection, avail, from, to, zoom, passwd, teaches_id, callback) {
-  let query = 'UPDATE Schedule SET available_day = ?, from_time = ?, to_time = ?, zoom_link = ?, zoom_passwd = ? \
-  WHERE teacher_id = ?';
-  connection.query(query, [avail, from, to, zoom, passwd, teaches_id], (err, result) => {
+function editSchedule(connection, available_day, from_day, to_time, teaches_id, course_id, callback) {
+  let query = 'UPDATE Schedule \
+INNER JOIN Session \
+ON Session.schedule_id = Schedule.schedule_id \
+SET available_day = ?, from_time = ?, to_time = ? \
+WHERE \
+teacher_id = ? \
+AND \
+course_id = ?;';
+  connection.query(query, [available_day, from_day, to_time, teaches_id, course_id], (err, result) => {
     if (err) {
       console.log("Could not edit schedule for: ", teaches_id);
       callback(err);
@@ -914,6 +920,17 @@ function createSchedule(connection, courseid, teaches_id, available_day, from, t
   });
 }
 
+function obtainSchedule(connection, teacher, callback) {
+  let query = 'SELECT * FROM Schedule WHERE teacher_id = ?';
+  connection.query(query, teacher, (err, result) => {
+    if(err) {
+      console.log("cannot find session for ",teacher);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
 /**
  * exports the modules for the other .js files to use
  */
@@ -953,5 +970,6 @@ module.exports = {
   getQuestionInfo,
   matchEmailInfo,
   editSchedule,
-  createSchedule
+  createSchedule,
+  obtainSchedule
 };

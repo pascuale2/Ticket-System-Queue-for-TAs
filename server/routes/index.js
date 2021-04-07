@@ -61,7 +61,7 @@ router.get('/schedule/:profname', function(req, res, next){
   var id = req.params.profname;
   db.searchProfessorByName(connection, id, function(result) {
     var teaches_id = result[0].teacher_id;
-    db.obtainSession(connection, teaches_id, function(result) {
+    db.obtainSchedule(connection, teaches_id, function(result) {
       var c = "(";
       for (var i=0; i<result.length; i++){
           c += (result[i].course_id);
@@ -489,11 +489,18 @@ router.get('/prof_schedule/add_schedule', function(req, res, next) {    // Add n
   });
 });
 
+router.get('/prof_schedule/edit_schedule', function(req, res, next) {                 // Edit schedule, view schedule
+  console.log('made it to prof edit schedule');
+  res.render('prof_edit_schedule');
+});
+
 // POST request to edit an existing schedule
-router.post('/prof_schedule', function(req, res, next) {
-  console.log('editing prof schedule', req.params);
-  db.editSchedule(connection, function(result) {
-    console.log(result);
+router.post('/prof_schedule/edit_schedule', function(req, res, next) {
+  console.log('editing prof schedule: ', req.body);
+  var temp_prof_id = 4000011;
+  db.editSchedule(connection, req.body.day_combobox, req.body.start_time_combobox,
+    req.body.end_time_combobox, temp_prof_id, req.body.course_combobox, function(result) {
+    console.log("Successfully edited schedule: ", result);
     res.render('prof_schedule')
   });
 });
@@ -502,11 +509,8 @@ router.post('/prof_schedule', function(req, res, next) {
 router.post('/prof_schedule/add_schedule', function(req, res, next) {
   console.log('creating new schedule', req.body);
   var temp_prof_id = 4000011;
-  console.log('COURSE FROM COMBOBOX: ', req.body.course_combobox);
-  db.createSchedule(connection, req.body.course_combobox, temp_prof_id, req.body.day_combobox, 
+  db.createSchedule(connection, req.body.course_combobox, temp_prof_id, req.body.day_combobox,
     req.body.start_time_combobox, req.body.end_time_combobox, "", function(result) {
-
-    console.log(result);
     res.render('prof_add-schedule');
   });
 });
