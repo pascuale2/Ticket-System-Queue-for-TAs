@@ -95,6 +95,18 @@ router.get('/schedule/:profname/:label/view_answers', function(req, res, next) {
 });
 
 /*
+ * GET request for upvoting an answered question from a schedule
+ */
+router.get('/schedule/:profname/:label/view_answers/:question_id', function(req, res, next) {
+  console.log("upvoted an answered question");
+  console.log(req.params);
+  db.upvoteQuestion(connection, req.params.question_id, function(result) {
+    res.redirect('/schedule/'+req.params.profname+'/'+req.params.label+'/view_answers');
+  });
+});
+
+
+/*
  * Gets the current profs schedule
 */
 router.get('/schedule/:profname/current_prof_schedule', function(req, res, next) {
@@ -259,6 +271,16 @@ router.get('/questions_search', function(req, res, next) {
   res.render('questions_search');
 });
 
+/*
+ * GET Request for upvoting a question from /search_questions
+*/
+router.get('/questions_search/:question_id', function(req, res, next) {
+  console.log("Starred the question: ", req.params);
+  db.upvoteQuestion(connection, req.params.question_id, function(result) {
+    res.render('questions_search');
+  });
+});
+
 /**
  * Get request for "Asked Questions" page
  */
@@ -352,7 +374,6 @@ router.post('/chat/redirect', function (req, res) {
     body: {name: channel, type: 1, members: [{email: 'gamerghost23@hotmail.com'}]},
     json: true
   };
-  
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
   

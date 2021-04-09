@@ -1036,6 +1036,17 @@ function obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, teache
   });
 }
 
+function upvoteQuestion(connection, question_id, callback) {
+  let query = 'UPDATE Question SET upvote = upvote + 1 WHERE question_id = ?';
+  connection.query(query, question_id, (err, result) => {
+    if(err) {
+      console.log("Upvoting failed for question: ", question_id, err);
+    } else {
+      callback(result);
+    }
+  });
+}
+
 /**
  * exports the modules for the other .js files to use
  */
@@ -1079,6 +1090,7 @@ module.exports = {
   editSchedule,
   createSchedule,
   obtainSchedule,
-  obtainScheduleAndSession
+  obtainScheduleAndSession,
+  upvoteQuestion
 
 };

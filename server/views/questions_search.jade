@@ -20,7 +20,7 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth 
+    // 7,8 - Google Auth
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
@@ -43,7 +43,7 @@ html
               .row.justify-content-center
                 img#profilepic(src='/images/donut.png')
           h2#profilename.text-center Seth Thompson
-          h3.text-center  
+          h3.text-center
         hr
         ul.list-unstyled.components
           li
@@ -138,13 +138,14 @@ html
                         p.text-center  Label: #{questions.label} | Course: #{questions.course_name}
                         if questions.question_status == 0
                           p.text-center Status: Answered
-                        else 
+                        else
                           p.text-center Status Unanswered
                       hr(id='hr_light')
                       .cardContainer
                         p(id='desc_header').text-center Description:
                         h4.text-center #{questions.question_desc}
                       .d-flex.justify-content-center
-                        a.btn.btn-outline-warning.btn-block.btn-lg(href='#') Star Question
+                        a.btn.btn-outline-warning.btn-block.btn-lg(href='/questions_search/'+questions.question_id) Star Question
+
                           i.fas.fa-star
     .overlay
