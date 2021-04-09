@@ -95,6 +95,18 @@ router.get('/schedule/:profname/:label/view_answers', function(req, res, next) {
 });
 
 /*
+ * GET request for upvoting an answered question from a schedule
+ */
+router.get('/schedule/:profname/:label/view_answers/:question_id', function(req, res, next) {
+  console.log("upvoted an answered question");
+  console.log(req.params);
+  db.upvoteQuestion(connection, req.params.question_id, function(result) {
+    res.redirect('/schedule/'+req.params.profname+'/'+req.params.label+'/view_answers');
+  });
+});
+
+
+/*
  * Gets the current profs schedule
 */
 router.get('/schedule/:profname/current_prof_schedule', function(req, res, next) {
@@ -259,6 +271,16 @@ router.get('/questions_search', function(req, res, next) {
   res.render('questions_search');
 });
 
+/*
+ * GET Request for upvoting a question from /search_questions
+*/
+router.get('/questions_search/:question_id', function(req, res, next) {
+  console.log("Starred the question: ", req.params);
+  db.upvoteQuestion(connection, req.params.question_id, function(result) {
+    res.render('questions_search');
+  });
+});
+
 /**
  * Get request for "Asked Questions" page
  */
@@ -342,20 +364,17 @@ router.get('/token', function (req, res) {
 })
 
 router.post('/chat/redirect', function (req, res) {
-  var message = req.body.message;
   var channel = req.body.to_channel;
-  //console.log(req.body.message,req.body.to_channel);
+  console.log(req.body.to_channel);
   //console.log(req.body);
   var options = {
     method: 'POST',
-    url: 'https://api.zoom.us/v2/chat/users/me/messages',
+    url: 'https://api.zoom.us/v2/chat/users/me/channels',
     headers: {'content-type': 'application/json', authorization: 'Bearer'+req.app.locals.authtokn},
-    body: {
-      message: message,
-      to_channel: channel,
-    },
+    body: {name: channel, type: 1, members: [{email: 'gamerghost23@hotmail.com'}]},
     json: true
   };
+
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
 

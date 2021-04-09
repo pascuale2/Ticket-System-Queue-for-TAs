@@ -909,14 +909,17 @@ function createSchedule(connection, courseid, teaches_id, available_day, from, t
       sched_id +=1;
       console.log("max schedule id AFTER INCREMENTING: ",sched_id);
       obtainSessionID(connection, courseid, function(sesh_id) {
-  
+
         // session already created, insert into schedule table
         if(sesh_id.length > 0) {
           console.log("session already created for session: ",sesh_id);
           //console.log(zoom);
           let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
           VALUES(?, ?, ?, ?, ?, ?, ?)';
-          connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+          if(!zoom) {
+            zoom = "";
+          }
+          connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, ""], (err, result) => {
             if (err) {
               console.log("Could not create schedule for: ", teaches_id);
               callback(err);
@@ -1000,10 +1003,10 @@ function obtainProfessorSchedule(connection, teacher_id, course_id, callback) {
 }
 
 /**
- * 
- * @param {*} connection 
- * @param {*} teacher_id 
- * @param {*} callback 
+ *
+ * @param {*} connection
+ * @param {*} teacher_id
+ * @param {*} callback
  */
 function obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, teacher_id, callback) {
   let query = '\
@@ -1028,6 +1031,17 @@ function obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, teache
       console.log("Cannot obtain question counts and schedule counts from courses!");
     } else {
       result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function upvoteQuestion(connection, question_id, callback) {
+  let query = 'UPDATE Question SET upvote = upvote + 1 WHERE question_id = ?';
+  connection.query(query, question_id, (err, result) => {
+    if(err) {
+      console.log("Upvoting failed for question: ", question_id, err);
+    } else {
       callback(result);
     }
   });
@@ -1076,6 +1090,7 @@ module.exports = {
   editSchedule,
   createSchedule,
   obtainSchedule,
-  obtainScheduleAndSession
+  obtainScheduleAndSession,
+  upvoteQuestion
 
 };
