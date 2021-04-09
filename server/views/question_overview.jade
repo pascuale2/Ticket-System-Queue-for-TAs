@@ -114,14 +114,14 @@ html
                 .list-group-item.list-group-item-action.flex-column.align-items-start(href='#' id='link_card')
                   .d-flex.w-100.justify-content-between
                     h3.mb-1 #{answer.question_title}
-                    button.btn.btn-outline-warning #{answer.upvote}
+                    a.button.btn.btn-outline-warning(href='/schedule/'+locals.teacher+'/'+locals.labeltitle+'/view_answers/'+answer.question_id) #{answer.upvote}
                       i.fas.fa-star
                   .description_container(id='description_container')
                     p(id='question_card_desc').mb-1 #{answer.question_desc}
-                  hr(id='no_margin_line_break') 
+                  hr(id='no_margin_line_break')
                   .description_container(id='description_container')
                     .d-flex.w-100.justify-content-between
                       p(id='question_card_desc').mb-1 A: #{answer.answer_string}
-                  p(id='faded_paragraph') 
+                  p(id='faded_paragraph')
                     small Date Answered: #{answer.answer_date} | Answered By: #{locals.teacher}
     .overlay
