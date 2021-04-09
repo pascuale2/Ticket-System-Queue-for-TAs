@@ -374,10 +374,9 @@ router.post('/chat/redirect', function (req, res) {
     body: {name: channel, type: 1, members: [{email: 'gamerghost23@hotmail.com'}]},
     json: true
   };
-
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-
+  
     console.log(body);
   });
   res.end("yes");

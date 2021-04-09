@@ -99,7 +99,7 @@ html
                   a.list-group-item.list-group-item-primary.flex-column.align-items-start.active(href='/prof_questions/'+courseID+'/'+questions.question_id id='link_card_active')
                     .d-flex.w-100.justify-content-between
                       h5.mb-1 #{questions.question_title}
-                      small Position: #{questions.position}
+                      | Position: #{questions.position} | Likes: #{questions.upvote}
                     .description_container(id='description_container')
                       p(id='question_card_desc').mb-1 #{questions.question_desc}
                     hr(id='no_margin_line_break')
@@ -108,7 +108,7 @@ html
                   a.list-group-item.list-group-item-action.flex-column.align-items-start(href='/prof_questions/'+courseID+'/'+questions.question_id id='link_card')
                     .d-flex.w-100.justify-content-between
                       h5.mb-1 #{questions.question_title}
-                      small Position: #{questions.position}
+                      | Position: #{questions.position} | Likes: #{questions.upvote}
                     .description_container(id='description_container')
                       p.mb-1 #{questions.question_desc}
                     hr(id='no_margin_line_break')

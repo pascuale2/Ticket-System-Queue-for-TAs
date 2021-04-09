@@ -94,6 +94,10 @@ a:focus {
     height: 80px;
 }
 
+.course_container {
+    height: 80px;
+}
+
 #options_text{
     font-size: 12px;
 }

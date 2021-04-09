@@ -108,7 +108,7 @@ a:focus {
 
 .card{
     margin: 10px;
-    width: 200px;
+    width: 250px;
     background-color: #252525;
     box-shadow: 0 2px 4px 0 rgba(211,211,211,0.2);
     transition: 0.3s;
