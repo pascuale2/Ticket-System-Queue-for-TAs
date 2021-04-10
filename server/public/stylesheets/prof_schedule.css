@@ -69,6 +69,10 @@ a:focus {
     text-shadow: 0px 1px 2px rgb(111, 111, 111)
 }
 
+/* ---------------------------------------------------
+    CARD STYLE
+----------------------------------------------------- */
+
 #courseCard {
     margin: 10px;
     padding: 15px;
@@ -97,7 +101,6 @@ a:focus {
 #scheduleTitle {
     height: 50px;
 }
-
 
 #options_text{
     font-size: 12px;

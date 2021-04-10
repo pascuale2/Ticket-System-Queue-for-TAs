@@ -106,9 +106,14 @@ html
                         small 
                           small COURSE OPTIONS
                     .cardContainer(id='cardOptions')
-                      button.btn.btn-info.btn-block.btn-lg
-                        a(href='#') Edit Schedule
-                          i.far.fa-calendar-alt.fa-fw
+                      if courses.scheduleCount > 0
+                        button.btn.btn-info.btn-block.btn-lg
+                          a(href='#') Edit Schedule
+                            i.far.fa-calendar-alt.fa-fw
+                      else
+                        button.btn.btn-primary.btn-block.btn-lg
+                          a(href='#') Add Schedule
+                            i.far.fa-calendar-alt.fa-fw
                       hr#invisible_line_break
                       // Checks if there are any questions that need to be answered 
                       // If there are then the button to check questions is enabled 

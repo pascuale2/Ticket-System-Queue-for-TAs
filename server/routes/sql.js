@@ -909,14 +909,17 @@ function createSchedule(connection, courseid, teaches_id, available_day, from, t
       sched_id +=1;
       console.log("max schedule id AFTER INCREMENTING: ",sched_id);
       obtainSessionID(connection, courseid, function(sesh_id) {
-  
+
         // session already created, insert into schedule table
         if(sesh_id.length > 0) {
           console.log("session already created for session: ",sesh_id);
           //console.log(zoom);
           let query = 'INSERT INTO Schedule(teacher_id, schedule_id, available_day, from_time, to_time, zoom_link, zoom_link_passwd) \
           VALUES(?, ?, ?, ?, ?, ?, ?)';
-          connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, "", teaches_id], (err, result) => {
+          if(!zoom) {
+            zoom = "";
+          }
+          connection.query(query, [teaches_id, sesh_id[0].session_id, available_day, from, to, zoom, ""], (err, result) => {
             if (err) {
               console.log("Could not create schedule for: ", teaches_id);
               callback(err);
@@ -961,7 +964,11 @@ function obtainSchedule(connection, teacher, callback) {
 }
 
 function obtainScheduleAndSession(connection, teacher, callback) {
-  let query = 'SELECT * FROM Schedule INNER JOIN Session ON Session.schedule_id = Schedule.schedule_id \
+  let query = 'SELECT * FROM Schedule \
+  INNER JOIN Session \
+  ON Session.schedule_id = Schedule.schedule_id \
+  INNER JOIN Course \
+  ON Course.course_id = Session.course_id\
   WHERE teacher_id = ?';
   connection.query(query, teacher, (err, result) => {
     if(err) {
@@ -990,6 +997,51 @@ function obtainProfessorSchedule(connection, teacher_id, course_id, callback) {
       callback(err);
     } else {
       result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
+ *
+ * @param {*} connection
+ * @param {*} teacher_id
+ * @param {*} callback
+ */
+function obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, teacher_id, callback) {
+  let query = '\
+  SELECT TCTable.course_id, TCTable.course_name, TCTable.course_title, IFNULL(QCTable.questionCounts,0) AS questionCount, IFNULL(SCTable.schedule_count, 0) AS scheduleCount \
+  FROM \
+  (SELECT Question.course_id, COUNT(Question.course_id) AS questionCounts \
+  FROM Question INNER JOIN Teaches ON Teaches.course_id = Question.course_id \
+  WHERE teacher_id = '+teacher_id+' AND Question.question_status=0 \
+  GROUP BY Question.course_id) AS QCTable \
+  RIGHT JOIN \
+  (SELECT Course.course_id, Course.course_name, Course.course_title \
+  FROM Teacher INNER JOIN Teaches ON Teacher.teacher_id = Teaches.teacher_id INNER JOIN Course ON Teaches.course_id = Course.course_id \
+  WHERE Teacher.teacher_id = '+teacher_id+' ) AS TCTable ON QCTable.course_id = TCTable.course_id \
+  LEFT JOIN \
+  (SELECT Session.course_id, COUNT(course_id) as schedule_count \
+  FROM Session INNER JOIN Schedule ON Session.schedule_id = Schedule.schedule_id \
+  WHERE Schedule.teacher_id = '+teacher_id+' \
+  GROUP BY Session.course_id) AS SCTable ON SCTable.course_id = TCTable.course_id \
+  ORDER BY TCTable.course_id';
+  connection.query(query, (err, result) => {
+    if(err) {
+      console.log("Cannot obtain question counts and schedule counts from courses!");
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+function upvoteQuestion(connection, question_id, callback) {
+  let query = 'UPDATE Question SET upvote = upvote + 1 WHERE question_id = ?';
+  connection.query(query, question_id, (err, result) => {
+    if(err) {
+      console.log("Upvoting failed for question: ", question_id, err);
+    } else {
       callback(result);
     }
   });
@@ -1025,6 +1077,7 @@ module.exports = {
   obtainQuestionFromACourse,
   obtainQuestionFromCourses,
   obtainQuestionCountFromCoursesTaught,
+  obtainQuestionCountAndScheduleCountFromCoursesTaught,
   obtainSession,
   obtainSessionID,
   obtainTeaches,
@@ -1037,6 +1090,7 @@ module.exports = {
   editSchedule,
   createSchedule,
   obtainSchedule,
-  obtainScheduleAndSession
+  obtainScheduleAndSession,
+  upvoteQuestion
 
 };

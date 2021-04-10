@@ -141,11 +141,12 @@ html
                         h3.text-center(style='color: gray;') #{names.name}
 
                     .button_container
-                      hr
+                      hr.m-1
                       if names.available == 1
                         h5.text-center Available
                       else
                         h5.text-center(style='color: gray;') Not Available
-                      a.btn.btn-primary.btn-block(href='schedule/'+ names.name id='schedule_button') View Answered Questions
+                      a.btn.btn-primary.btn-block.btn-lg(href='schedule/'+ names.name id='schedule_button') View Answered Questions
+                      a.btn.btn-danger.btn-block.btn-lg(href='/schedule/'+names.name+'/current_prof_schedule') Check Schedule
 
     .overlay

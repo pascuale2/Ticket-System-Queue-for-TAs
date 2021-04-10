@@ -112,11 +112,12 @@ html
                       small 
                         small SCHEDULE OPTIONS
                   .cardContainer(id='cardOptions')
-                    a.btn.btn-info.btn-block.btn-lg(href='/prof_schedule/'+schedule.course_id+'/edit_schedule') Edit Schedule
+                    a.btn.btn-primary.btn-block.btn-lg(href=schedule.zoom_link) Zoom Link
+                    hr#invisible_line_break
+                    a.btn.btn-success.btn-block.btn-lg(href='/prof_schedule/'+schedule.course_id+'/edit_schedule') Edit Schedule
                     hr#invisible_line_break
                     a.btn.btn-danger.btn-block.btn-lg(href='#') Delete Schedule
             else
               br
               h4.text-center You currently don't have any schedules :(
-        hr
     .overlay

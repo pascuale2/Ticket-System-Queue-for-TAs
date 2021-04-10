@@ -146,3 +146,21 @@ select {
     color: #bbbbbb;
     cursor: pointer;
 }
+
+#submit_button {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 350px;
+    padding: 5px;
+    transition: .25s all ease;
+}
+
+#clear_button {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    padding: 5px;
+    transition: .25s all ease;
+}

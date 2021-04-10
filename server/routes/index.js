@@ -68,7 +68,7 @@ router.get('/schedule/:profname', function(req, res, next){
           c+=","
         }
         var c = c.replace(/.$/,")");
-      
+
       db.obtainAllTaught(connection, teaches_id, c, function(courses) {
         db.getQuestionLabel(connection, teaches_id, function(labels) {
           console.log(labels);
@@ -95,6 +95,18 @@ router.get('/schedule/:profname/:label/view_answers', function(req, res, next) {
 });
 
 /*
+ * GET request for upvoting an answered question from a schedule
+ */
+router.get('/schedule/:profname/:label/view_answers/:question_id', function(req, res, next) {
+  console.log("upvoted an answered question");
+  console.log(req.params);
+  db.upvoteQuestion(connection, req.params.question_id, function(result) {
+    res.redirect('/schedule/'+req.params.profname+'/'+req.params.label+'/view_answers');
+  });
+});
+
+
+/*
  * Gets the current profs schedule
 */
 router.get('/schedule/:profname/current_prof_schedule', function(req, res, next) {
@@ -104,8 +116,8 @@ router.get('/schedule/:profname/current_prof_schedule', function(req, res, next)
     var teaches_id = result[0].teacher_id;
     var temp_prof_id = 4000011;
     db.obtainScheduleAndSession(connection, temp_prof_id, function(sched) {
-        console.log(sched);
-        res.render('view_prof_schedule', {"schedule": sched});
+        console.log("sched is: ", sched);
+        res.render('view_prof_schedule', {"schedule": sched, "teacher": id});
     });
   });
 });
@@ -259,6 +271,16 @@ router.get('/questions_search', function(req, res, next) {
   res.render('questions_search');
 });
 
+/*
+ * GET Request for upvoting a question from /search_questions
+*/
+router.get('/questions_search/:question_id', function(req, res, next) {
+  console.log("Starred the question: ", req.params);
+  db.upvoteQuestion(connection, req.params.question_id, function(result) {
+    res.render('questions_search');
+  });
+});
+
 /**
  * Get request for "Asked Questions" page
  */
@@ -352,7 +374,6 @@ router.post('/chat/redirect', function (req, res) {
     body: {name: channel, type: 1, members: [{email: 'gamerghost23@hotmail.com'}]},
     json: true
   };
-  
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
   
@@ -417,7 +438,7 @@ router.get('/prof_home', function(req, res, next) {
 router.get('/prof_courses', function(req, res, next) {
   var temp_prof_id = 4000011;
   db.obtainAddableCourses(connection, function(courseResults) {
-    db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+    db.obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
       res.render('prof_courses', {
         "data": courseResults,
         "count": questionCountResults});
@@ -489,7 +510,7 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
 });
 
 /**********************************************
- *            SCHEDULE ROUTING
+ *            SCHEDULE ROUTING                *
  **********************************************/
 
 router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule

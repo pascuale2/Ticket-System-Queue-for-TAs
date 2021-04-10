@@ -48,7 +48,7 @@ html
         hr
         ul.list-unstyled.components
           li
-            a(href='home')
+            a(href='/home')
               i.fas.fa-home
               | Home
           li.active
@@ -57,7 +57,7 @@ html
               | Courses
               ul#coursesSubmenu.collapse.list-unstyled
                 li
-                  a(href='courses') Current Courses
+                  a(href='/courses') Current Courses
                 li
                   a(href='#') Search Courses
           li.active
@@ -66,13 +66,13 @@ html
               | Questions
               ul#questionsSubmenu.collapse.list-unstyled
                 li
-                  a(href='questions') Ask a Question
+                  a(href='/questions') Ask a Question
                 li
-                  a(href='questions_search') Search Questions
+                  a(href='/questions_search') Search Questions
                 li
-                  a(href='questions_asked') Asked Questions
+                  a(href='/questions_asked') Asked Questions
           li
-            a(href='professors')
+            a(href='/professors')
               i.fas.fa-chalkboard-teacher
               | Professors
           li.active
@@ -81,13 +81,13 @@ html
               | Discussions
               ul#discussionsSubmenu.collapse.list-unstyled
                 li
-                  a(href='discussions') Discussion Board
+                  a(href='/discussions') Discussion Board
                 li
-                  a(href='token') Group Chats
+                  a(href='/token') Group Chats
         hr
         ul.list-unstyled.components
           li
-            a(href='settings')
+            a(href='/settings')
               i.fas.fa-cog
               | Settings
           li
@@ -101,7 +101,7 @@ html
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
             .logo
-              a(href='Home')
+              a(href='/home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
@@ -110,9 +110,42 @@ html
           h4.text-center Welcome back #{locals.data.name}
           hr
           .d-flex.justify-content-center
-            .card
-              h3.text-center You are currently enrolled in:
-              if locals.courses != Null
-                for courses in locals.courses
-                  p.text-center #{courses.course_name}
+            .card(id='buttonCard')
+              a.btn.btn-primary(href='/courses')
+                br
+                i.fas.fa-book.fa-5x
+                hr(id='invisible_line_break')
+                | VIEW COURSES
+            .card(id='buttonCard')
+              a.btn.btn-success(href='/questions')
+                br
+                i.fas.fa-question.fa-5x
+                hr(id='invisible_line_break')
+                | ASK A QUESTION
+            .card(id='buttonCard')
+              a.btn.btn-warning(href='/questions_asked') 
+                br
+                i.fas.fa-stream.fa-5x
+                hr(id='invisible_line_break')
+                | ASKED QUESTIONS 
+
+          .d-flex.justify-content-center
+            .card(id='buttonCard')
+              a.btn.btn-danger(href='/questions_search')
+                br
+                i.fas.fa-search.fa-5x
+                hr(id='invisible_line_break')
+                | SEARCH QUESTIONS
+            .card(id='buttonCard')
+              a.btn.btn-info(href='/professors')
+                br
+                i.fas.fa-user-friends.fa-5x
+                hr(id='invisible_line_break')
+                | SEARCH PROFESSORS
+            .card(id='buttonCard')
+              a.btn.btn-secondary(href='/token') 
+                br
+                i.far.fa-comments.fa-5x
+                hr(id='invisible_line_break')
+                | DISCUSSIONS / GROUP-CHATS
     .overlay

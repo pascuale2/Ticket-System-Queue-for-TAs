@@ -99,12 +99,11 @@ html
                   .card(id='courseCard')
                     h3.text-center #{courses.course_name}
                     .title_container(id='cardTitle')
-                      p(id='card_text').text-center  #{courses.course_title}
-                    hr(id='no_margin_line_break')
+                      p.m-1(id='card_text').text-center  #{courses.course_title}
+                    hr
                     p.text-center 
                       small 
-                        small 
-                          small QUESTION STATUS:
+                        small QUESTION STATUS:
                     
                     // IF THE QUESTION COUNT ISNT 0
                     // THEN YOU CAN CHECK THE QUESTIONS
@@ -116,7 +115,7 @@ html
                           small Questions Unanswered
                       hr
                       .cardContainer(id='cardOptions')
-                        a.btn.btn-success.btn-block(href='/prof_questions/'+courses.course_name name='answer_question' value=courses.course_id) Answer Questions
+                        a.btn.btn-success.btn-block.btn-lg(href='/prof_questions/'+courses.course_name name='answer_question' value=courses.course_id) Answer Questions
                     else 
                       h1.text-center #{courses.questionCount}
                       p(id='no_margin_paragraph').text-center 
@@ -124,8 +123,8 @@ html
                           small Questions Unanswered
                       hr
                       .cardContainer(id='cardOptions')
-                        button.btn.btn-secondary.btn-block(disabled)
-                          a(href='#') No Questions to Answer
+                        button.btn.btn-secondary.btn-block.btn-lg(disabled)
+                          a(href='#') No Questions Asked
 
               else
                 br
