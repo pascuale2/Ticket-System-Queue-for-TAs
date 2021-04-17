@@ -1048,6 +1048,23 @@ function upvoteQuestion(connection, question_id, callback) {
 }
 
 /**
+ * @param {*} connection
+ * @param {*} teacher_id
+ * @param {*} callback
+*/
+
+function findTeacherName(connection, teacher_id, callback) {
+  let query = 'SELECT name FROM Teacher WHERE teacher_id = ?';
+  connection.query(query, teacher_id, (err, result) => {
+    if(err) {
+      console.log("Could not find teacher with id: ", teacher_id);
+    } else {
+      callback(JSON.parse(JSON.stringify(result)));
+    }
+  });
+}
+
+/**
  * exports the modules for the other .js files to use
  */
 module.exports = {
@@ -1091,6 +1108,7 @@ module.exports = {
   createSchedule,
   obtainSchedule,
   obtainScheduleAndSession,
-  upvoteQuestion
+  upvoteQuestion,
+  findTeacherName
 
 };
