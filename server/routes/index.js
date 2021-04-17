@@ -64,8 +64,10 @@ router.get('/schedule/:profname', function(req, res, next){
     db.obtainSchedule(connection, teaches_id, function(result) {
       var c = "(";
       for (var i=0; i<result.length; i++){
+          if(result[i].course_id != null){
           c += (result[i].course_id);
           c+=","
+        }
         }
         var c = c.replace(/.$/,")");
 
@@ -376,7 +378,7 @@ router.post('/chat/redirect', function (req, res) {
   };
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-  
+
     console.log(body);
   });
   res.end("yes");
@@ -468,9 +470,12 @@ router.get('/prof_questions/:courses', function(req, res, next) {
  */
 router.get('/prof_questions', function(req, res, next) {
   var temp_prof_id = 4000011;
+  var temp_prof_id_jaime = 4000001;
   db.obtainQuestionCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
-    console.log("DATA: ", questionCountResults);
-    res.render('prof_questions', {data: questionCountResults});
+    db.findTeacherName(connection, temp_prof_id_jaime, function(profname) {
+      console.log("DATA: ", questionCountResults);
+      res.render('prof_questions', {data: questionCountResults, "prof_name": profname[0].name});
+    });
   });
 });
 
