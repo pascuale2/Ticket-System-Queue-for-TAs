@@ -125,7 +125,9 @@ router.get('/schedule/:profname/current_prof_schedule', function(req, res, next)
 });
 
 router.get('/settings', function(req, res, next) {
-  res.render('settings');
+  db.getStudentInfo(connection, student.id, function(result) {
+    res.render('settings', {"data": result});
+  });
 });
 
 router.get('/courses', function(req, res, next) {
@@ -323,7 +325,19 @@ router.get('/chat', function(req, res, next) {
 });
 
 router.get('/settings_edit', function(req, res, next) {
-  res.render('settings_edit');
+  db.getStudentInfo(connection, student.id, function(result) {
+    console.log(result);
+    res.render('settings_edit', {"data": result});
+  });
+});
+
+router.post('/settings_edit', function(req, res, next) {
+  db.updateStudentInfo(connection, req.body.stu_name, req.body.stu_email,
+    req.body.discipline_name, req.body.student_bio, student.id, function(result) {
+    db.getStudentInfo(connection, student.id, function(result) {
+      res.render('settings', {"data": result});
+    });
+  });
 });
 
 router.get('/home/:userId', function (req, res) {
