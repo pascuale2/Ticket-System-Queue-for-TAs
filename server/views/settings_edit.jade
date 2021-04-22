@@ -20,7 +20,7 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth 
+    // 7,8 - Google Auth
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
@@ -43,7 +43,7 @@ html
               .row.justify-content-center
                 img#profilepic(src='/images/donut.png')
           h2#profilename.text-center Seth Thompson
-          h3.text-center  
+          h3.text-center
         hr
         ul.list-unstyled.components
           li
@@ -105,31 +105,33 @@ html
             a(href='#')
         #content
           h2 Account Settings
-          form
-            .mb-4.row
-              label.col-sm-2.col-form-label(for='staticUsername') Username
-              .col-sm-10
-                input#staticUsername.form-control-plaintext(type='text' readonly='' value='MacEwanUsername')
-            .mb-4.row
-              label.col-sm-2.col-form-label(for='accountEmail') Email
-              .col-sm-10
-                input#accountEmail.form-control-plaintext(type='text' readonly='' value='MacEwanEmail@mymacewan.ca')
-            .mb-4.row
-              label.col-sm-2.col-form-label(for='staticPassword') Password
-              .col-sm-10
-                input#staticPassword.form-control-plaintext(type='text' readonly='' value='Connected to MacEwan Account')
-            .mb-4.row
-              label.form-label(for='profPic') Profile Picture
-              .col-sm-2
-                input#profPic.form-control(type='file')
-            .mb-4.row
-              label.col-sm-2.col-form-label(for='accountDiscipline') Discipline
-              .col-sm-4
-                input#accountDiscipline.form-control-plaintext(type='text' readonly='' value='Computer Science')
-            .mb-4.row
-              label.col-sm-2.col-form-label(for='accountBio') Bio
-              .col-sm-4
-                textarea#exampleFormControlTextarea1.form-control(rows='3')
-            a.btn.btn-primary(href='settings') Save Changes
-          .line
+          for stu_info in locals.data
+            form(action='/settings_edit' method='post')
+              .mb-4.row
+                .col-sm-4
+                  input#accountDiscipline.form-control-plaintext(type='text' readonly='' value=stu_info.name)
+                textarea.form-control(name="stu_name" aria-label="Question Description" placeholder="e.g. John Appleseed")
+
+              .mb-4.row
+                .col-sm-4
+                  input#accountDiscipline.form-control-plaintext(type='text' readonly='' value=stu_info.email)
+                textarea.form-control(name="stu_email" aria-label="Question Description" placeholder="e.g. johnappleseed@mymacewan.ca")
+
+              .mb-4.row
+                label.form-label(for='profPic') Profile Picture
+                .col-sm-2
+                  input#profPic.form-control(type='file')
+              .mb-4.row
+                .col-sm-4
+                  input#accountDiscipline.form-control-plaintext(type='text' readonly='' value=stu_info.discipline_name)
+                textarea.form-control(name="discipline_name" aria-label="Question Description" placeholder="e.g. Computer Science")
+
+              .mb-4.row
+                .col-sm-4
+                  input#accountDiscipline.form-control-plaintext(type='text' readonly='' value=stu_info.biography)
+                textarea.form-control(name="student_bio" rows ='3' aria-label="Question Description" placeholder="e.g. I am a student in...")
+
+              button.btn.btn-primary(id='submit_button' type='submit') Save Changes
+                i.fas.fa-arrow-right.fa-fw
+            .line
     .overlay
