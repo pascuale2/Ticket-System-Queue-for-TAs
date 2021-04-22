@@ -1064,6 +1064,46 @@ function findTeacherName(connection, teacher_id, callback) {
   });
 }
 
+function getStudentInfo(connection, student_id, callback) {
+  let query = 'SELECT * FROM Student \
+  INNER JOIN Discipline \
+  ON Discipline.discipline_id = Student.discipline_id \
+  WHERE student_id = ?';
+  connection.query(query, student_id, (err, result) => {
+    if(err) {
+      console.log("Could get student info with studentid: ", student_id);
+    } else {
+      callback(JSON.parse(JSON.stringify(result)));
+    }
+  });
+}
+
+function findDisciplineByName(connection, discp, callback) {
+  let query = 'SELECT discipline_id FROM Discipline WHERE discipline_name = ?';
+  connection.query(query, discp, (err, result) => {
+    if(err) {
+      console.log("Could not find discipline with name: ", discp);
+      callback(0);
+    } else {
+      callback(result[0].discipline_id);
+    }
+  });
+}
+
+function updateStudentInfo(connection, name, email, discp, bio, stu_id, callback) {
+  findDisciplineByName(connection, discp, function(discp_id) {
+    let query = 'UPDATE Student SET name = ?, email = ?, biography = ?, discipline_id = ? \
+    WHERE student_id =?';
+    connection.query(query, [name, email, bio, discp_id, stu_id], (err, result) => {
+      if(err) {
+        console.log("Could not update student: ", err);
+      } else {
+        callback(result);
+      }
+    });
+  });
+}
+
 /**
  * exports the modules for the other .js files to use
  */
@@ -1109,6 +1149,8 @@ module.exports = {
   obtainSchedule,
   obtainScheduleAndSession,
   upvoteQuestion,
-  findTeacherName
+  findTeacherName,
+  getStudentInfo,
+  updateStudentInfo
 
 };
