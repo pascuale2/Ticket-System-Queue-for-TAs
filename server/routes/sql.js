@@ -420,16 +420,23 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
  * @param {string} course_id the course id we are trying to get questions from
  * @param {*} callback
  */
- function obtainQuestionFromACourse(connection, course_name, question_id, callback) {
+ function obtainQuestionFromACourse(connection, course_name, question_id, sort, callback) {
   let query = "\
   SELECT * \
   FROM Question INNER JOIN Containsqueue ON Question.question_id = Containsqueue.question_id INNER JOIN Course ON Course.course_id = Question.course_id \
   WHERE Course.course_name='"+course_name+"' ";
 
+  if (!(sort === "")) {
+    query += ' ORDER BY ' + sort + ' DESC';
+  } else {
+      query = query + " ORDER BY POSITION";
+  }
+
   if(!(question_id==="")){
     query = query + " AND Question.question_id='"+question_id+"' ";
   }
-  query = query + " ORDER BY POSITION";
+
+  console.log("query is ", query);
 
   connection.query(query, (err, result) => {
     if(err) {
