@@ -114,11 +114,12 @@ function updateCurrentQueue(connection, quest_id, c_id, callback) {
  */
 function insertAnswer(connection, ans_str, ans_date, quest_id, c_id, callback) {
   getAnswerID(connection, function(ans_id) {
+    var temp_prof_id = 4000011;
     ans_id +=1;
-    let query = 'INSERT INTO Answer(answer_id, answer_string, answer_date, question_id, course_id) \
-    VALUES(?, ?, ?, ?, ?)';
+    let query = 'INSERT INTO Answer(answer_id, answer_string, answer_date, question_id, course_id, teacher_id) \
+    VALUES(?, ?, ?, ?, ?, ?)';
     console.log(ans_id, ans_str, ans_date, parseInt(quest_id), c_id.course_id);
-    connection.query(query, [ans_id, ans_str, ans_date, parseInt(quest_id), c_id.course_id], (err, result) => {
+    connection.query(query, [ans_id, ans_str, ans_date, parseInt(quest_id), c_id.course_id, temp_prof_id], (err, result) => {
       if(err) {
         console.log("Could not answer question with quest_id: ", parseInt(quest_id), err);
       } else {

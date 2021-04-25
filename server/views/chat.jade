@@ -75,46 +75,36 @@ html
         hr
         ul.list-unstyled.components
           li
-            a(href='home')
+            a(href='/home')
               i.fas.fa-home
               | Home
-          li.active
-            a(href='#coursesSubmenu' data-toggle='collapse' aria-expanded='false')
+          li
+            a(href='/courses')
               i.fas.fa-book
               | Courses
-              ul#coursesSubmenu.collapse.list-unstyled
-                li
-                  a(href='courses') Current Courses
-                li
-                  a(href='#') Search Courses
           li.active
             a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
               i.fas.fa-question-circle
               | Questions
               ul#questionsSubmenu.collapse.list-unstyled
                 li
-                  a(href='questions') Ask a Question
+                  a(href='/questions') Ask a Question
                 li
-                  a(href='questions_search') Search Questions
+                  a(href='/questions_search') Search Questions
                 li
-                  a(href='questions_asked') Asked Questions
+                  a(href='/questions_asked') Asked Questions
           li
-            a(href='professors')
+            a(href='/professors')
               i.fas.fa-chalkboard-teacher
               | Professors
-          li.active
-            a(href='#discussionsSubmenu' data-toggle='collapse' aria-expanded='false')
+          li
+            a(href='/token/chat')
               i.fas.fa-comments
-              | Discussions
-              ul#discussionsSubmenu.collapse.list-unstyled
-                li
-                  a(href='discussions') Discussion Board
-                li
-                  a(href='chat') Group Chats
+              | Group Chats
         hr
         ul.list-unstyled.components
           li
-            a(href='settings')
+            a(href='/settings')
               i.fas.fa-cog
               | Settings
           li

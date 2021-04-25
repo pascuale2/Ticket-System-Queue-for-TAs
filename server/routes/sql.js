@@ -834,6 +834,7 @@ function obtainAnsweredQuestionsByStudentID(connection, student_id, callback) {
       console.log("Cannot obtain the answered questions by student ID !!!!");
     } else {
       result = JSON.parse(JSON.stringify(result));
+      console.log(result);
       callback(result);
     }
   });
@@ -856,6 +857,7 @@ function getQuestionLabel(connection, teachesid, callback) {
       callback(result)
     } else {
       result = JSON.parse(JSON.stringify(result));
+      console
       callback(result);
     }
   });

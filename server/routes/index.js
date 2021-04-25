@@ -61,6 +61,7 @@ router.get('/schedule/:profname', function(req, res, next){
   var id = req.params.profname;
   db.searchProfessorByName(connection, id, function(result) {
     var teaches_id = result[0].teacher_id;
+    console.log(teaches_id);
     db.obtainSchedule(connection, teaches_id, function(result) {
       var c = "(";
       for (var i=0; i<result.length; i++){
