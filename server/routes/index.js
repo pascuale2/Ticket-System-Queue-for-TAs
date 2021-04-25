@@ -286,6 +286,18 @@ router.get('/questions_search/:question_id', function(req, res, next) {
 });
 
 /**
+ * GET Request for viewing an answered question
+*/
+router.get('/questions_search/answer/:question_id', function(req, res, next) {
+  console.log(req.params.question_id);
+  db.obtainAnsweredQuestionByQID(connection, req.params.question_id, function(answerResults) {
+    console.log(answerResults);
+    res.render('questions_answered', {"data": answerResults});
+  });
+});
+
+
+/**
  * Get request for "Asked Questions" page
  */
 router.get('/questions_asked', function(req, res, next) {
@@ -367,15 +379,19 @@ router.get('/token/code', function (req, res) {
     var authtokn = JSON.parse(body).access_token;
     req.app.locals.zoomtokn=body;
     req.app.locals.authtokn=authtokn;
-    //console.log(authtokn);
-    res.redirect("https://localhost:3000/home");
-    //zoom.getchannels(authtokn,res,req);
+    if(res.app.locals.prevurl=="chat"){
+      res.redirect("https://localhost:3000/chat");
+    }
+    if(res.app.locals.prevurl=="schedule"){
+      res.redirect("https://localhost:3000/prof_schedule/add_schedule");
+    }
   });
 })
 
-router.get('/token', function (req, res) {
+router.get('/token/:url', function (req, res) {
+  res.app.locals.prevurl=req.params.url;
+  console.log(res.app.locals.prevurl);
   // Access userId via: req.params.userId
-  console.log(req.params);
   res.redirect('https://zoom.us/oauth/authorize?response_type=code&client_id=uqERGEzQThSiyeVrlQlMvQ&redirect_uri=https://localhost:3000/token/code');
 })
 
@@ -447,14 +463,15 @@ router.get('/prof_home', function(req, res, next) {
 
 
 /**
- * Get request for professor course page
+ * GET request for professor course page
  *
  * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
- * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from
+ *                                                            the courses the prof teaches
  */
 router.get('/prof_courses', function(req, res, next) {
   var temp_prof_id = 4000011;
-  db.obtainAddableCourses(connection, function(courseResults) {
+  db.obtainAddableCourses(connection, temp_prof_id, function(courseResults) {
     db.obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
       res.render('prof_courses', {
         "data": courseResults,
@@ -462,6 +479,49 @@ router.get('/prof_courses', function(req, res, next) {
     });
   });
 });
+
+/**
+ * POST request for professor course page for adding a course
+ *
+ * db.insertCourse -> inserts the course selected to professors course list
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from
+ *                                                            the courses the prof teaches
+ */
+router.post('/prof_courses/add_course', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.insertCourse(connection, temp_prof_id, req.body.course_combobox, function(result){
+    db.obtainAddableCourses(connection, temp_prof_id, function(courseResults) {
+      db.obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+        res.render('prof_courses', {
+          "data": courseResults,
+          "count": questionCountResults});
+      });
+    });
+  });
+});
+
+/**
+ * POST request for professor course page for deleting a course
+ *
+ * db.insertCourse -> inserts the course selected to professors course list
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from
+ *                                                            the courses the prof teaches
+ */
+ router.post('/prof_courses/delete_course', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.deleteCourse(connection, temp_prof_id, req.body.delete_course_button, function(result){
+    db.obtainAddableCourses(connection, temp_prof_id, function(courseResults) {
+      db.obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+        res.render('prof_courses', {
+          "data": courseResults,
+          "count": questionCountResults});
+      });
+    });
+  });
+});
+
 
 /**
  * get request for professor overview page -> professor question overview page
@@ -545,8 +605,17 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
 
 router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
   var temp_prof_id = 4000011;
-  db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
-    res.render('prof_schedule', {schedules: scheduleResults});
+    db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+      res.render('prof_schedule', {schedules: scheduleResults});
+    });
+});
+
+router.post('/prof_schedule/delete_schedule', function(req, res, next) {                 // Edit schedule, view schedule
+  var temp_prof_id = 4000011;
+  db.deleteSchedule(connection, temp_prof_id, req.body.delete_schedule_button, function(result) {
+    db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+      res.render('prof_schedule', {schedules: scheduleResults});
+    });
   });
 });
 
