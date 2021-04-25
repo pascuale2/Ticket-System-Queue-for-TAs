@@ -287,6 +287,18 @@ router.get('/questions_search/:question_id', function(req, res, next) {
 });
 
 /**
+ * GET Request for viewing an answered question
+*/
+router.get('/questions_search/answer/:question_id', function(req, res, next) {
+  console.log(req.params.question_id);
+  db.obtainAnsweredQuestionByQID(connection, req.params.question_id, function(answerResults) {
+    console.log(answerResults);
+    res.render('questions_answered', {"data": answerResults});
+  });
+});
+
+
+/**
  * Get request for "Asked Questions" page
  */
 router.get('/questions_asked', function(req, res, next) {
