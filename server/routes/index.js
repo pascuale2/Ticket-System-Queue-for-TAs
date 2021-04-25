@@ -445,6 +445,7 @@ router.get('/prof_home', function(req, res, next) {
   });
 });
 
+
 /**
  * GET request for professor course page
  *
@@ -513,10 +514,20 @@ router.post('/prof_courses/add_course', function(req, res, next) {
  */
 router.get('/prof_questions/:courses', function(req, res, next) {
   var course_name = req.params.courses;
-  db.obtainQuestionFromACourse(connection, course_name, "", function(questionResults) {
+  db.obtainQuestionFromACourse(connection, course_name, "", "", function(questionResults) {
     res.render('prof_questions-answer', {
       "questions": questionResults,
       "courseID": course_name});
+  });
+});
+
+router.post('/prof_questions/:courses', function(req, res, next) {
+  var course_name = req.params.courses;
+  console.log(req.body);
+  db.obtainQuestionFromACourse(connection, course_name, "", req.body.sort_combobox, function(questionResults) {
+    res.render('prof_questions-answer', {
+      "questions": questionResults,
+       "courseID":course_name});
   });
 });
 
@@ -545,7 +556,7 @@ router.get('/prof_questions', function(req, res, next) {
  router.get('/prof_questions/:courses/:question_id', function(req, res, next) {
    var course_name = req.params.courses;
    var question_id = req.params.question_id;
-   db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+   db.obtainQuestionFromACourse(connection, course_name, question_id, "", function(questionResult) {
      res.render('prof_answer-question', {data: questionResult});
    });
  });
@@ -559,7 +570,7 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
   var course_name = req.params.courses;
   var question_id = req.params.question_id;
   console.log(req.body);
-  db.obtainQuestionFromACourse(connection, course_name, question_id, function(questionResult) {
+  db.obtainQuestionFromACourse(connection, course_name, question_id, "", function(questionResult) {
     console.log(question_id, questionResult[0].course_id, req.body.text_area);
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');

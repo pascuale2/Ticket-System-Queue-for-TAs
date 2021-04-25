@@ -51,22 +51,56 @@ function deleteTopQueuePos(connection, quest_id, callback) {
   });
 }
 
+function findQuestionPosition(connection, quest_id, callback) {
+  let query = 'SELECT position FROM Containsqueue WHERE question_id = ?';
+  connection.query(query, quest_id, (err, result) => {
+    if (err) {
+      console.log("Could not find position in queue with q_id ", quest_id);
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result[0].position);
+    }
+  });
+}
+
 function updateCurrentQueue(connection, quest_id, c_id, callback) {
- let query = 'UPDATE Containsqueue \
- INNER JOIN Queue \
- ON Queue.queue_id = Containsqueue.queue_id \
- INNER JOIN Session \
- ON Session.session_id = Queue.session_id \
- SET Containsqueue.position = Containsqueue.position - 1 \
- WHERE Session.course_id = ?';
- connection.query(query, c_id, (err, result) => {
-   if (err) {
-     console.log("Could not updatecurrentqueue with course_id: ",c_id);
-   } else {
-     deleteTopQueuePos(connection, quest_id, function(deleted) {
-       callback(deleted);
-     });
-   }
+ findQuestionPosition(connection, quest_id, function(position) {    // Determine if the position is 1 or more
+    if(position > 1) {                                              // If position is not 1, decrement everything after it
+      let query = 'UPDATE Containsqueue \
+      INNER JOIN Queue \
+      ON Queue.queue_id = Containsqueue.queue_id \
+      INNER JOIN Session \
+      ON Session.session_id = Queue.session_id \
+      SET Containsqueue.position = Containsqueue.position - 1 \
+      WHERE Session.course_id = ? AND Containsqueue.position > ?';
+      connection.query(query, [c_id, position], (err, result) => {
+        if (err) {
+          console.log("Could not updatecurrentqueue with quest_id: ",quest_id, "and position: ",position);
+        } else {
+          deleteTopQueuePos(connection, quest_id, function(deleted) {
+            callback(deleted);
+          });
+        }
+      });
+    } else {                                                        // Position is 1
+      let query = 'UPDATE Containsqueue \
+      INNER JOIN Queue \
+      ON Queue.queue_id = Containsqueue.queue_id \
+      INNER JOIN Session \
+      ON Session.session_id = Queue.session_id \
+      SET Containsqueue.position = Containsqueue.position - 1 \
+      WHERE Session.course_id = ?';
+      connection.query(query, c_id, (err, result) => {
+        if (err) {
+          console.log('\nThis is the position 1 code\n');
+          console.log("Could not updatecurrentqueue with quest_id: ",quest_id, "and position: ", position);
+        } else {
+            deleteTopQueuePos(connection, quest_id, function(deleted) {
+              callback(deleted);
+            });
+          }
+      });
+    }
  });
 }
 
