@@ -50,6 +50,8 @@ Question asking:
 
 ## Search Professors
 Students can easily search for any professor via this page, and are able to check their schedule along with their answered questions and may join their current answering session.
+<br>
+
 ![image](https://user-images.githubusercontent.com/56744638/116008340-4471f900-a5d1-11eb-8e16-8277431583af.png)
 
 # Professor Side
@@ -81,4 +83,5 @@ Professor question overview:
 Schedule functionality:
 * Students can view a professor’s up-to-date availability
 * Join a scheduled office hour session through zoom
+
 ![image](https://user-images.githubusercontent.com/56744638/116008373-6d928980-a5d1-11eb-9aa5-29e85a060be6.png)
