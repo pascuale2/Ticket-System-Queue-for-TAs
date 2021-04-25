@@ -19,9 +19,10 @@ A Ticket system intended for students and TA's (Teaching Assistants) to communic
  - MYSQL
 ### API's:
  - Google sign in
- - Zoom api
+ - Zoom API
  - OAuth 2.0
 
+<hr>
 
 # Student Side
 Students can:
@@ -32,8 +33,10 @@ Students can:
 
 ## Login Page
 * Uses OAuth 2.0
-* Join the professor's office hours to ask questions which is an industry-standard for authentication services
-* ID tokens are used to send the profile ID to the server securely where it is decrypted using google's nodejs plugin. For additional security, using Google authentication API, * We can use a G-Suite such as MacEwan’s to verify student accounts securely.
+* Join a professor's office hours to ask questions which is an industry-standard for authentication services
+* ID tokens are used to send the profile ID to the server securely where it is decrypted using google's nodejs plugin. 
+* We can use a G-Suite such as MacEwan’s to verify student accounts securely.
+
 
 ![image](https://user-images.githubusercontent.com/56744638/116008104-235cd880-a5d0-11eb-99f1-d8a9ab892a87.png)
 
@@ -53,6 +56,8 @@ Students can easily search for any professor via this page, and are able to chec
 <br>
 
 ![image](https://user-images.githubusercontent.com/56744638/116008340-4471f900-a5d1-11eb-8e16-8277431583af.png)
+
+<hr>
 
 # Professor Side
 Professor functionality:
