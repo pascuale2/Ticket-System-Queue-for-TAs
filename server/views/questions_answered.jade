@@ -4,14 +4,14 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    title Maple Donut - Search a Question
+    title Maple Donut - Questions
 
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/questions_search.css')
+    link(rel='stylesheet' href='/stylesheets/questions_asked.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
     // 1 - FONT AWESOME SCRIPT
@@ -86,7 +86,7 @@ html
         hr
         ul.list-unstyled.components
           li
-            a(href='settings')
+            a(href='/settings')
               i.fas.fa-cog
               | Settings
           li
@@ -104,58 +104,20 @@ html
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
-          br
-          br
-          h2.text-center Have a question? We'll try to find an answer!
-          .container.h-100
-            form(action='/questions_search' method='post')
-              .d-flex.justify-content-center
-                .searchBar(id='search_bar')
-                  input.searchInput(id='search_input' type='text' name='question_search' placeholder='e.g. What is Supervised learning?')
-                  button.searchIcon(id='search_icon' type='submit')
-                    i.fas.fa-search
-              .d-flex.justify-content-center
-                .select
-                  select(name="filter_combobox" id="filterComboBox")
-                    option(selected='selected' value='question_title') Search by
-                    option(type='text' value='question_title') Title
-                    option(type='text' value='label') Label/Tag
-                    option(type='text' value='question_desc') Description
-                    option(type='text' value='course_name') Course
-                .select(id="sort_combobox")
-                  select(name="sort_combobox" id="sortComboBox")
-                    option(selected='selected' value='') Sort by
-                    option(type='text' value='question_id') Recent
-                    option(type='text' value='question_status') Answered
-                    option(type='text' value='upvote') Likes
-            hr
-            .searchResultContainer
-              if locals.data != Null
-                for questions in locals.data
-                  if questions.question_title != Null
-                    .card
-                      .questionContainer
-                        h3.text-center #{questions.question_title}
-                        p.text-center  Label: #{questions.label} | Course: #{questions.course_name} | Likes: #{questions.upvote}
-                        if questions.question_status == 0
-                          p.text-center Status: Answered
-                        else
-                          p.text-center Status Unanswered
-                      hr(id='hr_light')
-                      .cardContainer
-                        p(id='desc_header').text-center Description:
-                        h4.text-center #{questions.question_desc}
-
-                      if questions.question_status == 1
-                        .d-flex.justify-content-center
-                          a.btn.btn-outline-warning.btn-lg(href='/questions_search/'+questions.question_id) Star Question
-                            i.fas.fa-star
-                          .col-md-auto
-                          a.btn.btn-outline-success.btn-lg(href='/questions_search/answer/'+questions.question_id) View Answer
-                      else
-                        .d-flex.justify-content-center
-                          a.btn.btn-outline-warning.btn-lg(href='/questions_search/'+questions.question_id) Star Question
-                            i.fas.fa-star
-                          .col-md-auto
-                          button.btn.btn-outline-success.btn-lg(href='#' disabled) Not Answered
+          hr
+          #myTabContent.tab-content
+            h2.text-center Answered Questions
+            .list-group
+              for answer in locals.data
+                .d-flex.justify-content-center
+                  a.list-group-item.list-group-item-action.flex-column.align-items-start(href='#' id='link_card')
+                    .d-flex.w-100.justify-content-between
+                      h5.mb-1 #{answer.question_title}
+                      small Answered By: #{answer.name}
+                    .description_container(id='description_container')
+                      p.mb-1 #{answer.answer_string}
+                    hr(id='no_margin_line_break')
+                    small Date Answered: #{answer.answer_date}
+                    hr(id='no_margin_line_break')
+                    small Likes #{answer.upvote}
     .overlay
