@@ -367,15 +367,19 @@ router.get('/token/code', function (req, res) {
     var authtokn = JSON.parse(body).access_token;
     req.app.locals.zoomtokn=body;
     req.app.locals.authtokn=authtokn;
-    //console.log(authtokn);
-    res.redirect("https://localhost:3000/home");
-    //zoom.getchannels(authtokn,res,req);
+    if(res.app.locals.prevurl=="chat"){
+      res.redirect("https://localhost:3000/chat");
+    }
+    if(res.app.locals.prevurl=="schedule"){
+      res.redirect("https://localhost:3000/prof_schedule/add_schedule");
+    }
   });
 })
 
-router.get('/token', function (req, res) {
+router.get('/token/:url', function (req, res) {
+  res.app.locals.prevurl=req.params.url;
+  console.log(res.app.locals.prevurl);
   // Access userId via: req.params.userId
-  console.log(req.params);
   res.redirect('https://zoom.us/oauth/authorize?response_type=code&client_id=uqERGEzQThSiyeVrlQlMvQ&redirect_uri=https://localhost:3000/token/code');
 })
 
