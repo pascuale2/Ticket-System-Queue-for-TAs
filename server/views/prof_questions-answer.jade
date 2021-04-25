@@ -92,14 +92,12 @@ html
           h1.text-center Questions: #{courseID}
           hr
           form(action='/prof_questions/'+courseID method='post')
-              .d-flex.justify-content-margin-right
-                .select(id="sort_combobox")
-                  select(name="sort_combobox" id="sortComboBox")
-                    option(selected='selected' value='') Sort by
-                    option(type='text' value='upvote') Most likes
-              br
-              button.btn.btn-success(type='submit' id='submit_button') Apply
-                i.fab.fa-telegram-plane
+            .d-flex.justify-content-center
+              .select(id="sort_combobox")
+                select(name="sort_combobox" id="sortComboBox")
+                  option(selected='selected' value='') Sort by
+                  option(type='text' value='upvote') Most likes
+              button.btn.btn-danger(type='submit' id='submit_button') Apply
           br
           if locals.questions != null
             .list-group

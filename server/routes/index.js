@@ -61,6 +61,7 @@ router.get('/schedule/:profname', function(req, res, next){
   var id = req.params.profname;
   db.searchProfessorByName(connection, id, function(result) {
     var teaches_id = result[0].teacher_id;
+    console.log(teaches_id);
     db.obtainSchedule(connection, teaches_id, function(result) {
       var c = "(";
       for (var i=0; i<result.length; i++){
@@ -284,6 +285,18 @@ router.get('/questions_search/:question_id', function(req, res, next) {
     res.render('questions_search');
   });
 });
+
+/**
+ * GET Request for viewing an answered question
+*/
+router.get('/questions_search/answer/:question_id', function(req, res, next) {
+  console.log(req.params.question_id);
+  db.obtainAnsweredQuestionByQID(connection, req.params.question_id, function(answerResults) {
+    console.log(answerResults);
+    res.render('questions_answered', {"data": answerResults});
+  });
+});
+
 
 /**
  * Get request for "Asked Questions" page

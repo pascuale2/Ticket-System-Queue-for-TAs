@@ -43,22 +43,17 @@ html
               .row.justify-content-center
                 img#profilepic(src='/images/donut.png')
           h2#profilename.text-center Seth Thompson
-          h3.text-center
+          h3.text-center  
         hr
         ul.list-unstyled.components
           li
             a(href='/home')
               i.fas.fa-home
               | Home
-          li.active
-            a(href='#coursesSubmenu' data-toggle='collapse' aria-expanded='false')
+          li
+            a(href='/courses')
               i.fas.fa-book
               | Courses
-              ul#coursesSubmenu.collapse.list-unstyled
-                li
-                  a(href='/courses') Current Courses
-                li
-                  a(href='#') Search Courses
           li.active
             a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
               i.fas.fa-question-circle
@@ -74,19 +69,14 @@ html
             a(href='/professors')
               i.fas.fa-chalkboard-teacher
               | Professors
-          li.active
-            a(href='#discussionsSubmenu' data-toggle='collapse' aria-expanded='false')
+          li
+            a(href='/token/chat')
               i.fas.fa-comments
-              | Discussions
-              ul#discussionsSubmenu.collapse.list-unstyled
-                li
-                  a(href='/discussions') Discussion Board
-                li
-                  a(href='/chat') Group Chats
+              | Group Chats
         hr
         ul.list-unstyled.components
           li
-            a(href='settings')
+            a(href='/settings')
               i.fas.fa-cog
               | Settings
           li
@@ -127,6 +117,7 @@ html
                     option(selected='selected' value='') Sort by
                     option(type='text' value='question_id') Recent
                     option(type='text' value='question_status') Answered
+                    option(type='text' value='upvote') Likes
             hr
             .searchResultContainer
               if locals.data != Null
@@ -135,17 +126,26 @@ html
                     .card
                       .questionContainer
                         h3.text-center #{questions.question_title}
-                        p.text-center  Label: #{questions.label} | Course: #{questions.course_name}
+                        p.text-center  Label: #{questions.label} | Course: #{questions.course_name} | Likes: #{questions.upvote}
                         if questions.question_status == 0
-                          p.text-center Status: Answered
+                          p.text-center Status: Unanswered
                         else
-                          p.text-center Status Unanswered
+                          p.text-center Status: Answered
                       hr(id='hr_light')
                       .cardContainer
                         p(id='desc_header').text-center Description:
                         h4.text-center #{questions.question_desc}
-                      .d-flex.justify-content-center
-                        a.btn.btn-outline-warning.btn-block.btn-lg(href='/questions_search/'+questions.question_id) Star Question
 
-                          i.fas.fa-star
+                      if questions.question_status == 1
+                        .d-flex.justify-content-center
+                          a.btn.btn-outline-warning.btn-lg(href='/questions_search/'+questions.question_id) Star Question
+                            i.fas.fa-star
+                          .col-md-auto
+                          a.btn.btn-outline-success.btn-lg(href='/questions_search/answer/'+questions.question_id) View Answer
+                      else
+                        .d-flex.justify-content-center
+                          a.btn.btn-outline-warning.btn-lg(href='/questions_search/'+questions.question_id) Star Question
+                            i.fas.fa-star.fa-fw
+                          .col-md-auto
+                          button.btn.btn-outline-success.btn-lg(href='#' disabled) Not Answered
     .overlay

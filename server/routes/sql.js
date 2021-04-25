@@ -250,7 +250,9 @@ function searchQuestions(connection, sort, category, input, callback) {
   FROM Question INNER JOIN Course ON Question.course_id = Course.course_id\
   WHERE ' + category + ' like ' + replacement;
 
-  if (!(sort === "")) {
+  if (sort === "upvote" || sort === "question_status") {
+    query += ' ORDER BY ' + sort + ' DESC';
+  } else if (!(sort === "")) {
     query += ' ORDER BY ' + sort + ' ASC';
   }
 
@@ -713,7 +715,6 @@ function obtainAllQuestionInfo(connection, quest_id, callback) {
 }
 
 /**
- * 
  * @param {*} connection 
  * @param {*} student_id 
  * @param {*} callback 
@@ -773,7 +774,6 @@ function insertStudent(connection, stud_id, stud_email, stud_name, callback) {
 
 /**
  * Inserts a course in professors course list.
- * 
  * @param {*} connection 
  * @param {*} professor_id the professor id
  * @param {*} course_id the course id
@@ -794,8 +794,7 @@ function insertCourse(connection, professor_id, course_id, callback) {
 }
 
 /**
- * Deletes a course from professors course list 
- * 
+ * Deletes a course from professors course list
  * @param {*} connection 
  * @param {number} professor_id the professor id
  * @param {number} course_id the course id
@@ -832,6 +831,7 @@ function obtainAnsweredQuestionsByStudentID(connection, student_id, callback) {
       console.log("Cannot obtain the answered questions by student ID !!!!");
     } else {
       result = JSON.parse(JSON.stringify(result));
+      console.log(result);
       callback(result);
     }
   });
@@ -854,6 +854,7 @@ function getQuestionLabel(connection, teachesid, callback) {
       callback(result)
     } else {
       result = JSON.parse(JSON.stringify(result));
+      console
       callback(result);
     }
   });
@@ -937,7 +938,6 @@ function editSchedule(connection, available_day, from_day, to_time, teaches_id, 
 }
 
 /**
- * 
  * @param {*} connection 
  * @param {*} courseid 
  * @param {*} teaches_id 
@@ -1186,6 +1186,19 @@ function updateStudentInfo(connection, name, email, discp, bio, stu_id, callback
   });
 }
 
+function obtainAnsweredQuestionByQID(connection, quest_id, callback) {
+  let query = 'SELECT * FROM Question INNER JOIN Answer\
+  ON Answer.question_id = Question.question_id INNER JOIN Teacher \
+  ON Teacher.teacher_id = Answer.teacher_id WHERE Question.question_id = ?';
+  connection.query(query, quest_id, (err, result) => {
+    if(err) {
+      console.log("Could not find answer for question: ", quest_id);
+    } else {
+      callback(JSON.parse(JSON.stringify(result)));
+    }
+  });
+}
+
 /**
  * exports the modules for the other .js files to use
  */
@@ -1236,6 +1249,7 @@ module.exports = {
   upvoteQuestion,
   findTeacherName,
   getStudentInfo,
-  updateStudentInfo
+  updateStudentInfo,
+  obtainAnsweredQuestionByQID
 
 };
