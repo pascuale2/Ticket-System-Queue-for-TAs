@@ -60,9 +60,12 @@ function obtainAllCourses(connection, student_id, callback){
 function obtainAddableCourses(connection, teacher_id, callback){
   let query = 'SELECT course_id, course_name, course_title \
   FROM Teacher INNER JOIN Course ON Teacher.discipline_id = Course.discipline_id \
-  WHERE Teacher.teacher_id = ?';
+  WHERE Teacher.teacher_id = '+teacher_id+' and Course.course_id NOT IN \
+  (SELECT Course.course_id \
+   FROM Teaches INNER JOIN Course ON Teaches.course_id = Course.course_id \
+   WHERE Teaches.teacher_id = '+teacher_id+')';
 
-  connection.query(query, teacher_id, (err, result) => {
+  connection.query(query, (err, result) => {
     if(err){                                               // query failed
       console.log(err);
     }else{
@@ -420,16 +423,23 @@ function obtainAllTaught(connection, teach_id, course_id, callback) {
  * @param {string} course_id the course id we are trying to get questions from
  * @param {*} callback
  */
- function obtainQuestionFromACourse(connection, course_name, question_id, callback) {
+ function obtainQuestionFromACourse(connection, course_name, question_id, sort, callback) {
   let query = "\
   SELECT * \
   FROM Question INNER JOIN Containsqueue ON Question.question_id = Containsqueue.question_id INNER JOIN Course ON Course.course_id = Question.course_id \
   WHERE Course.course_name='"+course_name+"' ";
 
+  if (!(sort === "")) {
+    query += ' ORDER BY ' + sort + ' DESC';
+  } else {
+      query = query + " ORDER BY POSITION";
+  }
+
   if(!(question_id==="")){
     query = query + " AND Question.question_id='"+question_id+"' ";
   }
-  query = query + " ORDER BY POSITION";
+
+  console.log("query is ", query);
 
   connection.query(query, (err, result) => {
     if(err) {
@@ -702,6 +712,12 @@ function obtainAllQuestionInfo(connection, quest_id, callback) {
    });
 }
 
+/**
+ * 
+ * @param {*} connection 
+ * @param {*} student_id 
+ * @param {*} callback 
+ */
 function obtainAllQuestionInfoByStudentID(connection, student_id, callback) {
   let query = 'SELECT * FROM Containsqueue\
    INNER JOIN Question \
@@ -756,10 +772,54 @@ function insertStudent(connection, stud_id, stud_email, stud_name, callback) {
 }
 
 /**
+ * Inserts a course in professors course list.
+ * 
+ * @param {*} connection 
+ * @param {*} professor_id the professor id
+ * @param {*} course_id the course id
+ * @param {*} callback 
+ */
+function insertCourse(connection, professor_id, course_id, callback) {
+  let query = 'INSERT INTO Teaches(teacher_id, course_id) VALUES(?, ?)';
+  connection.query(query, [professor_id, course_id], (err, result) => {
+    if(err) {
+      console.log("Could not insert course_id: ", course_id, err);
+      callback(result);
+    } else {
+      console.log(result);
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+/**
+ * Deletes a course from professors course list 
+ * 
+ * @param {*} connection 
+ * @param {number} professor_id the professor id
+ * @param {number} course_id the course id
+ * @param {*} callback 
+ */
+function deleteCourse(connection, professor_id, course_id, callback) {
+  let query = 'DELETE FROM Teaches \
+  WHERE teacher_id = '+professor_id+' AND course_id = '+course_id+' ';
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("Could not delete course!");
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
+}
+
+
+/**
  * Obtains all the answered questions by the inputted student_id
  *
  * @param {*} connection
- * @param {string|number} student_id the inputted student id we are trying to get answers from
+ * @param {number} student_id the inputted student id we are trying to get answers from
  * @param {*} callback
  */
 function obtainAnsweredQuestionsByStudentID(connection, student_id, callback) {
@@ -876,8 +936,19 @@ function editSchedule(connection, available_day, from_day, to_time, teaches_id, 
   });
 }
 
+/**
+ * 
+ * @param {*} connection 
+ * @param {*} courseid 
+ * @param {*} teaches_id 
+ * @param {*} available_day 
+ * @param {*} from 
+ * @param {*} to 
+ * @param {*} zoom 
+ * @param {*} callback 
+ * @param {*} authtokn 
+ */
 function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback,authtokn) {
-  //TODO: SETH THIS ZOOM VARIABLE IS FOR YOU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   var request = require("request");
   var zoom = "";
   var options = {
@@ -947,8 +1018,19 @@ function createSchedule(connection, courseid, teaches_id, available_day, from, t
     });
     //console.log(body.join_url);
   });
+}
 
-
+function deleteSchedule(connection, professor_id, schedule_id, callback) {
+  let query = 'DELETE FROM Schedule \
+  WHERE teacher_id = '+professor_id+' AND schedule_id = '+schedule_id+' ';
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("Could not delete schdule!");
+    } else {
+      result = JSON.parse(JSON.stringify(result));
+      callback(result);
+    }
+  });
 }
 
 function obtainSchedule(connection, teacher, callback) {
@@ -1048,6 +1130,63 @@ function upvoteQuestion(connection, question_id, callback) {
 }
 
 /**
+ * @param {*} connection
+ * @param {*} teacher_id
+ * @param {*} callback
+*/
+
+function findTeacherName(connection, teacher_id, callback) {
+  let query = 'SELECT name FROM Teacher WHERE teacher_id = ?';
+  connection.query(query, teacher_id, (err, result) => {
+    if(err) {
+      console.log("Could not find teacher with id: ", teacher_id);
+    } else {
+      callback(JSON.parse(JSON.stringify(result)));
+    }
+  });
+}
+
+function getStudentInfo(connection, student_id, callback) {
+  let query = 'SELECT * FROM Student \
+  INNER JOIN Discipline \
+  ON Discipline.discipline_id = Student.discipline_id \
+  WHERE student_id = ?';
+  connection.query(query, student_id, (err, result) => {
+    if(err) {
+      console.log("Could get student info with studentid: ", student_id);
+    } else {
+      callback(JSON.parse(JSON.stringify(result)));
+    }
+  });
+}
+
+function findDisciplineByName(connection, discp, callback) {
+  let query = 'SELECT discipline_id FROM Discipline WHERE discipline_name = ?';
+  connection.query(query, discp, (err, result) => {
+    if(err) {
+      console.log("Could not find discipline with name: ", discp);
+      callback(0);
+    } else {
+      callback(result[0].discipline_id);
+    }
+  });
+}
+
+function updateStudentInfo(connection, name, email, discp, bio, stu_id, callback) {
+  findDisciplineByName(connection, discp, function(discp_id) {
+    let query = 'UPDATE Student SET name = ?, email = ?, biography = ?, discipline_id = ? \
+    WHERE student_id =?';
+    connection.query(query, [name, email, bio, discp_id, stu_id], (err, result) => {
+      if(err) {
+        console.log("Could not update student: ", err);
+      } else {
+        callback(result);
+      }
+    });
+  });
+}
+
+/**
  * exports the modules for the other .js files to use
  */
 module.exports = {
@@ -1083,14 +1222,20 @@ module.exports = {
   obtainTeaches,
   obtainTeachingCourses,
   insertStudent,
+  insertCourse,
+  deleteCourse,
   searchProfessorByName,
   getQuestionLabel,
   getQuestionInfo,
   matchEmailInfo,
   editSchedule,
   createSchedule,
+  deleteSchedule,
   obtainSchedule,
   obtainScheduleAndSession,
-  upvoteQuestion
+  upvoteQuestion,
+  findTeacherName,
+  getStudentInfo,
+  updateStudentInfo
 
 };

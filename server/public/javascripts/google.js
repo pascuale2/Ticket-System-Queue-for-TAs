@@ -67,7 +67,6 @@ function onLoadLogin() {
 }
 
 function onLoadHome() {
-  console.log("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
   gapi.load('auth2', function() {
   auth2 = gapi.auth2.init({
     client_id: '798834471674-2hla9ttcnoausu8a6e2gsoo4j0f70v7u.apps.googleusercontent.com',
@@ -76,8 +75,6 @@ function onLoadHome() {
     redirect_uri: 'https://localhost:3000/home',
     hosted_domain: 'mymacewan.ca',
   }).then(function(auth2){
-    console.log("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-    console.log("Am I allowed to smash?: ",auth2.isSignedIn.get());
     console.log(auth2.currentUser.get().getBasicProfile());
     if(auth2.isSignedIn.get()){
       var profile=auth2.currentUser.get().getBasicProfile();
@@ -107,7 +104,6 @@ function onLoadHome() {
       pic.innerText=profile.getName();
 
     }});
-    console.log("I DIDNT SIGN IN AGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
   });
 }
 

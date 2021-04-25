@@ -20,7 +20,7 @@ html
     // 4 - Bootstrap JS
     // 5 - jQuery Custom Scroller CDN
     // 6 - Sidebar Animation JS
-    // 7,8 - Google Auth 
+    // 7,8 - Google Auth
     script(src='https://kit.fontawesome.com/c13290656a.js' crossorigin='anonymous')
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js', integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ', crossorigin='anonymous')
@@ -67,7 +67,7 @@ html
             ul#scheduleSubmenu.collapse.list-unstyled
               li
                 a(href='/prof_schedule') View Schedule(s)
-              li 
+              li
                 a(href='/prof_schedule/add_schedule') Add Schedule(s)
         hr
         ul.list-unstyled.components
@@ -101,31 +101,32 @@ html
                     .title_container(id='cardTitle')
                       p.m-1(id='card_text').text-center  #{courses.course_title}
                     hr
-                    p.text-center 
-                      small 
+                    p.text-center
+                      small
                         small QUESTION STATUS:
-                    
+
                     // IF THE QUESTION COUNT ISNT 0
                     // THEN YOU CAN CHECK THE QUESTIONS
                     // OTHERWISE BUTTON IS DISABLED
-                    if courses.questionCount != 0 
+                    if courses.questionCount != 0
                       h1.text-center #{courses.questionCount}
-                      p(id='no_margin_paragraph').text-center 
-                        small 
+                      p(id='no_margin_paragraph').text-center
+                        small
                           small Questions Unanswered
                       hr
                       .cardContainer(id='cardOptions')
                         a.btn.btn-success.btn-block.btn-lg(href='/prof_questions/'+courses.course_name name='answer_question' value=courses.course_id) Answer Questions
-                    else 
+                        a.btn.btn-danger.btn-block.btn-lg(href='/schedule/'+locals.prof_name name='answer_question' value=courses.course_id) View Answered Questions
+                    else
                       h1.text-center #{courses.questionCount}
-                      p(id='no_margin_paragraph').text-center 
-                        small 
+                      p(id='no_margin_paragraph').text-center
+                        small
                           small Questions Unanswered
                       hr
                       .cardContainer(id='cardOptions')
                         button.btn.btn-secondary.btn-block.btn-lg(disabled)
                           a(href='#') No Questions Asked
-
+                        a.btn.btn-danger.btn-block.btn-lg(href='/schedule/'+locals.prof_name name='answer_question' value=courses.course_id) View Answered Questions
               else
                 br
                 h4#desc.text-center You currently are not teaching any courses :(

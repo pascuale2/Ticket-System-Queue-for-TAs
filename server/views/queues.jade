@@ -47,7 +47,7 @@ html
         hr
         ul.list-unstyled.components
           li
-            a(href='home')
+            a(href='/home')
               i.fas.fa-home
               | Home
           li.active
@@ -56,7 +56,7 @@ html
               | Courses
               ul#coursesSubmenu.collapse.list-unstyled
                 li
-                  a(href='courses') Current Courses
+                  a(href='/courses') Current Courses
                 li
                   a(href='#') Search Courses
           li.active
@@ -65,11 +65,11 @@ html
               | Questions
               ul#questionsSubmenu.collapse.list-unstyled
                 li
-                  a(href='questions') Ask a Question
+                  a(href='/questions') Ask a Question
                 li
-                  a(href='questions_search') Search Questions
+                  a(href='/questions_search') Search Questions
                 li
-                  a(href='questions_asked') Asked Questions
+                  a(href='/questions_asked') Asked Questions
           li
             a(href='professors')
               i.fas.fa-chalkboard-teacher
@@ -80,13 +80,13 @@ html
               | Discussions
               ul#discussionsSubmenu.collapse.list-unstyled
                 li
-                  a(href='discussions') Discussion Board
+                  a(href='/discussions') Discussion Board
                 li
-                  a(href='chat') Group Chats
+                  a(href='/chat') Group Chats
         hr
         ul.list-unstyled.components
           li
-            a(href='settings')
+            a(href='/settings')
               i.fas.fa-cog
               | Settings
           li
@@ -113,13 +113,11 @@ html
                 img(src='/images/person.png' alt='Avatar')
                 hr
                 .cardContainer
-                  h3.text-center
-                    a.btn.btn-danger.btn-block(href='/schedule/'+names.name+'/current_prof_schedule') Check Schedule
                   if names.available == 1
                     h3.text-center #{names.name}
                     h4.text-center Available: Yes
-                    h5.text-center
-                      a.btn.btn-primary.btn-block(href='/questions') Ask Question
+                    a.btn.btn-danger.btn-block(href='/schedule/'+names.name+'/current_prof_schedule') Check Schedule
+                    a.btn.btn-primary.btn-block(href='/questions') Ask Question
                   else
                     h3.text-center #{names.name}
                     h4.text-center Available: No
