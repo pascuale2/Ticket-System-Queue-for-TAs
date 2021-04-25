@@ -69,10 +69,7 @@ Professor functionality:
 ![image](https://user-images.githubusercontent.com/56744638/116008199-88183300-a5d0-11eb-9a08-3fb7c2eef13f.png)
 
 ## Current Courses
-Professor functionality:
-* Answer students' questions through text or a zoom call in a queue system
-* Upvote popular questions
-* Create, edit, or delete schedules
+Professors can view the courses they are currently in, and can also add courses so they can receive questions from that course or delete it to stop receiving questions
 
 ![image](https://user-images.githubusercontent.com/56744638/116008359-5e134080-a5d1-11eb-81be-e235f13cc5a2.png)
 
