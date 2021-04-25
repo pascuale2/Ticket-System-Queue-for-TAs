@@ -50,7 +50,11 @@ function onLoad() {
       var pic=document.getElementById('profilename');
       pic.innerText=profile.getName();
 
-    }});
+    }
+    else{
+      window.location.replace("/");
+    }
+  });
   });
 }
 
