@@ -116,9 +116,7 @@ html
                       hr
                       .cardContainer(id='cardOptions')
                         a.btn.btn-success.btn-block.btn-lg(href='/prof_questions/'+courses.course_name name='answer_question' value=courses.course_id) Answer Questions
-                      hr
-                      .cardContainer(id='cardOptions')
-                        a.btn.btn-success.btn-block.btn-lg(href='/schedule/'+locals.prof_name name='answer_question' value=courses.course_id) View Answered Questions
+                        a.btn.btn-danger.btn-block.btn-lg(href='/schedule/'+locals.prof_name name='answer_question' value=courses.course_id) View Answered Questions
                     else
                       h1.text-center #{courses.questionCount}
                       p(id='no_margin_paragraph').text-center
@@ -128,11 +126,7 @@ html
                       .cardContainer(id='cardOptions')
                         button.btn.btn-secondary.btn-block.btn-lg(disabled)
                           a(href='#') No Questions Asked
-                      hr
-                      .cardContainer(id='cardOptions')
-                        a.btn.btn-success.btn-block.btn-lg(href='/schedule/'+locals.prof_name name='answer_question' value=courses.course_id) View Answered Questions
-
-
+                        a.btn.btn-danger.btn-block.btn-lg(href='/schedule/'+locals.prof_name name='answer_question' value=courses.course_id) View Answered Questions
               else
                 br
                 h4#desc.text-center You currently are not teaching any courses :(

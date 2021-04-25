@@ -446,14 +446,15 @@ router.get('/prof_home', function(req, res, next) {
 });
 
 /**
- * Get request for professor course page
+ * GET request for professor course page
  *
  * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
- * db.obtainTeachinCourses -> obtains all the courses that the professor currently teaches
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from 
+ *                                                            the courses the prof teaches
  */
 router.get('/prof_courses', function(req, res, next) {
   var temp_prof_id = 4000011;
-  db.obtainAddableCourses(connection, function(courseResults) {
+  db.obtainAddableCourses(connection, temp_prof_id, function(courseResults) {
     db.obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
       res.render('prof_courses', {
         "data": courseResults,
@@ -461,6 +462,49 @@ router.get('/prof_courses', function(req, res, next) {
     });
   });
 });
+
+/**
+ * POST request for professor course page for adding a course
+ *
+ * db.insertCourse -> inserts the course selected to professors course list
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from 
+ *                                                            the courses the prof teaches
+ */
+router.post('/prof_courses/add_course', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.insertCourse(connection, temp_prof_id, req.body.course_combobox, function(result){
+    db.obtainAddableCourses(connection, temp_prof_id, function(courseResults) {
+      db.obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+        res.render('prof_courses', {
+          "data": courseResults,
+          "count": questionCountResults});
+      });
+    });
+  });
+});
+
+/**
+ * POST request for professor course page for deleting a course
+ *
+ * db.insertCourse -> inserts the course selected to professors course list
+ * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from 
+ *                                                            the courses the prof teaches
+ */
+ router.post('/prof_courses/delete_course', function(req, res, next) {
+  var temp_prof_id = 4000011;
+  db.deleteCourse(connection, temp_prof_id, req.body.delete_course_button, function(result){
+    db.obtainAddableCourses(connection, temp_prof_id, function(courseResults) {
+      db.obtainQuestionCountAndScheduleCountFromCoursesTaught(connection, temp_prof_id, function(questionCountResults) {
+        res.render('prof_courses', {
+          "data": courseResults,
+          "count": questionCountResults});
+      });
+    });
+  });
+});
+
 
 /**
  * get request for professor overview page -> professor question overview page
@@ -534,8 +578,17 @@ router.post('/prof_questions/:courses/:question_id', function(req, res, next) {
 
 router.get('/prof_schedule', function(req, res, next) {                 // Edit schedule, view schedule
   var temp_prof_id = 4000011;
-  db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
-    res.render('prof_schedule', {schedules: scheduleResults});
+    db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+      res.render('prof_schedule', {schedules: scheduleResults});
+    });
+});
+
+router.post('/prof_schedule/delete_schedule', function(req, res, next) {                 // Edit schedule, view schedule
+  var temp_prof_id = 4000011;
+  db.deleteSchedule(connection, temp_prof_id, req.body.delete_schedule_button, function(result) {
+    db.obtainProfessorSchedule(connection, temp_prof_id, "", function(scheduleResults) {
+      res.render('prof_schedule', {schedules: scheduleResults});
+    });
   });
 });
 

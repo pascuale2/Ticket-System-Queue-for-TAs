@@ -29,6 +29,7 @@ html
     script(type='text/javascript' src='/javascripts/sidebar.js')
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
     script(src='https://apis.google.com/js/platform.js?onload=onLoadProfHome' async='' defer='')
+    script(type='text/javascript' src='/javascripts/selected.js')
 
   body
     .wrapper
@@ -93,7 +94,7 @@ html
             h1.text-center Current Courses
             hr
             // Dynamically displays the courses that the prof teaches as cards
-            .d-flex.justify-content-center.h-100
+            .searchResultContainer
               if locals.count != null
                 for courses in locals.count
                   .card(id='courseCard')
@@ -108,42 +109,52 @@ html
                     .cardContainer(id='cardOptions')
                       if courses.scheduleCount > 0
                         button.btn.btn-info.btn-block.btn-lg
-                          a(href='#') Edit Schedule
+                          a(href='/prof_schedule/'+courses.course_id+'/edit_schedule') Edit Schedule
                             i.far.fa-calendar-alt.fa-fw
                       else
                         button.btn.btn-primary.btn-block.btn-lg
-                          a(href='#') Add Schedule
+                          a(href='/prof_schedule/add_schedule') Add Schedule
                             i.far.fa-calendar-alt.fa-fw
                       hr#invisible_line_break
                       // Checks if there are any questions that need to be answered 
                       // If there are then the button to check questions is enabled 
                       // otherwise it is disabled
                       if courses.questionCount > 0
-                        a.btn.btn-danger.btn-block.btn-lg(href='/prof_questions/'+courses.course_name name='check_questions' value=courses.course_id) Check Questions
+                        a.btn.btn-success.btn-block.btn-lg(href='/prof_questions/'+courses.course_name name='check_questions' value=courses.course_id) Check Questions
                           i.far.fa-question-circle.fa-fw
                       else
                         button.btn.btn-secondary.btn-block.btn-lg(disabled)
                           a(href='#') No Questions
                             i.far.fa-times-circle.fa-fw
+                      hr#invisible_line_break
+                      form(action='/prof_courses/delete_course' method='post')
+                        button.btn.btn-danger.btn-block.btn-lg(type='submit' name='delete_course_button' value=courses.course_id) Delete Course
+                          i.fa.fa-trash.fa-fw
               else
                 br
                 h4#desc.text-center You currently are not teaching any courses :(
           br
           br
           br
-          br
+          hr
           h3.text-center Add a Course
           br
-          .d-flex.justify-content-center
-            // ------------------------------ //
-            // Select Course ComboBox
-            // ------------------------------ //
-            .select
-              select(name="course_combobox" id="courseComboBox")
-                option(selected) Select a Course
-                if locals.data != Null
-                  for courses in locals.data
-                    option(type='text' value=courses.course_id) #{courses.course_name}
-
+          form(action='/prof_courses/add_course' method='post')
+            .d-flex.justify-content-center
+              // ------------------------------ //
+              // Select Course ComboBox
+              // ------------------------------ //
+              .select
+                select(name="course_combobox" id="courseComboBox")
+                  option(selected value='') Select a Course
+                  if locals.data != Null
+                    for courses in locals.data
+                      option(type='text' value=courses.course_id) #{courses.course_name}
+            br
+            .d-flex.justify-content-center
+              button.btn.btn-primary(type='submit' id='submit_button' disabled) Submit
+                i.fas.fa-check.fa-fw
+              .col-md-auto
+              button.btn.btn-danger(type='reset' id='clear_button' disabled) Clear
     .overlay
 

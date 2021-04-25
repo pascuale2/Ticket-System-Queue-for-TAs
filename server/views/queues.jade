@@ -113,13 +113,11 @@ html
                 img(src='/images/person.png' alt='Avatar')
                 hr
                 .cardContainer
-                  h3.text-center
-                    a.btn.btn-danger.btn-block(href='/schedule/'+names.name+'/current_prof_schedule') Check Schedule
                   if names.available == 1
                     h3.text-center #{names.name}
                     h4.text-center Available: Yes
-                    h5.text-center
-                      a.btn.btn-primary.btn-block(href='/questions') Ask Question
+                    a.btn.btn-danger.btn-block(href='/schedule/'+names.name+'/current_prof_schedule') Check Schedule
+                    a.btn.btn-primary.btn-block(href='/questions') Ask Question
                   else
                     h3.text-center #{names.name}
                     h4.text-center Available: No
