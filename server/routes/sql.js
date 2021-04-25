@@ -250,7 +250,7 @@ function searchQuestions(connection, sort, category, input, callback) {
   FROM Question INNER JOIN Course ON Question.course_id = Course.course_id\
   WHERE ' + category + ' like ' + replacement;
 
-  if (sort === "upvote") {
+  if (sort === "upvote" || sort === "question_status") {
     query += ' ORDER BY ' + sort + ' DESC';
   } else if (!(sort === "")) {
     query += ' ORDER BY ' + sort + ' ASC';

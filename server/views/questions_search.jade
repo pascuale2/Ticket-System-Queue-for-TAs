@@ -128,9 +128,9 @@ html
                         h3.text-center #{questions.question_title}
                         p.text-center  Label: #{questions.label} | Course: #{questions.course_name} | Likes: #{questions.upvote}
                         if questions.question_status == 0
-                          p.text-center Status: Answered
+                          p.text-center Status: Unanswered
                         else
-                          p.text-center Status Unanswered
+                          p.text-center Status: Answered
                       hr(id='hr_light')
                       .cardContainer
                         p(id='desc_header').text-center Description:
