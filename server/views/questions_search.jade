@@ -127,6 +127,7 @@ html
                     option(selected='selected' value='') Sort by
                     option(type='text' value='question_id') Recent
                     option(type='text' value='question_status') Answered
+                    option(type='text' value='upvote') Likes
             hr
             .searchResultContainer
               if locals.data != Null
@@ -135,7 +136,7 @@ html
                     .card
                       .questionContainer
                         h3.text-center #{questions.question_title}
-                        p.text-center  Label: #{questions.label} | Course: #{questions.course_name}
+                        p.text-center  Label: #{questions.label} | Course: #{questions.course_name} | Likes: #{questions.upvote}
                         if questions.question_status == 0
                           p.text-center Status: Answered
                         else
@@ -144,8 +145,16 @@ html
                       .cardContainer
                         p(id='desc_header').text-center Description:
                         h4.text-center #{questions.question_desc}
-                      .d-flex.justify-content-center
-                        a.btn.btn-outline-warning.btn-block.btn-lg(href='/questions_search/'+questions.question_id) Star Question
-
-                          i.fas.fa-star
+                      if questions.question_status == 0
+                        .d-flex.justify-content-center
+                          a.btn.btn-outline-warning.btn-lg(href='/questions_search/'+questions.question_id) Star Question
+                            i.fas.fa-star
+                          .col-md-auto
+                          a.btn.btn-outline-success.btn-lg(href='#') View Answer
+                      else 
+                        .d-flex.justify-content-center
+                          a.btn.btn-outline-warning.btn-lg(href='/questions_search/'+questions.question_id) Star Question
+                            i.fas.fa-star
+                          .col-md-auto
+                          button.btn.btn-outline-success.btn-lg(href='#' disabled) Not Answered
     .overlay
