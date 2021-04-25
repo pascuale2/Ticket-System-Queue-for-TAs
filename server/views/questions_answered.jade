@@ -4,14 +4,14 @@ html
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    title Maple Donut - Answer Question
+    title Maple Donut - Questions
 
     // 1,2 - CSS BOOTSTRAP LINK
     // 3 - CUSTOM CSS LINKS
     // 4 - FAVICON LINK
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css' integrity='sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl' crossorigin='anonymous')
-    link(rel='stylesheet' href='/stylesheets/prof_questions-answer.css')
+    link(rel='stylesheet' href='/stylesheets/questions_asked.css')
     link(rel='icon' type='image/png' href='/images/donut.png')
 
     // 1 - FONT AWESOME SCRIPT
@@ -28,7 +28,7 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
     script(type='text/javascript' src='/javascripts/sidebar.js')
     script(type='text/javascript' src='/javascripts/google.js' async='' defer='')
-    script(src='https://apis.google.com/js/platform.js?onload=onLoadProfHome' async='' defer='')
+    script(src='https://apis.google.com/js/platform.js?onload=onLoad' async='' defer='')
 
   body
     .wrapper
@@ -47,27 +47,42 @@ html
         hr
         ul.list-unstyled.components
           li
-            a(href='/prof_home')
+            a(href='/home')
               i.fas.fa-home
               | Home
-          li
-            a(href='/prof_courses')
+          li.active
+            a(href='#coursesSubmenu' data-toggle='collapse' aria-expanded='false')
               i.fas.fa-book
               | Courses
-          li
-            a(href='/prof_questions')
+              ul#coursesSubmenu.collapse.list-unstyled
+                li
+                  a(href='/courses') Current Courses
+                li
+                  a(href='#') Search Courses
+          li.active
+            a(href='#questionsSubmenu' data-toggle='collapse' aria-expanded='false')
               i.fas.fa-question-circle
               | Questions
-
+              ul#questionsSubmenu.collapse.list-unstyled
+                li
+                  a(href='/questions') Ask a Question
+                li
+                  a(href='/questions_search') Search Questions
+                li
+                  a(href='/questions_asked') Asked Questions
+          li
+            a(href='/professors')
+              i.fas.fa-chalkboard-teacher
+              | Professors
           li.active
-            a(href='#scheduleSubmenu' data-toggle='collapse' aria-expanded='false')
-              i.fas.fa-calendar
-              | Schedule
-            ul#scheduleSubmenu.collapse.list-unstyled
-              li
-                a(href='/prof_schedule') View Schedule(s)
-              li
-                a(href='/prof_schedule/add_schedule') Add Schedule(s)
+            a(href='#discussionsSubmenu' data-toggle='collapse' aria-expanded='false')
+              i.fas.fa-comments
+              | Discussions
+              ul#discussionsSubmenu.collapse.list-unstyled
+                li
+                  a(href='/discussions') Discussion Board
+                li
+                  a(href='/chat') Group Chats
         hr
         ul.list-unstyled.components
           li
@@ -80,45 +95,29 @@ html
               | Logout
       // Page Content
       #page
-        nav.navbar.navbar-expand-md
+        nav.navbar.navbar-expand-ml
           #navbar-header.container-fluid
             a#sidebarCollapse(href='#')
               i.fas.fa-bars
             .logo
-              a(href='/prof_home')
+              a(href='/home')
                 img(src='/images/maple-donut-logo.png')
             a(href='#')
         #content
-          h1.text-center Questions: #{courseID}
           hr
-          form(action='/prof_questions/'+courseID method='post')
-            .d-flex.justify-content-center
-              .select(id="sort_combobox")
-                select(name="sort_combobox" id="sortComboBox")
-                  option(selected='selected' value='') Sort by
-                  option(type='text' value='upvote') Most likes
-              button.btn.btn-danger(type='submit' id='submit_button') Apply
-          br
-          if locals.questions != null
+          #myTabContent.tab-content
+            h2.text-center Answered Questions
             .list-group
-            for questions in locals.questions
-              .d-flex.justify-content-center
-                if questions.position == 1
-                  a.list-group-item.list-group-item-primary.flex-column.align-items-start.active(href='/prof_questions/'+courseID+'/'+questions.question_id id='link_card_active')
+              for answer in locals.data
+                .d-flex.justify-content-center
+                  a.list-group-item.list-group-item-action.flex-column.align-items-start(href='#' id='link_card')
                     .d-flex.w-100.justify-content-between
-                      h5.mb-1 #{questions.question_title}
-                      | Position: #{questions.position} | Likes: #{questions.upvote}
+                      h5.mb-1 #{answer.question_title}
+                      small Answered By: #{answer.name}
                     .description_container(id='description_container')
-                      p(id='question_card_desc').mb-1 #{questions.question_desc}
+                      p.mb-1 #{answer.answer_string}
                     hr(id='no_margin_line_break')
-                    small Tags: #{questions.label}
-                else
-                  a.list-group-item.list-group-item-action.flex-column.align-items-start(href='/prof_questions/'+courseID+'/'+questions.question_id id='link_card')
-                    .d-flex.w-100.justify-content-between
-                      h5.mb-1 #{questions.question_title}
-                      | Position: #{questions.position} | Likes: #{questions.upvote}
-                    .description_container(id='description_container')
-                      p.mb-1 #{questions.question_desc}
+                    small Date Answered: #{answer.answer_date}
                     hr(id='no_margin_line_break')
-                    small Tags: #{questions.label}
+                    small Likes #{answer.upvote}
     .overlay
