@@ -69,6 +69,13 @@ a:focus {
     text-shadow: 0px 1px 2px rgb(111, 111, 111)
 }
 
+.searchResultContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 #courseCard {
     margin: 10px;
     padding: 15px;
@@ -119,7 +126,7 @@ a:focus {
 .select {
     position: relative;
     display: flex;
-    width: 250px;
+    width: 450px;
     height: 3em;
     line-height: 3;
     background: #252525;
@@ -133,4 +140,22 @@ select {
     font-size: 18px;
     color: #bbbbbb;
     cursor: pointer;
+}
+
+#submit_button {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 250px;
+    padding: 5px;
+    transition: .25s all ease;
+}
+
+#clear_button {
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    padding: 5px;
+    transition: .25s all ease;
 }

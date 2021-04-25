@@ -715,10 +715,9 @@ function obtainAllQuestionInfo(connection, quest_id, callback) {
 }
 
 /**
- *
- * @param {*} connection
- * @param {*} student_id
- * @param {*} callback
+ * @param {*} connection 
+ * @param {*} student_id 
+ * @param {*} callback 
  */
 function obtainAllQuestionInfoByStudentID(connection, student_id, callback) {
   let query = 'SELECT * FROM Containsqueue\
@@ -775,11 +774,10 @@ function insertStudent(connection, stud_id, stud_email, stud_name, callback) {
 
 /**
  * Inserts a course in professors course list.
- *
- * @param {*} connection
+ * @param {*} connection 
  * @param {*} professor_id the professor id
  * @param {*} course_id the course id
- * @param {*} callback
+ * @param {*} callback 
  */
 function insertCourse(connection, professor_id, course_id, callback) {
   let query = 'INSERT INTO Teaches(teacher_id, course_id) VALUES(?, ?)';
@@ -797,11 +795,10 @@ function insertCourse(connection, professor_id, course_id, callback) {
 
 /**
  * Deletes a course from professors course list
- *
- * @param {*} connection
+ * @param {*} connection 
  * @param {number} professor_id the professor id
  * @param {number} course_id the course id
- * @param {*} callback
+ * @param {*} callback 
  */
 function deleteCourse(connection, professor_id, course_id, callback) {
   let query = 'DELETE FROM Teaches \
@@ -939,16 +936,15 @@ function editSchedule(connection, available_day, from_day, to_time, teaches_id, 
 }
 
 /**
- *
- * @param {*} connection
- * @param {*} courseid
- * @param {*} teaches_id
- * @param {*} available_day
- * @param {*} from
- * @param {*} to
- * @param {*} zoom
- * @param {*} callback
- * @param {*} authtokn
+ * @param {*} connection 
+ * @param {*} courseid 
+ * @param {*} teaches_id 
+ * @param {*} available_day 
+ * @param {*} from 
+ * @param {*} to 
+ * @param {*} zoom 
+ * @param {*} callback 
+ * @param {*} authtokn 
  */
 function createSchedule(connection, courseid, teaches_id, available_day, from, to, zoom, callback,authtokn) {
   var request = require("request");

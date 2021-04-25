@@ -145,6 +145,7 @@ html
                       .cardContainer
                         p(id='desc_header').text-center Description:
                         h4.text-center #{questions.question_desc}
+
                       if questions.question_status == 1
                         .d-flex.justify-content-center
                           a.btn.btn-outline-warning.btn-lg(href='/questions_search/'+questions.question_id) Star Question

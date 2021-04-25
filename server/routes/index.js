@@ -466,7 +466,7 @@ router.get('/prof_home', function(req, res, next) {
  * GET request for professor course page
  *
  * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
- * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from 
  *                                                            the courses the prof teaches
  */
 router.get('/prof_courses', function(req, res, next) {
@@ -485,7 +485,7 @@ router.get('/prof_courses', function(req, res, next) {
  *
  * db.insertCourse -> inserts the course selected to professors course list
  * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
- * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from 
  *                                                            the courses the prof teaches
  */
 router.post('/prof_courses/add_course', function(req, res, next) {
@@ -506,7 +506,7 @@ router.post('/prof_courses/add_course', function(req, res, next) {
  *
  * db.insertCourse -> inserts the course selected to professors course list
  * db.obtainAddableCourses -> obtains all the courses from the discipline the prof teaches_id
- * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from
+ * db.obtainQuestionCountAndScheduleCountFromCoursesTaught -> obtains all the question count and the schedule count from 
  *                                                            the courses the prof teaches
  */
  router.post('/prof_courses/delete_course', function(req, res, next) {

@@ -16,7 +16,7 @@ html {
     --border-color: rgba(113, 119, 144, 0.26);
     --body-font: "Poppins", sans-serif;
     --content-title-color: #ebeeff;
-    --content-bg: rgba(146, 151, 179, 0.137);
+    --content-bg: #252525;
     --button-inactive: rgba(248, 242, 242, 0.521);
 }
 body {
@@ -242,6 +242,7 @@ a:focus {
     padding: 50px;
     transition: all 0.3s;
     align-items: justify;
+    justify-content: center;
     position: absolute;
     top: 50px;
     right: 0;

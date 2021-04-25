@@ -7,7 +7,6 @@ function addMessageGroup(channelname,snippet,id) {
     var menu = document.createElement("div");
     var icon = document.createElement("img");
     var status = document.createElement("span");
-    var statuscircle = document.createElement("span");
     var bttn = document.createElement("bttn");
     var letter =channelname.toLowerCase().charAt(0);
     if(letter.length === 1 && letter.match(/[a-z]/i)){
@@ -27,7 +26,6 @@ function addMessageGroup(channelname,snippet,id) {
     bttnwrap.setAttribute('class', 'button-wrapper');
     menu.setAttribute('class', 'menu');
     status.setAttribute('class', 'status');
-    statuscircle.setAttribute('class', "status-circle green");
     bttn.setAttribute('class', 'message-button status-button open');
     bttn.setAttribute("id", channelname);
     bttn.innerText="Join";
@@ -40,7 +38,6 @@ function addMessageGroup(channelname,snippet,id) {
     bttnwrap.appendChild(bttn);
     bttnwrap.appendChild(menu);
     node.appendChild(bttnwrap);
-    status.appendChild(statuscircle);
     }
 function JoinChat(name){
   var bttn = document.getElementById(name);
