@@ -2,10 +2,10 @@
 A Ticket system intended for students and TA's (Teaching Assistants) to communicate effectively using a queue based system.
 
 # Project Members
-- Bruce Szostak
-- Dylan Ollikka
-- Erwin Pascual
-- Seth Thompson
+- [Bruce Szostak](https://github.com/Bruce-Szo)
+- [Dylan Ollikka](https://github.com/dylanollikka)
+- [Erwin Pascual](https://github.com/pascuale2)
+- [Seth Thompson](https://github.com/ThompsonSeth)
 
 # Technologies
 
